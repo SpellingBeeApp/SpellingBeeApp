@@ -14,20 +14,38 @@
 
 
 const express = require('express')
-const bodyParser = require('body-parser')
-
+// const bodyParser = require('body-parser')
+const io = require('socket.io')
 
 const app = express();
 const port = 5000;
-app.use(bodyParser.urlencoded({ extended: false }))
 
-app.post('/', (req, res, next) => {
-  res.send('<h1>this is the username:' + req.body.username + '</h1>')
-})
 
-app.get('/', (req, res, next) => {
-  res.send('<form method="POST"><input type="text" name="username"><button>Create User</button></input></form>')
+app.get('/', (req, res)=>{
+  res.send('hello world')
 })
+app.listen(port, () => {
+  console.log(`Server listening on port ${port}`);
+});
+
+
+
+
+
+
+
+
+
+
+// app.use(bodyParser.urlencoded({ extended: false }))
+
+// app.post('/', (req, res, next) => {
+//   res.send('<h1>this is the username:' + req.body.username + '</h1>')
+// })
+
+// app.get('/', (req, res, next) => {
+//   res.send('<form method="POST"><input type="text" name="username"><button>Create User</button></input></form>')
+// })
 // app.use((req, res, next) => {
 //   let body = ''
 //   req.on('end', () => {
@@ -52,6 +70,4 @@ app.get('/', (req, res, next) => {
 // })
 // testing
 
-app.listen(port, () => {
-  console.log(`Server listening on port ${port}`);
-});
+
