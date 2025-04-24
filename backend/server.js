@@ -1,3 +1,4 @@
+// server
 const express = require('express')
 const app = express();
 const port = 3000;
@@ -13,7 +14,7 @@ const io = new Server(server, {
   }
 });
 
-console.log("hello")
+console.log("This is the server!")
 
 app.get('/', (req, res) => {
   res.send('hello world')
@@ -23,6 +24,12 @@ app.get('/', (req, res) => {
 
 io.on('connection', (socket) => {
   console.log("a user connected")
+
+  socket.on('chat message', (msg)=>{
+    console.log("User said: " + msg)
+    socket.emit('chat message', "got your message! thanks client! im the server")
+
+  })
 })
 
 
