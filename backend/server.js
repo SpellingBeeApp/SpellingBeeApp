@@ -25,11 +25,24 @@ app.get('/', (req, res) => {
 io.on('connection', (socket) => {
   console.log("a user connected")
 
-  socket.on('chat message', (msg)=>{
-    console.log("User said: " + msg)
-    socket.emit('chat message', "got your message! thanks client! im the server")
+  socket.on('clientToServer', (msg)=>{
+    console.log("This is a message from client to server: "+ msg)
+    socket.emit('serverToClient',"the server has recieved your message: " + msg)
+  })
+  // socket.on('chat message', (msg)=>{
+  //   console.log("User said: " + msg)
+  //   socket.emit('chat message', "got your message! thanks client! im the server")
 
+  // })
+
+
+  // this method will listen to the request from the middleware named: clientoclient 
+
+  socket.on('clientToClient', (data)=>{
+    // once we get a request, we want to broadcast a response to all clients
+    socket.broadcast.emit("serverToClient", data)
   })
 })
+
 
 
