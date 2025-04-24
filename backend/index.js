@@ -1,73 +1,28 @@
-// const express = require("express");
-// const app = express();
-// const port = 3000;
-
-// app.get("/", (req, res) => {
-//   res.send("Hello World!");
-// });
-
-// app.listen(port, () => {
-//   console.log(`Server listening on port ${port}`);
-// });
-
-
-
-
 const express = require('express')
-// const bodyParser = require('body-parser')
-const io = require('socket.io')
-
 const app = express();
-const port = 5000;
+const port = 3000;
+const server = app.listen(port)
+const { Server } = require('socket.io');
 
-
-app.get('/', (req, res)=>{
-  res.send('hello world')
-})
-app.listen(port, () => {
-  console.log(`Server listening on port ${port}`);
+// const bodyParser = require('body-parser')
+// const io = require('socket.io')(server)
+const io = new Server(server, {
+  cors: {
+    origin: 'http://127.0.0.1:5500', // or '*' for all origins (not recommended in prod)
+    methods: ['GET', 'POST'],
+  }
 });
 
+console.log("hello")
 
+app.get('/', (req, res) => {
+  res.send('hello world')
+  console.log("hello 2")
 
+})
 
-
-
-
-
-
-
-// app.use(bodyParser.urlencoded({ extended: false }))
-
-// app.post('/', (req, res, next) => {
-//   res.send('<h1>this is the username:' + req.body.username + '</h1>')
-// })
-
-// app.get('/', (req, res, next) => {
-//   res.send('<form method="POST"><input type="text" name="username"><button>Create User</button></input></form>')
-// })
-// app.use((req, res, next) => {
-//   let body = ''
-//   req.on('end', () => {
-//     const userName = body.split('=')[1]
-//     if (userName) {
-//       req.body = { name: userName }
-//     }
-//     next()
-//   })
-
-//   req.on('data', chunk => {
-//     body += chunk;
-//   })
-// })
-
-// middleware function take a callback with three arguments
-// app.use((req, res, next) => {
-//   if (req.body) {
-//     return res.send('<h1> User:' + req.body.name + '</h1>')
-//   }
-//   res.send('<form method="POST"><input type="text" name="username"><button>Create User</button></input></form>')
-// })
-// testing
+io.on('connection', (socket) => {
+  console.log("a user connected")
+})
 
 
