@@ -23,7 +23,8 @@ submitName.addEventListener('click', ()=>{
 
 })
 hostRoom.addEventListener('click', function () {
-    socket.emit('clientToClient', 'Hello to the fellow clients. Welcome to the spelling Bee!')
+
+    socket.emit('clientToClient', 'Welcome to the spelling Bee!')
 })
 
 // middle ware function for when client enters spelling of word
