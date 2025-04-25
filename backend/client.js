@@ -3,23 +3,37 @@ const socket = io('http://localhost:3000')
 // here im sending a message to server
 socket.emit('chat message', 'hello there!')
 // button to say hello
-const sayHelloButton = document.getElementById("sayHello")
+const hostRoom = document.getElementById("hostRoom")
+const clientWord = document.getElementById('clientWord')
+const wordInput = document.getElementById('wordInput')
+const playerName = document.getElementById('playerName')
+const submitName = document.getElementById('enterName')
 // here im recieving message from server
 
 // socket.on('chat message', (data)=>{
 //     console.log("Server responds: " + data)
 // })
-console.log(sayHelloButton)
-sayHelloButton.addEventListener('click', function (){
-    console.log("testing")
+
+
+
+submitName.addEventListener('click', ()=>{
+    event.preventDefault()
+    console.log("clicked submit name button. name is: " + playerName.value)
+    socket.emit('newPlayer', {playerName: playerName.value, words: []})
+
+})
+hostRoom.addEventListener('click', function () {
     socket.emit('clientToClient', 'Hello to the fellow clients. Welcome to the spelling Bee!')
 })
-socket.emit('clientToServer', "Hey its me client. How are you server")
+
+// middle ware function for when client enters spelling of word
+clientWord.addEventListener('submit', () => {
+    event.preventDefault()
+    console.log("user clicked enter: " + wordInput.value)
+    socket.emit('clientSubmitWord', wordInput.value + " client id is: " + socket.id)
+})
 
 
 socket.on('serverToClient', (data) => {
-    // socket.emit("Hey server. im client. I got your message" + data)
-    // console.log("Server responds: " + data)
     alert(data)
 })
-

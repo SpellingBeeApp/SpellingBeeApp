@@ -6,7 +6,22 @@
     <title>Document</title>
   </head>
   <body>
-    <button id="sayHello">Say Hello to other clients</button>
+    <label>Enter Your Name</label>
+    <input type="text" id="playerName">
+    <button id="enterName">Submit</button>
+    </br>  
+</br>
+    <button id="hostRoom">Click to Host Spelling Bee Room</button>
+</br>  </br>
+   
+
+    <form id="clientWord"> 
+       
+        <label>Enter Spelling of Word</label>
+        <input type="text" id="wordInput" />
+        <button>Submit</button>
+        
+    </form>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.8.1/socket.io.js"></script>
     <script src="client.js"></script>
