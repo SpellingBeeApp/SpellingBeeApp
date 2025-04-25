@@ -30,7 +30,7 @@ hostRoom.addEventListener('click', function () {
 clientWord.addEventListener('submit', () => {
     event.preventDefault()
     console.log("user clicked enter: " + wordInput.value)
-    socket.emit('clientSubmitWord', wordInput.value + " client id is: " + socket.id)
+    socket.emit('clientSubmitWord', wordInput.value)
 })
 
 
