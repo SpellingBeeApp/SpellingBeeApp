@@ -10,20 +10,25 @@ const io = new Server(server, {
     methods: ['GET', 'POST'],
   }
 });
-const players = {}
+let players = {}
 
 const connected = (socket)=> {
-
-
   // this method will store new player id to players object variable
   socket.on('newPlayer', (data)=>{
-    // players[socket.id]= data
-    console.log('New client connected. Id is: ' + socket.id + " name is: "+ data.playerName)
+    players[socket.id]= data
+     Object.entries(players).forEach(([socketId, player]) => {
+      console.log(`Player Info: ID: ${socketId}, Name: ${player.playerName}`);
+    })
+    console.log("Total Number of players: " + Object.keys(players).length)
+    
   })
 
   // this middleware will render what the client spelled and submitted
   socket.on('clientSubmitWord', (data) => {
-    console.log("word is: " + data)
+    players[socket.id].words.push(data)
+    console.log("word is: " + data + " words: "+ players[socket.id].words[0])
+
+    //players[socket.id].words.push(data)
   })
   
   // this method will listen to the request from the middleware named: clientoclient 
