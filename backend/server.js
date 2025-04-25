@@ -26,7 +26,9 @@ const connected = (socket)=> {
   // this middleware will render what the client spelled and submitted
   socket.on('clientSubmitWord', (data) => {
     players[socket.id].words.push(data)
-    console.log("word is: " + data + " words: "+ players[socket.id].words[0])
+    console.log("word is: " + data + " "+ players[socket.id].playerName + " words entered are: ")
+    players[socket.id].words.forEach(word=>console.log(word))
+    
 
     //players[socket.id].words.push(data)
   })
