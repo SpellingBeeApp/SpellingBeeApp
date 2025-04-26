@@ -17,7 +17,7 @@ const submitName = document?.getElementById('enterName')
 submitName?.addEventListener('click', () => {
     event.preventDefault()
     console.log("clicked submit name button. name is: " + playerName.value)
-    socket.emit('newPlayer', { playerName: playerName.value, words: [] })
+    socket.emit('newPlayer', { playerName: playerName.value, words: [], correctAmount: 0, wrongAmount: 0, finalScore: 0 })
 
 })
 // hostRoom?.addEventListener('click', function () {
@@ -36,5 +36,6 @@ socket.on('serverToClient', (data) => {
 })
 
 socket.on('changeWord', ()=>{
-    alert("Please enter word")
+   let userInput =  prompt("Please enter word")
+   socket.emit('clientSubmitWord', userInput)
 })

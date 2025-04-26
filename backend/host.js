@@ -11,6 +11,7 @@ const word3 = document.getElementById('hostWord3')
 const word4 = document.getElementById('hostWord4')
 const word5 = document.getElementById('hostWord5')
 const nextWord = document.getElementById('nextWord')
+const getScore = document.getElementById('getScore')
 
 
 
@@ -19,7 +20,12 @@ hostRoom?.addEventListener('click', function () {
     socket.emit('hostSpellingWords', [word1.value, word2.value, word3.value, word4.value, word5.value])
 })
 
+// method when host clicks next word button to prompt client to enter word
 nextWord?.addEventListener('click', ()=>{
     socket.emit('nextWord', "")
 })
 
+getScore.addEventListener('click', ()=>{
+    console.log("clicked get score button")
+    socket.emit('getScore', "")
+})
