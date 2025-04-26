@@ -27,7 +27,7 @@ const connected = (socket) => {
   // this middleware will render what the client spelled and submitted
   socket.on('clientSubmitWord', (data) => {
     players[socket.id].words.push(data)
-    console.log("word is: " + data + " " + players[socket.id].playerName + " words entered are: ")
+    console.log("Client word is: " + data + "; " + players[socket.id].playerName + " total words entered are: ")
     players[socket.id].words.forEach(word => console.log(word))
 
 
@@ -45,9 +45,26 @@ const connected = (socket) => {
   spellingBeeWords = data;
   })
 
+  // listening for host to prompt user to enter word
   socket.on('nextWord', ()=>{
     console.log("next word")
     socket.broadcast.emit('changeWord')
+  })
+
+
+  socket.on('getScore', ()=>{
+    Object.entries(players).forEach(([socketId, player]) => {
+      // console.log(`Player Info: ID: ${socketId}, Name: ${player.playerName}` );
+      player.words.forEach((word, index)=> {
+      if(word === spellingBeeWords[index]){
+    player.correctAmount += 1;
+      }else{
+        player.wrongAmount -= 1;
+      }
+    })
+    player.finalScore = (player.correctAmount / player.words.length) * 100;
+    console.log(`${player.playerName} final score is: ` + player.finalScore)
+    })
   })
   
 }
