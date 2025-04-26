@@ -44,6 +44,12 @@ const connected = (socket) => {
   socket.on('hostSpellingWords', (data) => {
   spellingBeeWords = data;
   })
+
+  socket.on('nextWord', ()=>{
+    console.log("next word")
+    socket.broadcast.emit('changeWord')
+  })
+  
 }
 
 
