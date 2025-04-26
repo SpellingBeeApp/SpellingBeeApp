@@ -11,34 +11,41 @@ const io = new Server(server, {
   }
 });
 let players = {}
+let spellingBeeWords = []
 
-const connected = (socket)=> {
+const connected = (socket) => {
   // this method will store new player id to players object variable
-  socket.on('newPlayer', (data)=>{
-    players[socket.id]= data
-     Object.entries(players).forEach(([socketId, player]) => {
+  socket.on('newPlayer', (data) => {
+    players[socket.id] = data
+    Object.entries(players).forEach(([socketId, player]) => {
       console.log(`Player Info: ID: ${socketId}, Name: ${player.playerName}`);
     })
     console.log("Total Number of players: " + Object.keys(players).length)
-    
+
   })
 
   // this middleware will render what the client spelled and submitted
   socket.on('clientSubmitWord', (data) => {
     players[socket.id].words.push(data)
-    console.log("word is: " + data + " "+ players[socket.id].playerName + " words entered are: ")
-    players[socket.id].words.forEach(word=>console.log(word))
-    
+    console.log("word is: " + data + " " + players[socket.id].playerName + " words entered are: ")
+    players[socket.id].words.forEach(word => console.log(word))
+
 
     //players[socket.id].words.push(data)
   })
-  
+
   // this method will listen to the request from the middleware named: clientoclient 
   socket.on('clientToClient', (data) => {
     // once we get a request, we want to broadcast a response to all clients
     socket.broadcast.emit("serverToClient", data)
   })
+
+  // store host words to spellingBeeWords array
+  socket.on('hostSpellingWords', (data) => {
+  spellingBeeWords = data;
+  })
 }
+
 
 io.on('connection', connected)
 
