@@ -34,3 +34,7 @@ clientWord?.addEventListener('submit', () => {
 socket.on('serverToClient', (data) => {
     alert(data)
 })
+
+socket.on('changeWord', ()=>{
+    alert("Please enter word")
+})
