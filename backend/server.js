@@ -24,6 +24,7 @@ const connected = (socket) => {
 
   })
 
+  // this method disconnects client once browser is changed, or connection is cut. this is a built in callback method from socketio.
   // socket.on('disconnect', ()=>{
 
   //   if (players[socket.id]) {
@@ -64,13 +65,7 @@ const connected = (socket) => {
   socket.on('getScore', ()=>{
     Object.entries(players).forEach(([socketId, player]) => {
       // console.log(`Player Info: ID: ${socketId}, Name: ${player.playerName}` );
-      player.words.forEach((word, index)=> {
-      if(word === spellingBeeWords[index]){
-    player.correctAmount += 1;
-      }else{
-        player.wrongAmount -= 1;
-      }
-    })
+    player.words.forEach((word, index)=> word === spellingBeeWords[index] ? player.correctAmount += 1 : player.wrongAmount -= 1)
     player.finalScore = (player.correctAmount / player.words.length) * 100;
     console.log(`${player.playerName} final score is: ` + player.finalScore)
     })
@@ -80,28 +75,4 @@ const connected = (socket) => {
 
 
 io.on('connection', connected)
-
-
-// app.get('/', (req, res) => {
-//   res.send('hello world')
-//   console.log("hello 2")
-
-// })
-
-// io.on('connection', (socket) => {
-//   // console.log("a user connected")
-
-//   // socket.on('clientToServer', (msg)=>{
-//   //   console.log("This is a message from client to server: "+ msg)
-//     // socket.emit('serverToClient',"the server has recieved your message: " + msg)
-//   })
-// socket.on('chat message', (msg)=>{
-//   console.log("User said: " + msg)
-//   socket.emit('chat message', "got your message! thanks client! im the server")
-
-// })
-
-// const bodyParser = require('body-parser')
-// const io = require('socket.io')(server)
-
 
