@@ -37,6 +37,6 @@ socket.on('serverToClient', (data) => {
 
 socket.on('changeWord', ()=>{
     console.log("changed word")
-   let userInput =  window.prompt("Please enter word")
-   socket.emit('clientSubmitWord', userInput)
+     alert("Please enter word")
+//    socket.emit('clientSubmitWord', wordInput.value)
 })
