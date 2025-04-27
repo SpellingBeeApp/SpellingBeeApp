@@ -24,6 +24,12 @@ const connected = (socket) => {
 
   })
 
+  socket.on('disconnect', ()=>{
+    console.log("Good bye, " + players[socket.id])
+    delete players[socket.id];
+    console.log("Current numbers of players " + Object.entries(players).length)
+  })
+
   // this middleware will render what the client spelled and submitted
   socket.on('clientSubmitWord', (data) => {
     players[socket.id].words.push(data)
