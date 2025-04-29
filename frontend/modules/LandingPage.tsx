@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Sparkles } from "lucide-react";
+import Image from "next/image";
 
 export default function LandingPage() {
   const router = useRouter();
@@ -51,13 +52,14 @@ export default function LandingPage() {
         <div className="card-body">
           <div className="flex justify-center mb-4">
             <div className="relative">
-              <Sparkles size={48} className="text-primary animate-bounce" />
+              <Image
+                alt="Scripps Spelling Bee Logo"
+                src="\logo.svg"
+                width={200}
+                height={300}
+              />
             </div>
           </div>
-
-          <h2 className="card-title text-3xl font-bold text-center justify-center">
-            Spelling Bee
-          </h2>
           <p className="text-center text-base-content/70">
             Create or join a spelling competition
           </p>
