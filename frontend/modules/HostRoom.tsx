@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ArrowRight, Check, Copy, List, Users } from "lucide-react";
+import Image from "next/image";
 
 type Player = {
   id: string;
@@ -76,7 +77,12 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
           <div>
-            <h1 className="text-3xl font-bold">Spelling Bee</h1>
+            <Image
+              alt="Scripps Spelling Bee Logo"
+              src="\logo.svg"
+              width={200}
+              height={300}
+            />
             <p className="text-base-content/70">Host Room</p>
           </div>
 
