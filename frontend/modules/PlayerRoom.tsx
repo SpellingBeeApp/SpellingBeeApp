@@ -5,16 +5,9 @@ import React from "react";
 import { Send, Users } from "lucide-react";
 import Image from "next/image";
 import useSocket from "@/hooks/useSocket";
-import { GetPlayers, SubmitGuess } from "@/types/dto";
-import { RoomStatus } from "@/common/enum";
+import { SubmitGuess } from "@/types/dto";
 import { Room } from "@/types";
 import { RoomStatusDisplay } from "./PlayerRoom/RoomStatusDisplay";
-
-type Player = {
-  id: string;
-  name: string;
-  score: number;
-};
 
 export default function PlayerRoom({ params }: { params: { roomId: string } }) {
   const router = useRouter();
