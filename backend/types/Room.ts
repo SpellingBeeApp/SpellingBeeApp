@@ -18,6 +18,11 @@ type Room = {
    * The participants of the room.
    */
   players: Player[];
+
+  /**
+   * The list of words for the game.
+   */
+  words: Set<string>;
 };
 
 export type { Room };

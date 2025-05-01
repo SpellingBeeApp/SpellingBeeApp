@@ -28,6 +28,7 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
         code: roomId,
       };
       emit("getPlayers", payload, (players: string) => {
+        console.log(players);
         setPlayers(JSON.parse(players) as Player[]);
       });
     }
@@ -48,6 +49,7 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
   const submitGuess = () => {
     if (!guess.trim()) return;
 
+    emit("guessWord", guess, (updatedUsers) => {});
     // fill in guesses from socket here
     setGuess("");
   };

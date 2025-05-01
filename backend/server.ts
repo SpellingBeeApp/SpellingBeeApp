@@ -2,7 +2,16 @@
 
 import express from "express";
 import { Server, Socket } from "socket.io";
-import type { Rooms, CreateRoomData, JoinRoomData, GetPlayers } from "./types";
+import type {
+  Rooms,
+  CreateRoomData,
+  JoinRoomData,
+  GetPlayers,
+  Player,
+  Room,
+} from "./types";
+import { SubmitGuess } from "./types/dto/SubmitGuess";
+import { SubmitWords } from "./types/dto/SubmitWords";
 
 const app = express();
 const port = 5500;
@@ -13,6 +22,24 @@ const io = new Server(server, {
     methods: ["GET", "POST"],
   },
 });
+
+/**
+ * Takes in a player from the spelling bee game, and modifies it for JSON.stringify.
+ * @param player - The player to modify for stringification.
+ * @returns The modified player.
+ */
+const modifyPlayerForStringify = (
+  player: Player
+): Omit<Player, "guesses"> & { guesses: Array<string> } => {
+  const { guesses, ...rest } = player;
+
+  if (guesses !== undefined) {
+    const convertedGuesses = [...guesses.values()];
+    return { ...rest, guesses: convertedGuesses };
+  }
+
+  return { ...rest, guesses: [] };
+};
 
 const rooms: Rooms = {};
 let players = {};
@@ -32,10 +59,14 @@ const connected = (socket: Socket) => {
     const { code, player } = data;
     if (code in rooms) {
       const { isHost, ...rest } = player;
-      rooms[code].players.push({ ...rest, isHost: false });
+      rooms[code].players.push({
+        ...rest,
+        idNumber: rooms[code].players.length,
+        isHost: false,
+        guesses: new Set<string>(),
+      });
     }
 
-    console.log("emitting", player);
     socket.broadcast.emit(`${code}_playerJoined`, player);
   });
 
@@ -46,7 +77,57 @@ const connected = (socket: Socket) => {
       rooms[code] = {
         host,
         players: [],
+        words: new Set<string>(),
       };
+    }
+  });
+
+  socket.on("submitWords", (data: SubmitWords, callback) => {
+    const { roomId, words } = data;
+
+    if (roomId !== undefined && words !== undefined && roomId in rooms) {
+      // TODO: convert to set concatenation
+      for (const eachWord of words) {
+        rooms[roomId].words.add(eachWord);
+      }
+
+      console.log(rooms[roomId]);
+      callback(JSON.stringify([...rooms[roomId].words.values()]));
+    }
+  });
+
+  socket.on("guessWord", (data: SubmitGuess, callback) => {
+    const { playerIdNumber, guess, roomId } = data;
+
+    if (
+      playerIdNumber !== undefined &&
+      guess !== undefined &&
+      guess.trim().length > 0 &&
+      roomId !== undefined
+    ) {
+      const foundPlayerIndex = rooms[roomId].players.findIndex(
+        (eachPlayer) => eachPlayer.idNumber === playerIdNumber
+      );
+      if (foundPlayerIndex !== -1) {
+        const foundPlayer = rooms[roomId].players[foundPlayerIndex];
+        if (foundPlayer?.guesses !== undefined) {
+          foundPlayer.guesses.add(guess);
+          // TODO: remove intersection in place of manual intersection
+          foundPlayer.score = rooms[roomId].words.intersection(
+            foundPlayer.guesses
+          ).size;
+
+          /** Update the room */
+          rooms[roomId].players[foundPlayerIndex] = foundPlayer;
+          callback(
+            JSON.stringify(
+              rooms[roomId].players.map((eachPlayer) =>
+                modifyPlayerForStringify(eachPlayer)
+              )
+            )
+          );
+        }
+      }
     }
   });
 
@@ -59,7 +140,13 @@ const connected = (socket: Socket) => {
     const { code } = data;
 
     if (code in rooms) {
-      callback(JSON.stringify(rooms[code].players));
+      callback(
+        JSON.stringify(
+          rooms[code].players.map((eachPlayer) =>
+            modifyPlayerForStringify(eachPlayer)
+          )
+        )
+      );
     }
   });
 

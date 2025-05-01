@@ -5,6 +5,7 @@ import React from "react";
 import { ArrowRight, Check, Copy, List, Users } from "lucide-react";
 import Image from "next/image";
 import useSocket from "@/hooks/useSocket";
+import { SubmitWords } from "@/types/dto/SubmitWords";
 
 type Player = {
   id: string;
@@ -20,11 +21,11 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
   const [currentWordIndex, setCurrentWordIndex] = React.useState(-1);
   const [activeTab, setActiveTab] = React.useState("players");
   const roomId = params.roomId;
-  const { socket, on } = useSocket("http://localhost:5500");
+  const { emit, on } = useSocket("http://localhost:5500");
   const [players, setPlayers] = React.useState<Player[]>([]);
 
   React.useEffect(() => {
-    if (socket) {
+    if (on !== undefined) {
       on(`${roomId}_playerJoined`, (newPlayer: Player) => {
         setPlayers((oldPlayers: Player[]) => [...oldPlayers, newPlayer]);
       });
@@ -59,7 +60,19 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
       return;
     }
 
-    setWords(wordList);
+    const payload: SubmitWords = {
+      roomId,
+      words: wordList,
+    };
+
+    console.log(wordList);
+
+    emit("submitWords", payload, (updatedWordList) => {
+      console.log("received", updatedWordList);
+      setWords(JSON.parse(updatedWordList));
+    });
+
+    // setWords(wordList);
   };
 
   const nextWord = () => {

@@ -7,6 +7,11 @@
  */
 type Player = {
   /**
+   * The index of the player (defaults to -1 for the host).
+   */
+  idNumber?: number;
+
+  /**
    * Whether the player is the host of the room.
    */
   isHost?: boolean;
@@ -19,7 +24,7 @@ type Player = {
   /**
    * The score of the player.
    */
-  score: number;
+  score?: number;
 };
 
 export type { Player };

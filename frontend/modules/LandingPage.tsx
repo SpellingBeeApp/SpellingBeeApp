@@ -32,6 +32,7 @@ export default function LandingPage() {
     const payload: CreateRoomData = {
       code: newRoomCode,
       host: {
+        idNumber: -1,
         name: playerName,
         isHost: true,
       },
@@ -57,7 +58,7 @@ export default function LandingPage() {
 
     const payload: JoinRoomData = {
       code: roomCode,
-      player: { name: playerName },
+      player: { name: playerName, score: 0 },
     };
     socket?.emit("joinRoom", payload);
 
