@@ -1,9 +1,11 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import React from "react";
 import { Send, Users } from "lucide-react";
 import Image from "next/image";
+import useSocket from "@/hooks/useSocket";
+import { GetPlayers } from "@/types/dto";
 
 type Player = {
   id: string;
@@ -13,19 +15,27 @@ type Player = {
 
 export default function PlayerRoom({ params }: { params: { roomId: string } }) {
   const router = useRouter();
-  const [playerName, setPlayerName] = useState("");
-  const [guess, setGuess] = useState("");
-  const [currentWordIndex, setCurrentWordIndex] = useState(1);
+  const [playerName, setPlayerName] = React.useState("");
+  const [guess, setGuess] = React.useState("");
+  const [currentWordIndex, setCurrentWordIndex] = React.useState(1);
   const roomId = params.roomId;
+  const [players, setPlayers] = React.useState<Player[]>([]);
+  const { emit, on } = useSocket("http://localhost:5500");
 
-  // fake players replace with whats gathered from socket
-  const [players] = useState<Player[]>([
-    { id: "1", name: "Host", score: 0 },
-    { id: "2", name: "Player 1", score: 2 },
-    { id: "3", name: "Player 2", score: 1 },
-  ]);
+  React.useEffect(() => {
+    if (emit !== undefined && on !== undefined && roomId !== undefined) {
+      const payload: GetPlayers = {
+        code: roomId,
+      };
+      console.log("emitting");
+      emit("getPlayers", payload);
+      on(`${roomId}_players`, (players: string) => {
+        console.log("players = ", players);
+      });
+    }
+  }, [roomId, emit, on]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const storedName = localStorage.getItem("playerName") || "";
     const isHost = localStorage.getItem("isHost") === "true";
 

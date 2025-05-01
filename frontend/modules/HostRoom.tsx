@@ -1,9 +1,10 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import React from "react";
 import { ArrowRight, Check, Copy, List, Users } from "lucide-react";
 import Image from "next/image";
+import useSocket from "@/hooks/useSocket";
 
 type Player = {
   id: string;
@@ -13,21 +14,24 @@ type Player = {
 
 export default function HostRoom({ params }: { params: { roomId: string } }) {
   const router = useRouter();
-  const [playerName, setPlayerName] = useState("");
-  const [wordListText, setWordListText] = useState("");
-  const [words, setWords] = useState<string[]>([]);
-  const [currentWordIndex, setCurrentWordIndex] = useState(-1);
-  const [activeTab, setActiveTab] = useState("players");
+  const [playerName, setPlayerName] = React.useState("");
+  const [wordListText, setWordListText] = React.useState("");
+  const [words, setWords] = React.useState<string[]>([]);
+  const [currentWordIndex, setCurrentWordIndex] = React.useState(-1);
+  const [activeTab, setActiveTab] = React.useState("players");
   const roomId = params.roomId;
+  const { socket, on } = useSocket("http://localhost:5500");
+  const [players, setPlayers] = React.useState<Player[]>([]);
 
-  // fake players for now replace with whats given from express socket
-  const [players] = useState<Player[]>([
-    { id: "1", name: "Host", score: 0 },
-    { id: "2", name: "Player 1", score: 2 },
-    { id: "3", name: "Player 2", score: 1 },
-  ]);
+  React.useEffect(() => {
+    if (socket) {
+      on(`${roomId}_playerJoined`, (newPlayer: Player) => {
+        setPlayers((oldPlayers: Player[]) => [...oldPlayers, newPlayer]);
+      });
+    }
+  }, [on, roomId]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const storedName = localStorage.getItem("playerName") || "";
     const isHost = localStorage.getItem("isHost") === "true";
 
@@ -198,7 +202,7 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
                   <div className="space-y-2">
                     {players.map((player, index) => (
                       <div
-                        key={player.id}
+                        key={`${player.name}-${index}`}
                         className="flex items-center justify-between p-3 bg-base-200 rounded-lg"
                       >
                         <span className="font-medium">

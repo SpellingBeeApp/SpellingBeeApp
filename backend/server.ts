@@ -1,0 +1,129 @@
+// server
+
+import express from "express";
+import { Server, Socket } from "socket.io";
+import type { Rooms, CreateRoomData, JoinRoomData, GetPlayers } from "./types";
+
+const app = express();
+const port = 5500;
+const server = app.listen(port);
+const io = new Server(server, {
+  cors: {
+    origin: "*", // or '*' for all origins (not recommended in prod)
+    methods: ["GET", "POST"],
+  },
+});
+
+const rooms: Rooms = {};
+let players = {};
+let spellingBeeWords = [];
+
+const connected = (socket: Socket) => {
+  // this method will store new player id to players object variable
+  // socket.on("newPlayer", (data) => {
+  //   players[socket.id] = data;
+  //   Object.entries(players).forEach(([socketId, player]) => {
+  //     console.log(`Player Info: ID: ${socketId}, Name: ${player.playerName}`);
+  //   });
+  //   console.log("Total Number of players: " + Object.keys(players).length);
+  // });
+
+  socket.on("joinRoom", (data: JoinRoomData) => {
+    const { code, player } = data;
+    if (code in rooms) {
+      const { isHost, ...rest } = player;
+      rooms[code].players.push({ ...rest, isHost: false });
+    }
+
+    console.log("emitting", player);
+    socket.broadcast.emit(`${code}_playerJoined`, player);
+  });
+
+  socket.on("createRoom", (data: CreateRoomData) => {
+    const { code, host } = data;
+
+    if (!(code in rooms)) {
+      rooms[code] = {
+        host,
+        players: [],
+      };
+    }
+  });
+
+  socket.on("getPlayers", (data: GetPlayers) => {
+    const { code } = data;
+
+    if (code in rooms) {
+      console.log("emitting", code);
+      socket.broadcast.emit(
+        `${code}_players`,
+        JSON.stringify(rooms[code].players)
+      );
+    }
+  });
+
+  // this method disconnects client once browser is changed, or connection is cut. this is a built in callback method from socketio.
+  // socket.on('disconnect', ()=>{
+
+  //   if (players[socket.id]) {
+  //     console.log("Good bye, " + players[socket.id].playerName);
+  //     delete players[socket.id];
+  //     console.log("Current number of players: " + Object.keys(players).length);
+  // }
+  // })
+
+  // this middleware will render what the client spelled and submitted
+  // socket.on("clientSubmitWord", (data) => {
+  //   if (socket.id in players) {
+  //     players[socket.id].words.push(data);
+  //     console.log(
+  //       "Client word is: " +
+  //         data +
+  //         "; " +
+  //         players[socket.id].playerName +
+  //         " total words entered are: "
+  //     );
+  //     players[socket.id].words.forEach((word) => console.log(word));
+  //   }
+
+  //   //players[socket.id].words.push(data)
+  // });
+
+  // // this method will listen to the request from the middleware named: clientoclient
+  // socket.on("clientToClient", (data) => {
+  //   // once we get a request, we want to broadcast a response to all clients
+  //   socket.broadcast.emit("serverToClient", data);
+  // });
+
+  // // store host words to spellingBeeWords array
+  // socket.on("hostSpellingWords", (data) => {
+  //   spellingBeeWords = data;
+  // });
+
+  // // listening for host to prompt user to enter word
+  // socket.on("nextWord", () => {
+  //   console.log("next word");
+  //   socket.broadcast.emit("changeWord");
+  // });
+
+  // socket.on("getScore", () => {
+  //   Object.entries(players).forEach(([socketId, player]) => {
+  //     // console.log(`Player Info: ID: ${socketId}, Name: ${player.playerName}` );
+  //     player.words.forEach((word, index) =>
+  //       word === spellingBeeWords[index]
+  //         ? (player.correctAmount += 1)
+  //         : (player.wrongAmount -= 1)
+  //     );
+  //     player.finalScore = (player.correctAmount / player.words.length) * 100;
+  //     console.log(`${player.playerName} final score is: ` + player.finalScore);
+  //   });
+  // });
+};
+
+io.on("connection_error", (err) => {
+  console.log(err.req); // the request object
+  console.log(err.code); // the error code, for example 1
+  console.log(err.message); // the error message, for example "Session ID unknown"
+  console.log(err.context); // some additional error context
+});
+io.on("connection", connected);

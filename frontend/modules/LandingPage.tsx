@@ -2,14 +2,17 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Sparkles } from "lucide-react";
 import Image from "next/image";
+import useSocket from "@/hooks/useSocket";
+import { CreateRoomData } from "@/types/dto/CreateRoomData";
+import { JoinRoomData } from "@/types/dto/JoinRoomData";
 
 export default function LandingPage() {
   const router = useRouter();
   const [playerName, setPlayerName] = useState("");
   const [roomCode, setRoomCode] = useState("");
   const [activeTab, setActiveTab] = useState("join");
+  const { socket } = useSocket("http://localhost:5500");
 
   const createRoom = () => {
     if (!playerName.trim()) {
@@ -25,6 +28,15 @@ export default function LandingPage() {
 
     localStorage.setItem("playerName", playerName);
     localStorage.setItem("isHost", "true");
+
+    const payload: CreateRoomData = {
+      code: newRoomCode,
+      host: {
+        name: playerName,
+        isHost: true,
+      },
+    };
+    socket?.emit("createRoom", payload);
 
     router.push(`/room/${newRoomCode}/host`);
   };
@@ -42,6 +54,12 @@ export default function LandingPage() {
 
     localStorage.setItem("playerName", playerName);
     localStorage.setItem("isHost", "false");
+
+    const payload: JoinRoomData = {
+      code: roomCode,
+      player: { name: playerName },
+    };
+    socket?.emit("joinRoom", payload);
 
     router.push(`/room/${roomCode}/play`);
   };
