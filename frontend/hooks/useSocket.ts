@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState, useCallback } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any -- Disabled, needed for this generic hook. */
+import { useEffect, useState, useCallback } from "react";
 import io, { ManagerOptions, Socket, SocketOptions } from "socket.io-client";
 
 type Callback = (..._args: any[]) => void;

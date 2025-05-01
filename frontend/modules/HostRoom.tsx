@@ -79,7 +79,7 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
     }
 
     setCurrentWordIndex((previousWordIndex) => {
-      let payload: Partial<Room> = {
+      const payload: Partial<Room> = {
         wordIndex: previousWordIndex + 1,
       };
       if (previousWordIndex === -1) {
