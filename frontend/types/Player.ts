@@ -7,6 +7,11 @@
  */
 type Player = {
   /**
+   * The guesses made by the player
+   */
+  guesses?: Array<string>;
+
+  /**
    * The index of the player (defaults to -1 for the host).
    */
   idNumber?: number;
@@ -20,6 +25,11 @@ type Player = {
    * Name when a player registers.
    */
   name: string;
+
+  /**
+   * The rounds that the player has guessed.
+   */
+  roundGuesses?: Array<number>;
 
   /**
    * The score of the player.

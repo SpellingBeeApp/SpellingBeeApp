@@ -5,7 +5,10 @@ import React from "react";
 import { Send, Users } from "lucide-react";
 import Image from "next/image";
 import useSocket from "@/hooks/useSocket";
-import { GetPlayers } from "@/types/dto";
+import { GetPlayers, SubmitGuess } from "@/types/dto";
+import { RoomStatus } from "@/common/enum";
+import { Room } from "@/types";
+import { RoomStatusDisplay } from "./PlayerRoom/RoomStatusDisplay";
 
 type Player = {
   id: string;
@@ -15,21 +18,31 @@ type Player = {
 
 export default function PlayerRoom({ params }: { params: { roomId: string } }) {
   const router = useRouter();
-  const { emit } = useSocket("http://localhost:5500");
+  const { emit, on } = useSocket("http://localhost:5500");
   const [playerName, setPlayerName] = React.useState("");
   const [guess, setGuess] = React.useState("");
-  const [currentWordIndex, setCurrentWordIndex] = React.useState(1);
   const roomId = params.roomId?.trim();
-  const [players, setPlayers] = React.useState<Player[]>([]);
+  const [room, setRoom] = React.useState<Room>();
+
+  React.useEffect(() => {
+    if (roomId !== undefined) {
+      on(`room_${roomId}_modified`, (partialRoom: Room) => {
+        console.log(partialRoom);
+        setRoom((oldRoom) => {
+          if (oldRoom === undefined) {
+            return { ...partialRoom };
+          }
+
+          return { ...oldRoom, ...partialRoom };
+        });
+      });
+    }
+  }, [roomId, on]);
 
   React.useEffect(() => {
     if (roomId !== undefined && emit !== undefined) {
-      const payload: GetPlayers = {
-        code: roomId,
-      };
-      emit("getPlayers", payload, (players: string) => {
-        console.log(players);
-        setPlayers(JSON.parse(players) as Player[]);
+      emit("getRoom", roomId, (room: Room) => {
+        setRoom(room);
       });
     }
   }, [emit, roomId]);
@@ -49,21 +62,31 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
   const submitGuess = () => {
     if (!guess.trim()) return;
 
-    emit("guessWord", guess, (updatedUsers) => {});
+    const payload: SubmitGuess = {
+      guess,
+      roomId,
+      playerName,
+    };
+    emit("guessWord", payload);
     // fill in guesses from socket here
-    setGuess("");
+    setGuess(guess);
   };
 
   const getPlayerRank = () => {
-    if (!playerName) return null;
-
-    const sortedPlayers = [...players].sort((a, b) => b.score - a.score);
+    if (!playerName || !room) return null;
+    const { players } = room;
+    const sortedPlayers = [...players].sort(
+      (a, b) => (b.score ?? 0) - (a.score ?? 0)
+    );
     const playerIndex = sortedPlayers.findIndex((p) => p.name === playerName);
 
     return playerIndex >= 0 ? playerIndex + 1 : null;
   };
 
   const playerRank = getPlayerRank();
+  const currentPlayer = room?.players.find(
+    (eachPlayer) => eachPlayer.name === playerName
+  );
 
   return (
     <div className="min-h-screen p-4 md:p-6 honeycomb-bg">
@@ -82,7 +105,7 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
           <div className="flex gap-2">
             <div className="badge badge-outline gap-2">
               <Users className="h-4 w-4" />
-              {players.length} players
+              {room === undefined ? 0 : room.players.length} players
             </div>
             <div className="badge badge-secondary">Room: {roomId}</div>
           </div>
@@ -91,14 +114,10 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
         <div className="space-y-6">
           <div className="card bg-base-100 shadow-xl">
             <div className="card-body">
-              <div className="text-center space-y-4">
-                <div className="flex items-center justify-center">
-                  <div className="w-6 h-6 bg-primary rounded-full animate-pulse"></div>
-                </div>
-                <p className="text-base-content/70">
-                  Waiting for word #{currentWordIndex}
-                </p>
-              </div>
+              <RoomStatusDisplay
+                currentWordIndex={room?.wordIndex}
+                roomStatus={room?.status}
+              />
 
               <div className="mt-8 mb-2">
                 <p className="text-center text-lg font-medium">
@@ -118,7 +137,10 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
                 <button
                   className="btn btn-primary join-item"
                   onClick={submitGuess}
-                  disabled={!guess.trim()}
+                  disabled={
+                    !guess.trim() ||
+                    currentPlayer?.roundGuesses?.includes(room?.wordIndex ?? -1)
+                  }
                 >
                   <Send className="h-4 w-4" />
                 </button>
@@ -133,29 +155,31 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
                 {playerRank && (
                   <div className="bg-base-200 p-3 rounded-lg text-center">
                     <p className="font-medium">
-                      Your Rank: {playerRank} of {players.length}
+                      Your Rank: {playerRank} of{" "}
+                      {room === undefined ? 0 : room.players.length}
                     </p>
                   </div>
                 )}
                 <div className="space-y-2">
-                  {players.map((player, index) => (
-                    <div
-                      key={`${player.name}_${index}`}
-                      className={`flex items-center justify-between p-3 rounded-lg ${
-                        player.name === playerName
-                          ? "bg-primary/20"
-                          : "bg-base-200"
-                      }`}
-                    >
-                      <span className="font-medium">
-                        {index + 1}. {player.name}
-                        {player.name === playerName && (
-                          <span className="badge badge-sm ml-2">You</span>
-                        )}
-                      </span>
-                      <span className="font-bold">{player.score}</span>
-                    </div>
-                  ))}
+                  {room !== undefined &&
+                    room.players.map((player, index) => (
+                      <div
+                        key={`${player.name}_${index}`}
+                        className={`flex items-center justify-between p-3 rounded-lg ${
+                          player.name === playerName
+                            ? "bg-primary/20"
+                            : "bg-base-200"
+                        }`}
+                      >
+                        <span className="font-medium">
+                          {index + 1}. {player.name}
+                          {player.name === playerName && (
+                            <span className="badge badge-sm ml-2">You</span>
+                          )}
+                        </span>
+                        <span className="font-bold">{`${player.score}%`}</span>
+                      </div>
+                    ))}
                 </div>
               </div>
             </div>

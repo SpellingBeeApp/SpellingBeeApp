@@ -6,6 +6,8 @@ import { ArrowRight, Check, Copy, List, Users } from "lucide-react";
 import Image from "next/image";
 import useSocket from "@/hooks/useSocket";
 import { SubmitWords } from "@/types/dto/SubmitWords";
+import { Room } from "@/types";
+import { RoomStatus } from "@/common/enum";
 
 type Player = {
   id: string;
@@ -65,14 +67,9 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
       words: wordList,
     };
 
-    console.log(wordList);
-
-    emit("submitWords", payload, (updatedWordList) => {
-      console.log("received", updatedWordList);
-      setWords(JSON.parse(updatedWordList));
+    emit("submitWords", payload, (updatedWordList: string) => {
+      setWords(JSON.parse(updatedWordList) as string[]);
     });
-
-    // setWords(wordList);
   };
 
   const nextWord = () => {
@@ -81,7 +78,20 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
       return;
     }
 
-    setCurrentWordIndex((prev) => prev + 1);
+    setCurrentWordIndex((previousWordIndex) => {
+      let payload: Partial<Room> = {
+        wordIndex: previousWordIndex + 1,
+      };
+      if (previousWordIndex === -1) {
+        payload.status = RoomStatus.STARTED;
+      } else if (previousWordIndex === words.length) {
+        payload.status = RoomStatus.ENDED;
+      }
+
+      emit("modifyRoom", roomId, playerName, payload);
+
+      return previousWordIndex + 1;
+    });
   };
 
   const copyRoomCode = () => {

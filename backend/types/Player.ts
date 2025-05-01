@@ -27,6 +27,11 @@ type Player = {
   name: string;
 
   /**
+   * The rounds that the player has guessed.
+   */
+  roundGuesses: Set<number>;
+
+  /**
    * The score of the player.
    */
   score?: number;

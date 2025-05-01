@@ -22,13 +22,9 @@ function useSocket(
 
   // Function to emit messages
   const emit = useCallback(
-    (event: string, data: unknown, ackFunc?: Callback) => {
+    (event: string, ...args: unknown[]) => {
       if (socket) {
-        if (ackFunc !== undefined) {
-          socket.emit(event, data, ackFunc);
-        } else {
-          socket.emit(event, data);
-        }
+        socket.emit(event, ...args);
       }
     },
     [socket]
