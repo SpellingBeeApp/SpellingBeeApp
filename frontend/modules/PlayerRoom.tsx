@@ -15,25 +15,23 @@ type Player = {
 
 export default function PlayerRoom({ params }: { params: { roomId: string } }) {
   const router = useRouter();
+  const { emit } = useSocket("http://localhost:5500");
   const [playerName, setPlayerName] = React.useState("");
   const [guess, setGuess] = React.useState("");
   const [currentWordIndex, setCurrentWordIndex] = React.useState(1);
-  const roomId = params.roomId;
+  const roomId = params.roomId?.trim();
   const [players, setPlayers] = React.useState<Player[]>([]);
-  const { emit, on } = useSocket("http://localhost:5500");
 
   React.useEffect(() => {
-    if (emit !== undefined && on !== undefined && roomId !== undefined) {
+    if (roomId !== undefined && emit !== undefined) {
       const payload: GetPlayers = {
         code: roomId,
       };
-      console.log("emitting");
-      emit("getPlayers", payload);
-      on(`${roomId}_players`, (players: string) => {
-        console.log("players = ", players);
+      emit("getPlayers", payload, (players: string) => {
+        setPlayers(JSON.parse(players) as Player[]);
       });
     }
-  }, [roomId, emit, on]);
+  }, [emit, roomId]);
 
   React.useEffect(() => {
     const storedName = localStorage.getItem("playerName") || "";
@@ -140,7 +138,7 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
                 <div className="space-y-2">
                   {players.map((player, index) => (
                     <div
-                      key={player.id}
+                      key={`${player.name}_${index}`}
                       className={`flex items-center justify-between p-3 rounded-lg ${
                         player.name === playerName
                           ? "bg-primary/20"

@@ -50,15 +50,16 @@ const connected = (socket: Socket) => {
     }
   });
 
-  socket.on("getPlayers", (data: GetPlayers) => {
+  /**
+   * IF YOU WANT ON-->EMIT, SUPPLY (data, CALLBACK) as the argument.
+   * call `callback` with whatever data you were expecting in the front-end.
+   * https://socket.io/docs/v3/emitting-events/#acknowledgements
+   */
+  socket.on("getPlayers", (data: GetPlayers, callback) => {
     const { code } = data;
 
     if (code in rooms) {
-      console.log("emitting", code);
-      socket.broadcast.emit(
-        `${code}_players`,
-        JSON.stringify(rooms[code].players)
-      );
+      callback(JSON.stringify(rooms[code].players));
     }
   });
 

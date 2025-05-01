@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import io, { ManagerOptions, Socket, SocketOptions } from "socket.io-client";
 
-type SocketCallback = (..._args: any[]) => void;
+type Callback = (..._args: any[]) => void;
 
 function useSocket(
   url: string,
@@ -22,9 +22,13 @@ function useSocket(
 
   // Function to emit messages
   const emit = useCallback(
-    (event: string, data: unknown) => {
+    (event: string, data: unknown, ackFunc?: Callback) => {
       if (socket) {
-        socket.emit(event, data);
+        if (ackFunc !== undefined) {
+          socket.emit(event, data, ackFunc);
+        } else {
+          socket.emit(event, data);
+        }
       }
     },
     [socket]
@@ -32,13 +36,11 @@ function useSocket(
 
   // Function to subscribe to an event
   const on = useCallback(
-    (event: string, func: SocketCallback) => {
+    (event: string, func: Callback) => {
       if (socket) {
-        console.log("setting listener for ", event);
         socket.on(event, func);
 
         return () => {
-          console.log("cleaning");
           socket.off(event, func); // Return a cleanup function
         };
       }
