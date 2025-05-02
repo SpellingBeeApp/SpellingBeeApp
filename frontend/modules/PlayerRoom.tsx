@@ -61,7 +61,6 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
       playerName,
     };
     emit("guessWord", payload);
-    // fill in guesses from socket here
     setGuess(guess);
   };
 
@@ -80,6 +79,8 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
   const currentPlayer = room?.players.find(
     (eachPlayer) => eachPlayer.name === playerName
   );
+
+  /**TODO: Need to reset word guess input on submit */
 
   return (
     <div className="min-h-screen p-4 md:p-6 honeycomb-bg">

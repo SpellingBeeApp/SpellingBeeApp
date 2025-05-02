@@ -99,6 +99,8 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
     alert("Room code copied to clipboard");
   };
 
+  /**TODO: Need to get score to update properly and implement activity log */
+
   return (
     <div className="min-h-screen p-4 md:p-6 honeycomb-bg">
       <div className="max-w-6xl mx-auto">
@@ -231,7 +233,7 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
                         <span className="font-medium">
                           {index + 1}. {player.name}
                         </span>
-                        <span className="font-bold">{player.score}</span>
+                        <span className="font-bold">{`${player.score}%`}</span>
                       </div>
                     ))}
                   </div>
