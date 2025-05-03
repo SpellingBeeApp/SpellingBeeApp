@@ -17,21 +17,22 @@ let spellingBeeWords = []
 
 const connected = (socket) => {
 
-      // increment client number once client is added
-      clientNo++;
-      // once user joins add him to room (clientno/2 for now) 
-      // we want to get room number from endpoint and add user to that room. Once game is over clean out data in room
-      socket.join(Math.round(clientNo/2))
-  
-      // once client is logged in send the room number to client
-      socket.emit('serverMsg', Math.round(clientNo/2))
-  
-      // once the button is pressed, we send the client room and io.to will send a message to all the clients in the room 
-      socket.on('buttonPressed', (clientRoom)=>{
-          io.to(clientRoom).emit('switchFromServer')
-      })
+  // multiple rooms for socket 
+  // increment client number once client is added
+  clientNo++;
+  // once user joins add him to room (clientno/2 for now) 
+  // we want to get room number from endpoint and add user to that room. Once game is over clean out data in room
+  socket.join(Math.round(clientNo / 2))
 
-      
+  // once client is logged in send the room number to client
+  socket.emit('serverMsg', Math.round(clientNo / 2))
+
+  // once the button is pressed, we send the client room and io.to will send a message to all the clients in the room. This is for host
+  socket.on('buttonPressed', (clientRoom) => {
+    io.to(clientRoom).emit('switchFromServer')
+  })
+
+
   // this method will store new player id to players object variable
   socket.on('newPlayer', (data) => {
     players[socket.id] = data
@@ -70,25 +71,25 @@ const connected = (socket) => {
 
   // store host words to spellingBeeWords array
   socket.on('hostSpellingWords', (data) => {
-  spellingBeeWords = data;
+    spellingBeeWords = data;
   })
 
   // listening for host to prompt user to enter word
-  socket.on('nextWord', ()=>{
+  socket.on('nextWord', () => {
     console.log("next word")
     socket.broadcast.emit('changeWord')
   })
 
 
-  socket.on('getScore', ()=>{
+  socket.on('getScore', () => {
     Object.entries(players).forEach(([socketId, player]) => {
       // console.log(`Player Info: ID: ${socketId}, Name: ${player.playerName}` );
-    player.words.forEach((word, index)=> word === spellingBeeWords[index] ? player.correctAmount += 1 : player.wrongAmount -= 1)
-    player.finalScore = (player.correctAmount / player.words.length) * 100;
-    console.log(`${player.playerName} final score is: ` + player.finalScore)
+      player.words.forEach((word, index) => word === spellingBeeWords[index] ? player.correctAmount += 1 : player.wrongAmount -= 1)
+      player.finalScore = (player.correctAmount / player.words.length) * 100;
+      console.log(`${player.playerName} final score is: ` + player.finalScore)
     })
   })
-  
+
 }
 
 
