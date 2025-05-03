@@ -4,7 +4,7 @@ socket.emit('chat message', 'hello there!')
 const clientWord = document?.getElementById('clientWord')
 const wordInput = document?.getElementById('wordInput')
 const playerName = document?.getElementById('playerName')
-const submitName = document?.getElementById('enterName')
+const submitName = document?.getElementById('enterName') 
 
 
 submitName?.addEventListener('click', () => {
