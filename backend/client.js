@@ -4,7 +4,8 @@ socket.emit('chat message', 'hello there!')
 const clientWord = document?.getElementById('clientWord')
 const wordInput = document?.getElementById('wordInput')
 const playerName = document?.getElementById('playerName')
-const submitName = document?.getElementById('enterName') 
+const submitName = document?.getElementById('enterName')
+const switchButton = document?.getElementById("switchButton")
 
 
 submitName?.addEventListener('click', () => {
@@ -25,8 +26,8 @@ socket.on('serverToClient', (data) => {
     alert(data)
 })
 
-socket.on('changeWord', ()=>{
+socket.on('changeWord', () => {
     console.log("changed word")
-     alert("Please enter word")
-//    socket.emit('clientSubmitWord', wordInput.value)
+    alert("Please enter word")
+    //    socket.emit('clientSubmitWord', wordInput.value)
 })
