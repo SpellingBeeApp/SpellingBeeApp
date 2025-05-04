@@ -1,31 +1,59 @@
 "use client";
 
+/**
+ * @file The Player room client side component
+ */
+
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import React from "react";
 import { Send, Users } from "lucide-react";
 import Image from "next/image";
-
-type Player = {
-  id: string;
-  name: string;
-  score: number;
-};
+import useSocket from "@/hooks/useSocket";
+import { SubmitGuess } from "@/types/dto";
+import { Room } from "@/types";
+import { RoomStatusDisplay } from "./PlayerRoom/RoomStatusDisplay";
 
 export default function PlayerRoom({ params }: { params: { roomId: string } }) {
   const router = useRouter();
-  const [playerName, setPlayerName] = useState("");
-  const [guess, setGuess] = useState("");
-  const [currentWordIndex, setCurrentWordIndex] = useState(1);
-  const roomId = params.roomId;
+  const { emit, on } = useSocket("http://localhost:5500");
+  const [playerName, setPlayerName] = React.useState("");
+  const [guess, setGuess] = React.useState("");
+  const roomId = params.roomId?.trim();
+  const [room, setRoom] = React.useState<Room>();
 
-  // fake players replace with whats gathered from socket
-  const [players] = useState<Player[]>([
-    { id: "1", name: "Host", score: 0 },
-    { id: "2", name: "Player 1", score: 2 },
-    { id: "3", name: "Player 2", score: 1 },
-  ]);
+  /**
+   * listening for the specific roomId modify listener
+   * this constantly updates or "modifies" the room when anything changes
+   */
+  React.useEffect(() => {
+    if (roomId !== undefined) {
+      on(`room_${roomId}_modified`, (partialRoom: Room) => {
+        console.log(partialRoom);
+        setRoom((oldRoom) => {
+          if (oldRoom === undefined) {
+            return { ...partialRoom };
+          }
+          return { ...oldRoom, ...partialRoom };
+        });
+      });
+    }
+  }, [roomId, on]);
 
-  useEffect(() => {
+  /**
+   * emitting to the get Room listener and getting the room info in server
+   */
+  React.useEffect(() => {
+    if (roomId !== undefined && emit !== undefined) {
+      emit("getRoom", roomId, (room: Room) => {
+        setRoom(room);
+      });
+    }
+  }, [emit, roomId]);
+
+  /**
+   * getting the player name from local storage and setting it
+   */
+  React.useEffect(() => {
     const storedName = localStorage.getItem("playerName") || "";
     const isHost = localStorage.getItem("isHost") === "true";
 
@@ -37,23 +65,47 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
     setPlayerName(storedName);
   }, [router]);
 
+  /**
+   * emits to the "guessWord" listener when the players guess the current word
+   * @returns void
+   */
   const submitGuess = () => {
     if (!guess.trim()) return;
 
-    // fill in guesses from socket here
-    setGuess("");
+    /**
+     * the payload we will emit to the server consisting of the guess, the roomId, and the playerName
+     */
+    const payload: SubmitGuess = {
+      guess,
+      roomId,
+      playerName,
+    };
+
+    /**
+     * emitting tht guess to the "guessWord" listener in the server and setting the guess to the word inputted
+     */
+    emit("guessWord", payload);
+    setGuess(guess);
   };
 
   const getPlayerRank = () => {
-    if (!playerName) return null;
-
-    const sortedPlayers = [...players].sort((a, b) => b.score - a.score);
+    if (!playerName || !room) return null;
+    const { players } = room;
+    const sortedPlayers = [...players].sort(
+      (a, b) => (b.score ?? 0) - (a.score ?? 0)
+    );
     const playerIndex = sortedPlayers.findIndex((p) => p.name === playerName);
 
     return playerIndex >= 0 ? playerIndex + 1 : null;
   };
 
   const playerRank = getPlayerRank();
+
+  const currentPlayer = room?.players.find(
+    (eachPlayer) => eachPlayer.name === playerName
+  );
+
+  /**TODO: Need to reset word guess input on submit */
 
   return (
     <div className="min-h-screen p-4 md:p-6 honeycomb-bg">
@@ -72,7 +124,7 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
           <div className="flex gap-2">
             <div className="badge badge-outline gap-2">
               <Users className="h-4 w-4" />
-              {players.length} players
+              {room === undefined ? 0 : room.players.length} players
             </div>
             <div className="badge badge-secondary">Room: {roomId}</div>
           </div>
@@ -81,38 +133,44 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
         <div className="space-y-6">
           <div className="card bg-base-100 shadow-xl">
             <div className="card-body">
-              <div className="text-center space-y-4">
-                <div className="flex items-center justify-center">
-                  <div className="w-6 h-6 bg-primary rounded-full animate-pulse"></div>
-                </div>
-                <p className="text-base-content/70">
-                  Waiting for word #{currentWordIndex}
-                </p>
-              </div>
+              <RoomStatusDisplay
+                currentWordIndex={room?.wordIndex}
+                roomStatus={room?.status}
+              />
 
               <div className="mt-8 mb-2">
-                <p className="text-center text-lg font-medium">
-                  Spell the word:
-                </p>
+                {" "}
+                {room?.status ? (
+                  <p className="text-center text-lg font-medium">
+                    Spell the word:
+                  </p>
+                ) : null}
               </div>
 
-              <div className="join w-full">
-                <input
-                  type="text"
-                  placeholder="Type your answer..."
-                  className="input input-bordered join-item w-full"
-                  value={guess}
-                  onChange={(e) => setGuess(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && submitGuess()}
-                />
-                <button
-                  className="btn btn-primary join-item"
-                  onClick={submitGuess}
-                  disabled={!guess.trim()}
-                >
-                  <Send className="h-4 w-4" />
-                </button>
-              </div>
+              {room?.status ? (
+                <div className="join w-full">
+                  <input
+                    type="text"
+                    placeholder="Type your answer..."
+                    className="input input-bordered join-item w-full"
+                    value={guess}
+                    onChange={(e) => setGuess(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && submitGuess()}
+                  />
+                  <button
+                    className="btn btn-primary join-item"
+                    onClick={submitGuess}
+                    disabled={
+                      !guess.trim() ||
+                      currentPlayer?.roundGuesses?.includes(
+                        room?.wordIndex ?? -1
+                      )
+                    }
+                  >
+                    <Send className="h-4 w-4" />
+                  </button>
+                </div>
+              ) : null}
             </div>
           </div>
 
@@ -123,29 +181,31 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
                 {playerRank && (
                   <div className="bg-base-200 p-3 rounded-lg text-center">
                     <p className="font-medium">
-                      Your Rank: {playerRank} of {players.length}
+                      Your Rank: {playerRank} of{" "}
+                      {room === undefined ? 0 : room.players.length}
                     </p>
                   </div>
                 )}
                 <div className="space-y-2">
-                  {players.map((player, index) => (
-                    <div
-                      key={player.id}
-                      className={`flex items-center justify-between p-3 rounded-lg ${
-                        player.name === playerName
-                          ? "bg-primary/20"
-                          : "bg-base-200"
-                      }`}
-                    >
-                      <span className="font-medium">
-                        {index + 1}. {player.name}
-                        {player.name === playerName && (
-                          <span className="badge badge-sm ml-2">You</span>
-                        )}
-                      </span>
-                      <span className="font-bold">{player.score}</span>
-                    </div>
-                  ))}
+                  {room !== undefined &&
+                    room.players.map((player, index) => (
+                      <div
+                        key={`${player.name}_${index}`}
+                        className={`flex items-center justify-between p-3 rounded-lg ${
+                          player.name === playerName
+                            ? "bg-primary/20"
+                            : "bg-base-200"
+                        }`}
+                      >
+                        <span className="font-medium">
+                          {index + 1}. {player.name}
+                          {player.name === playerName && (
+                            <span className="badge badge-sm ml-2">You</span>
+                          )}
+                        </span>
+                        <span className="font-bold">{`${player.score}%`}</span>
+                      </div>
+                    ))}
                 </div>
               </div>
             </div>

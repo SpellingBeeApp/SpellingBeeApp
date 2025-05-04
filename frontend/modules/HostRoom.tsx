@@ -1,9 +1,17 @@
 "use client";
 
+/**
+ * @file The Host Room client side component
+ */
+
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import React from "react";
 import { ArrowRight, Check, Copy, List, Users } from "lucide-react";
 import Image from "next/image";
+import useSocket from "@/hooks/useSocket";
+import { SubmitWords } from "@/types/dto/SubmitWords";
+import { Room } from "@/types";
+import { RoomStatus } from "@/common/enum";
 
 type Player = {
   id: string;
@@ -13,21 +21,30 @@ type Player = {
 
 export default function HostRoom({ params }: { params: { roomId: string } }) {
   const router = useRouter();
-  const [playerName, setPlayerName] = useState("");
-  const [wordListText, setWordListText] = useState("");
-  const [words, setWords] = useState<string[]>([]);
-  const [currentWordIndex, setCurrentWordIndex] = useState(-1);
-  const [activeTab, setActiveTab] = useState("players");
+  const [playerName, setPlayerName] = React.useState("");
+  const [wordListText, setWordListText] = React.useState("");
+  const [words, setWords] = React.useState<string[]>([]);
+  const [currentWordIndex, setCurrentWordIndex] = React.useState(-1);
+  const [activeTab, setActiveTab] = React.useState("players");
   const roomId = params.roomId;
+  const { emit, on } = useSocket("http://localhost:5500");
+  const [players, setPlayers] = React.useState<Player[]>([]);
 
-  // fake players for now replace with whats given from express socket
-  const [players] = useState<Player[]>([
-    { id: "1", name: "Host", score: 0 },
-    { id: "2", name: "Player 1", score: 2 },
-    { id: "3", name: "Player 2", score: 1 },
-  ]);
+  /**
+   * listening for new players that join and adding them to the rooms player list
+   */
+  React.useEffect(() => {
+    if (on !== undefined) {
+      on(`${roomId}_playerJoined`, (newPlayer: Player) => {
+        setPlayers((oldPlayers: Player[]) => [...oldPlayers, newPlayer]);
+      });
+    }
+  }, [on, roomId]);
 
-  useEffect(() => {
+  /**
+   * set players name from name provided in localstorage
+   */
+  React.useEffect(() => {
     const storedName = localStorage.getItem("playerName") || "";
     const isHost = localStorage.getItem("isHost") === "true";
 
@@ -39,38 +56,109 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
     setPlayerName(storedName);
   }, [router]);
 
+  /**
+   * handles submitting word list for players to guess
+   * @returns void
+   */
   const submitWordList = () => {
+    /**
+     * makes sure they dont submit an empty list
+     */
     if (!wordListText.trim()) {
       alert("Please enter at least one word");
       return;
     }
 
+    /**
+     * separates list by line breaks or commas and ensures words are at least one character
+     */
     const wordList = wordListText
       .split(/[\n,]/)
       .map((word) => word.trim())
       .filter((word) => word.length > 0);
 
+    /**
+     * check again to make sure word list isnt empty
+     */
     if (wordList.length === 0) {
       alert("Please enter at least one word!");
       return;
     }
 
-    setWords(wordList);
+    /**
+     * the payload we will emit to the server consisting of the roomId and the word list
+     */
+    const payload: SubmitWords = {
+      roomId,
+      words: wordList,
+    };
+
+    /**
+     * emitting the word list to the "submitWords" listener
+     */
+    emit("submitWords", payload, (updatedWordList: string) => {
+      setWords(JSON.parse(updatedWordList) as string[]);
+    });
   };
 
+  /**
+   * used with the "Next Word" button to advance through the word list
+   * @returns the next index in the word list
+   */
   const nextWord = () => {
+    /**
+     * check to make sure the word list isn't empty
+     */
     if (words.length === 0) {
       alert("Please submit a word list first!");
       return;
     }
 
-    setCurrentWordIndex((prev) => prev + 1);
+    /**
+     * setting the current word index in the word list
+     */
+    setCurrentWordIndex((previousWordIndex) => {
+      /**
+       * the payload is a "Partial" Room only using the wordIndex and room status fields
+       * when emitted we will increment the index by 1
+       */
+      const payload: Partial<Room> = {
+        wordIndex: previousWordIndex + 1,
+      };
+
+      /**
+       * if the index is -1 we will start the game switching the display to say waiting for word#1
+       * once it reaches the length of the word list (the last index) the game is over
+       * TODO: when game ends we will then display the scoreboard
+       */
+      if (previousWordIndex === -1) {
+        payload.status = RoomStatus.STARTED;
+      } else if (previousWordIndex === words.length) {
+        payload.status = RoomStatus.ENDED;
+      }
+
+      /**
+       * emit to the "modifyRoom" listener with the roomId, hostName, and payload above
+       * this will only update the corresponding room
+       */
+      emit("modifyRoom", roomId, playerName, payload);
+
+      /**
+       * increment the word list index
+       */
+      return previousWordIndex + 1;
+    });
   };
 
+  /**
+   * copies the room code for the host to share easier
+   */
   const copyRoomCode = () => {
     navigator.clipboard.writeText(roomId);
     alert("Room code copied to clipboard");
   };
+
+  /**TODO: Need to get player scores to update properly for host and implement activity log */
 
   return (
     <div className="min-h-screen p-4 md:p-6 honeycomb-bg">
@@ -198,13 +286,13 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
                   <div className="space-y-2">
                     {players.map((player, index) => (
                       <div
-                        key={player.id}
+                        key={`${player.name}-${index}`}
                         className="flex items-center justify-between p-3 bg-base-200 rounded-lg"
                       >
                         <span className="font-medium">
                           {index + 1}. {player.name}
                         </span>
-                        <span className="font-bold">{player.score}</span>
+                        <span className="font-bold">{`${player.score}%`}</span>
                       </div>
                     ))}
                   </div>
