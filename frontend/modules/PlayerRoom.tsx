@@ -1,5 +1,9 @@
 "use client";
 
+/**
+ * @file The Player room client side component
+ */
+
 import { useRouter } from "next/navigation";
 import React from "react";
 import { Send, Users } from "lucide-react";
@@ -17,6 +21,10 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
   const roomId = params.roomId?.trim();
   const [room, setRoom] = React.useState<Room>();
 
+  /**
+   * listening for the specific roomId modify listener
+   * this constantly updates or "modifies" the room when anything changes
+   */
   React.useEffect(() => {
     if (roomId !== undefined) {
       on(`room_${roomId}_modified`, (partialRoom: Room) => {
@@ -25,13 +33,15 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
           if (oldRoom === undefined) {
             return { ...partialRoom };
           }
-
           return { ...oldRoom, ...partialRoom };
         });
       });
     }
   }, [roomId, on]);
 
+  /**
+   * emitting to the get Room listener and getting the room info in server
+   */
   React.useEffect(() => {
     if (roomId !== undefined && emit !== undefined) {
       emit("getRoom", roomId, (room: Room) => {
@@ -40,6 +50,9 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
     }
   }, [emit, roomId]);
 
+  /**
+   * getting the player name from local storage and setting it
+   */
   React.useEffect(() => {
     const storedName = localStorage.getItem("playerName") || "";
     const isHost = localStorage.getItem("isHost") === "true";
@@ -52,14 +65,25 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
     setPlayerName(storedName);
   }, [router]);
 
+  /**
+   * emits to the "guessWord" listener when the players guess the current word
+   * @returns void
+   */
   const submitGuess = () => {
     if (!guess.trim()) return;
 
+    /**
+     * the payload we will emit to the server consisting of the guess, the roomId, and the playerName
+     */
     const payload: SubmitGuess = {
       guess,
       roomId,
       playerName,
     };
+
+    /**
+     * emitting tht guess to the "guessWord" listener in the server and setting the guess to the word inputted
+     */
     emit("guessWord", payload);
     setGuess(guess);
   };
@@ -76,6 +100,7 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
   };
 
   const playerRank = getPlayerRank();
+
   const currentPlayer = room?.players.find(
     (eachPlayer) => eachPlayer.name === playerName
   );
@@ -114,31 +139,38 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
               />
 
               <div className="mt-8 mb-2">
-                <p className="text-center text-lg font-medium">
-                  Spell the word:
-                </p>
+                {" "}
+                {room?.status ? (
+                  <p className="text-center text-lg font-medium">
+                    Spell the word:
+                  </p>
+                ) : null}
               </div>
 
-              <div className="join w-full">
-                <input
-                  type="text"
-                  placeholder="Type your answer..."
-                  className="input input-bordered join-item w-full"
-                  value={guess}
-                  onChange={(e) => setGuess(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && submitGuess()}
-                />
-                <button
-                  className="btn btn-primary join-item"
-                  onClick={submitGuess}
-                  disabled={
-                    !guess.trim() ||
-                    currentPlayer?.roundGuesses?.includes(room?.wordIndex ?? -1)
-                  }
-                >
-                  <Send className="h-4 w-4" />
-                </button>
-              </div>
+              {room?.status ? (
+                <div className="join w-full">
+                  <input
+                    type="text"
+                    placeholder="Type your answer..."
+                    className="input input-bordered join-item w-full"
+                    value={guess}
+                    onChange={(e) => setGuess(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && submitGuess()}
+                  />
+                  <button
+                    className="btn btn-primary join-item"
+                    onClick={submitGuess}
+                    disabled={
+                      !guess.trim() ||
+                      currentPlayer?.roundGuesses?.includes(
+                        room?.wordIndex ?? -1
+                      )
+                    }
+                  >
+                    <Send className="h-4 w-4" />
+                  </button>
+                </div>
+              ) : null}
             </div>
           </div>
 

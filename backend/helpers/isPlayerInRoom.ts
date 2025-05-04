@@ -1,5 +1,5 @@
 /**
- * @file Detects if a given player name, and a given room code. If the given player code exists in the room.
+ * @file Detects if given player name and a  room code. If the given player code exists in the room.
  */
 
 import { RoomCode, Rooms } from "../types";

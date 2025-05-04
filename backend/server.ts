@@ -1,5 +1,9 @@
 // server
 
+/**
+ * @file the express server using socket.io
+ */
+
 import express from "express";
 import { Server, Socket } from "socket.io";
 import type {
@@ -31,10 +35,28 @@ const io = new Server(server, {
 const rooms: Rooms = {};
 
 const connected = (socket: Socket) => {
+  /**
+   * listener for "joinRoom"
+   * handles when players join the room
+   */
   socket.on("joinRoom", (data: JoinRoomData) => {
+    /**
+     * destructuring data
+     */
     const { code, player } = data;
+    /** checks if code exists in rooms Record ("sort of like a dictionary") */
     if (code in rooms) {
+      /**
+       * de-structures player joining so we can set isHost to false
+       */
       const { isHost, ...rest } = player;
+
+      /**
+       * access the key in rooms with the RoomCode and push the player to the players list
+       * the idNumber will be their index in the list
+       * the guesses is a Set for faster score calculation (I hope they dont include duplicates during the same spelling bee)
+       * the round guesses is a Set where it will increment and correspond to the word index ensuring you only get one guess per round (same rules as the participants in real life)
+       */
       rooms[code].players.push({
         ...rest,
         idNumber: rooms[code].players.length,
@@ -42,24 +64,40 @@ const connected = (socket: Socket) => {
         guesses: new Set<string>(),
         roundGuesses: new Set<number>(),
       });
+
+      /**
+       * emit to the "room_{ROOMID}_modified" listener for EVERY client tht the room was updated
+       */
       socket.broadcast.emit(
         `room_${code}_modified`,
         modifyRoomForStringify(rooms[code])
       );
     }
 
+    /**
+     * emits to the "{roomID}_playerJoined" listener
+     * same thing as above but makes sure the player list updates for the host as well
+     */
     socket.broadcast.emit(
       `${code}_playerJoined`,
       modifyPlayerForStringify(player)
     ); // for host
   });
 
+  /**
+   * gets the Room data
+   * listener for "getRoom"
+   */
   socket.on("getRoom", (code: RoomCode, callback) => {
     if (code in rooms) {
       callback(rooms[code]);
     }
   });
 
+  /**
+   * listener for "modifyRoom"
+   * this updates the Room data so every client has the most up-to-date "Room" data
+   */
   socket.on(
     "modifyRoom",
     (code: RoomCode, playerName: string, partialRoom: Partial<Room>) => {
@@ -76,6 +114,10 @@ const connected = (socket: Socket) => {
     }
   );
 
+  /**
+   * listener for the "createRoom"
+   * creates a room
+   */
   socket.on("createRoom", (data: CreateRoomData) => {
     const { code, host } = data;
 
@@ -90,6 +132,10 @@ const connected = (socket: Socket) => {
     }
   });
 
+  /**
+   * listener for "submitWords"
+   * handles when the host submits a word list for the room
+   */
   socket.on("submitWords", (data: SubmitWords, callback) => {
     const { roomId, words } = data;
 
@@ -103,6 +149,10 @@ const connected = (socket: Socket) => {
     }
   });
 
+  /**
+   * listener for "guessWords"
+   * handles when players guess the current word
+   */
   socket.on("guessWord", (data: SubmitGuess) => {
     const { playerName, guess, roomId } = data;
     /**
@@ -158,6 +208,7 @@ const connected = (socket: Socket) => {
 
           /** Update the room */
           rooms[roomId].players[foundPlayerIndex] = foundPlayer;
+          /** listener for "room_${roomId}_modified" is found in PlayerRoom.tsx */
           socket.broadcast.emit(
             `room_${roomId}_modified`,
             modifyRoomForStringify(rooms[roomId])
@@ -172,7 +223,11 @@ const connected = (socket: Socket) => {
   });
 
   /**
-   * IF YOU WANT ON-->EMIT, SUPPLY (data, CALLBACK) as the argument.
+   * listener for "getPlayers"
+   * handles fetching the players for the room
+   * the callback ensures every player is updated so every player sees the other updated players
+   *
+   * IF YOU WANT ON-->EMIT, supply (data, CALLBACK) as the argument.
    * call `callback` with whatever data you were expecting in the front-end.
    * https://socket.io/docs/v3/emitting-events/#acknowledgements
    */
