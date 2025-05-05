@@ -90,7 +90,7 @@ const connected = (socket: Socket) => {
    */
   socket.on("getRoom", (code: RoomCode, callback) => {
     if (code in rooms) {
-      callback(rooms[code]);
+      callback(modifyRoomForStringify(rooms[code]));
     }
   });
 
@@ -138,6 +138,8 @@ const connected = (socket: Socket) => {
    */
   socket.on("submitWords", (data: SubmitWords, callback) => {
     const { roomId, words } = data;
+
+    console.log(data);
 
     if (roomId !== undefined && words !== undefined && roomId in rooms) {
       // TODO: convert to set concatenation (ie union)

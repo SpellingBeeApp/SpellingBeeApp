@@ -29,6 +29,36 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
   const roomId = params.roomId;
   const { emit, on } = useSocket("http://localhost:5500");
   const [players, setPlayers] = React.useState<Player[]>([]);
+  const [room, setRoom] = React.useState<Room>();
+
+  /**
+   * listening for the specific roomId modify listener
+   * this constantly updates or "modifies" the room when anything changes
+   */
+  React.useEffect(() => {
+    if (roomId !== undefined) {
+      on(`room_${roomId}_modified`, (partialRoom: Room) => {
+        console.log(partialRoom);
+        setRoom((oldRoom) => {
+          if (oldRoom === undefined) {
+            return { ...partialRoom };
+          }
+          return { ...oldRoom, ...partialRoom };
+        });
+      });
+    }
+  }, [roomId, on]);
+
+  /**
+   * emitting to the get Room listener and getting the room info in server
+   */
+  React.useEffect(() => {
+    if (roomId !== undefined && emit !== undefined) {
+      emit("getRoom", roomId, (room: Room) => {
+        setRoom(room);
+      });
+    }
+  }, [emit, roomId]);
 
   /**
    * listening for new players that join and adding them to the rooms player list
@@ -97,6 +127,8 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
      * emitting the word list to the "submitWords" listener
      */
     emit("submitWords", payload, (updatedWordList: string) => {
+      console.log("firing");
+
       setWords(JSON.parse(updatedWordList) as string[]);
     });
   };
@@ -177,7 +209,7 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
           <div className="flex gap-2">
             <div className="badge badge-outline gap-2 mt-1">
               <Users className="h-4 w-4" />
-              {players.length} players
+              {room === undefined ? 0 : room.players.length} players
             </div>
             <div className="flex items-center gap-2">
               <div className="badge badge-secondary gap-2 mb-1">
@@ -284,7 +316,7 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
               <div className="card-body">
                 {activeTab === "players" ? (
                   <div className="space-y-2">
-                    {players.map((player, index) => (
+                    {room?.players.map((player, index) => (
                       <div
                         key={`${player.name}-${index}`}
                         className="flex items-center justify-between p-3 bg-base-200 rounded-lg"
