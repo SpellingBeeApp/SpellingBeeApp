@@ -27,7 +27,7 @@ type Room = {
   /**
    * The list of words for the game.
    */
-  words: Set<string>;
+  words: Array<string>;
 
   /**
    * The current index of the "guessable" word in the game.

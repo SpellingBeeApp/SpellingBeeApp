@@ -107,6 +107,8 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
 
   /**TODO: Need to reset word guess input on submit */
 
+  console.log(currentPlayer);
+
   return (
     <div className="min-h-screen p-4 md:p-6 honeycomb-bg">
       <div className="max-w-xl mx-auto">
