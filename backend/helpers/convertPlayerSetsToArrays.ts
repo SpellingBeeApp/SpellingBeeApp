@@ -10,11 +10,11 @@ type ModifiedPlayer = Omit<Player, "guesses" | "roundGuesses"> & {
 };
 
 /**
- * Takes in a player from the spelling bee game, and modifies it for JSON.stringify.
- * @param player - The player to modify for stringification.
+ * Takes in a player from the spelling bee game, and modifies it by converting all fields of type `set` to their respective array equivalent.
+ * @param player - The player to modify.
  * @returns The modified player.
  */
-const modifyPlayerForStringify = (player: Player): ModifiedPlayer => {
+const convertPlayerSetsToArrays = (player: Player): ModifiedPlayer => {
   const { guesses, roundGuesses, ...rest } = player;
 
   if (guesses !== undefined) {
@@ -30,4 +30,4 @@ const modifyPlayerForStringify = (player: Player): ModifiedPlayer => {
   return { ...rest, guesses: [], roundGuesses: [] };
 };
 
-export { modifyPlayerForStringify, type ModifiedPlayer };
+export { convertPlayerSetsToArrays, type ModifiedPlayer };

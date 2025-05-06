@@ -4,11 +4,14 @@
 
 import { RoomStatus } from "../common/enum";
 import type { Player } from "./Player";
+import { RoomActivity } from "./RoomActivity";
 
 /**
  * Room in the spelling bee.
  */
 type Room = {
+  activities: Array<RoomActivity>;
+
   /**
    * The host of the room.
    */

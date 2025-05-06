@@ -5,7 +5,7 @@
  */
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import React from "react";
 import Image from "next/image";
 import useSocket from "@/hooks/useSocket";
 import { CreateRoomData } from "@/types/dto/CreateRoomData";
@@ -13,9 +13,9 @@ import { JoinRoomData } from "@/types/dto/JoinRoomData";
 
 export default function LandingPage() {
   const router = useRouter();
-  const [playerName, setPlayerName] = useState("");
-  const [roomCode, setRoomCode] = useState("");
-  const [activeTab, setActiveTab] = useState("join");
+  const [playerName, setPlayerName] = React.useState("");
+  const [roomCode, setRoomCode] = React.useState("");
+  const [activeTab, setActiveTab] = React.useState("join");
   const { socket } = useSocket("http://localhost:5500");
 
   /**
@@ -109,12 +109,20 @@ export default function LandingPage() {
     /**
      * emitting the payload to the "joinRoom" listener in the server
      */
-    socket?.emit("joinRoom", payload);
+    socket?.emit("joinRoom", payload, (result: boolean) => {
+      if (result) {
+        router.push(`/room/${roomCode}/play`);
+      } else {
+        alert(
+          `Player ${playerName} already exists in room ${roomCode}. Please pick another name.`
+        );
+      }
+    });
 
-    /**
-     * pushing the player to the room with the room code they supplied (TODO: check to see room actually exists)
-     */
-    router.push(`/room/${roomCode}/play`);
+    // /**
+    //  * pushing the player to the room with the room code they supplied (TODO: check to see room actually exists)
+    //  */
+    // router.push(`/room/${roomCode}/play`);
   };
 
   return (

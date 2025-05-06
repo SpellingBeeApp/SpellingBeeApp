@@ -12,6 +12,7 @@ import useSocket from "@/hooks/useSocket";
 import { SubmitGuess } from "@/types/dto";
 import { Room } from "@/types";
 import { RoomStatusDisplay } from "./PlayerRoom/RoomStatusDisplay";
+import { RoomStatus } from "@/common/enum";
 
 export default function PlayerRoom({ params }: { params: { roomId: string } }) {
   const router = useRouter();
@@ -107,8 +108,6 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
 
   /**TODO: Need to reset word guess input on submit */
 
-  console.log(currentPlayer);
-
   return (
     <div className="min-h-screen p-4 md:p-6 honeycomb-bg">
       <div className="max-w-xl mx-auto">
@@ -142,14 +141,14 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
 
               <div className="mt-8 mb-2">
                 {" "}
-                {room?.status ? (
+                {room?.status === RoomStatus.STARTED ? (
                   <p className="text-center text-lg font-medium">
                     Spell the word:
                   </p>
                 ) : null}
               </div>
 
-              {room?.status ? (
+              {room?.status === RoomStatus.STARTED ? (
                 <div className="join w-full">
                   <input
                     type="text"

@@ -9,7 +9,7 @@ type Player = {
   /**
    * The guesses made by the player
    */
-  guesses?: Set<string>;
+  guesses?: Array<string>;
 
   /**
    * The index of the player (defaults to -1 for the host).
