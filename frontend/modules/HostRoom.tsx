@@ -13,12 +13,6 @@ import { SubmitWords } from "@/types/dto/SubmitWords";
 import { Room } from "@/types";
 import { RoomStatus } from "@/common/enum";
 
-type Player = {
-  id: string;
-  name: string;
-  score: number;
-};
-
 export default function HostRoom({ params }: { params: { roomId: string } }) {
   const router = useRouter();
   const [playerName, setPlayerName] = React.useState("");
@@ -28,17 +22,17 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
   const [activeTab, setActiveTab] = React.useState("players");
   const roomId = params.roomId;
   const { emit, on } = useSocket("http://localhost:5500");
-  const [players, setPlayers] = React.useState<Player[]>([]);
   const [room, setRoom] = React.useState<Room>();
 
   /**
-   * listening for the specific roomId modify listener
-   * this constantly updates or "modifies" the room when anything changes
+   * Reacting to a change in `roomId` or `on`.
+   *
+   * Listens for the specific roomId modify event.
+   * This will update or "modify" the room when anything changes.
    */
   React.useEffect(() => {
     if (roomId !== undefined) {
       on(`room_${roomId}_modified`, (partialRoom: Room) => {
-        console.log(partialRoom);
         setRoom((oldRoom) => {
           if (oldRoom === undefined) {
             return { ...partialRoom };
@@ -50,7 +44,7 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
   }, [roomId, on]);
 
   /**
-   * emitting to the get Room listener and getting the room info in server
+   * Emitting the `getRoom` listener and receiving the room content in the callback.
    */
   React.useEffect(() => {
     if (roomId !== undefined && emit !== undefined) {
@@ -59,17 +53,6 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
       });
     }
   }, [emit, roomId]);
-
-  /**
-   * listening for new players that join and adding them to the rooms player list
-   */
-  React.useEffect(() => {
-    if (on !== undefined) {
-      on(`${roomId}_playerJoined`, (newPlayer: Player) => {
-        setPlayers((oldPlayers: Player[]) => [...oldPlayers, newPlayer]);
-      });
-    }
-  }, [on, roomId]);
 
   /**
    * set players name from name provided in localstorage
@@ -92,9 +75,9 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
    */
   const submitWordList = () => {
     /**
-     * makes sure they dont submit an empty list
+     * Checks if `wordListText` is empty, ensuring the user does not submit an empty word list.
      */
-    if (!wordListText.trim()) {
+    if (wordListText.trim().length === 0) {
       alert("Please enter at least one word");
       return;
     }
@@ -108,7 +91,7 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
       .filter((word) => word.length > 0);
 
     /**
-     * check again to make sure word list isnt empty
+     * check again to make sure word list contains an element
      */
     if (wordList.length === 0) {
       alert("Please enter at least one word!");
@@ -127,8 +110,6 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
      * emitting the word list to the "submitWords" listener
      */
     emit("submitWords", payload, (updatedWordList: string) => {
-      console.log("firing");
-
       setWords(JSON.parse(updatedWordList) as string[]);
     });
   };
@@ -151,7 +132,7 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
      */
     setCurrentWordIndex((previousWordIndex) => {
       /**
-       * the payload is a "Partial" Room only using the wordIndex and room status fields
+       * the payload is a "Partial" Room only using the wordIndex
        * when emitted we will increment the index by 1
        */
       const payload: Partial<Room> = {

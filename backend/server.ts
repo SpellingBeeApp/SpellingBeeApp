@@ -18,9 +18,9 @@ import type {
 import { SubmitGuess } from "./types/dto/SubmitGuess";
 import { SubmitWords } from "./types/dto/SubmitWords";
 import { RoomStatus } from "./common/enum";
-import { modifyPlayerForStringify } from "./helpers/modifyPlayerForStringify";
+import { convertPlayerSetsToArrays } from "./helpers/convertPlayerSetsToArrays";
 import { isPlayerInRoom } from "./helpers/isPlayerInRoom";
-import { modifyRoomForStringify } from "./helpers/modifyRoomForStringify";
+import { convertRoomSetsToArrays } from "./helpers/convertRoomSetsToArrays";
 
 const app = express();
 const port = 5500;
@@ -47,7 +47,8 @@ const connected = (socket: Socket) => {
     /** checks if code exists in rooms Record ("sort of like a dictionary") */
     if (code in rooms) {
       /**
-       * de-structures player joining so we can set isHost to false
+       * stripping `isHost` from the `player` object, and setting `rest` to the remainder of the object (player).
+       * So we can set isHost to false
        */
       const { isHost, ...rest } = player;
 
@@ -66,22 +67,13 @@ const connected = (socket: Socket) => {
       });
 
       /**
-       * emit to the "room_{ROOMID}_modified" listener for EVERY client tht the room was updated
+       * emit to the "room_{ROOMID}_modified" listener for EVERY client (but the sender) that the room was updated
        */
       socket.broadcast.emit(
         `room_${code}_modified`,
-        modifyRoomForStringify(rooms[code])
+        convertRoomSetsToArrays(rooms[code])
       );
     }
-
-    /**
-     * emits to the "{roomID}_playerJoined" listener
-     * same thing as above but makes sure the player list updates for the host as well
-     */
-    socket.broadcast.emit(
-      `${code}_playerJoined`,
-      modifyPlayerForStringify(player)
-    ); // for host
   });
 
   /**
@@ -90,7 +82,7 @@ const connected = (socket: Socket) => {
    */
   socket.on("getRoom", (code: RoomCode, callback) => {
     if (code in rooms) {
-      callback(modifyRoomForStringify(rooms[code]));
+      callback(convertRoomSetsToArrays(rooms[code]));
     }
   });
 
@@ -108,7 +100,7 @@ const connected = (socket: Socket) => {
         const { host, ...rest } = rooms[code];
         socket.broadcast.emit(
           `room_${code}_modified`,
-          modifyRoomForStringify({ ...rest } as Room)
+          convertRoomSetsToArrays({ ...rest } as Room)
         );
       }
     }
@@ -213,11 +205,11 @@ const connected = (socket: Socket) => {
           /** listener for "room_${roomId}_modified" is found in PlayerRoom.tsx */
           socket.broadcast.emit(
             `room_${roomId}_modified`,
-            modifyRoomForStringify(rooms[roomId])
+            convertRoomSetsToArrays(rooms[roomId])
           );
           socket.emit(
             `room_${roomId}_modified`,
-            modifyRoomForStringify(rooms[roomId])
+            convertRoomSetsToArrays(rooms[roomId])
           );
         }
       }
@@ -240,7 +232,7 @@ const connected = (socket: Socket) => {
       callback(
         JSON.stringify(
           rooms[code].players.map((eachPlayer) =>
-            modifyPlayerForStringify(eachPlayer)
+            convertPlayerSetsToArrays(eachPlayer)
           )
         )
       );
