@@ -41,7 +41,7 @@ const connected = (socket: Socket) => {
    * listener for "joinRoom"
    * handles when players join the room
    */
-  socket.on("joinRoom", (data: JoinRoomData) => {
+  socket.on("joinRoom", (data: JoinRoomData, callback) => {
     /**
      * destructuring data
      */
@@ -53,6 +53,13 @@ const connected = (socket: Socket) => {
        * So we can set isHost to false
        */
       const { isHost, ...rest } = player;
+
+      const doesPlayerExist = isPlayerInRoom(rest.name, code, rooms);
+
+      if (doesPlayerExist) {
+        callback(false);
+        return;
+      }
 
       /**
        * access the key in rooms with the RoomCode and push the player to the players list
@@ -86,6 +93,8 @@ const connected = (socket: Socket) => {
         `room_${code}_modified`,
         convertRoomSetsToArrays(rooms[code])
       );
+
+      callback(true);
     }
   });
 
