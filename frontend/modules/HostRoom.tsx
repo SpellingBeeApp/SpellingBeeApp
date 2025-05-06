@@ -16,9 +16,8 @@ import { ActivityLog } from "./HostRoom/ActivityLog";
 
 export default function HostRoom({ params }: { params: { roomId: string } }) {
   const router = useRouter();
+  const textAreaInputReference = React.useRef<HTMLTextAreaElement | null>(null);
   const [playerName, setPlayerName] = React.useState("");
-  const [wordListText, setWordListText] = React.useState("");
-  const [words, setWords] = React.useState<string[]>([]);
   const [currentWordIndex, setCurrentWordIndex] = React.useState(-1);
   const [activeTab, setActiveTab] = React.useState("players");
   const roomId = params.roomId;
@@ -75,6 +74,14 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
    * @returns void
    */
   const submitWordList = () => {
+    const currentRef = textAreaInputReference.current;
+
+    if (currentRef === null) {
+      return;
+    }
+
+    const wordListText = currentRef.value;
+
     /**
      * Checks if `wordListText` is empty, ensuring the user does not submit an empty word list.
      */
@@ -82,7 +89,6 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
       alert("Please enter at least one word");
       return;
     }
-
     /**
      * separates list by line breaks or commas and ensures words are at least one character
      */
@@ -90,7 +96,6 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
       .split(/[\n,]/)
       .map((word) => word.trim())
       .filter((word) => word.length > 0);
-
     /**
      * check again to make sure word list contains an element
      */
@@ -98,7 +103,6 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
       alert("Please enter at least one word!");
       return;
     }
-
     /**
      * the payload we will emit to the server consisting of the roomId and the word list
      */
@@ -106,14 +110,18 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
       roomId,
       words: wordList,
     };
-
     /**
      * emitting the word list to the "submitWords" listener
      */
-    emit("submitWords", payload, (updatedWordList: string) => {
-      setWords(JSON.parse(updatedWordList) as string[]);
-    });
+    emit("submitWords", payload);
   };
+
+  const endGame = React.useCallback(() => {
+    emit("modifyRoom", roomId, playerName, {
+      ...room,
+      status: RoomStatus.ENDED,
+    });
+  }, [emit, playerName, room, roomId]);
 
   /**
    * used with the "Next Word" button to advance through the word list
@@ -123,7 +131,7 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
     /**
      * check to make sure the word list isn't empty
      */
-    if (words.length === 0) {
+    if (room?.words.length === 0) {
       alert("Please submit a word list first!");
       return;
     }
@@ -147,7 +155,7 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
        */
       if (previousWordIndex === -1) {
         payload.status = RoomStatus.STARTED;
-      } else if (previousWordIndex === words.length) {
+      } else if (previousWordIndex === room?.words.length) {
         payload.status = RoomStatus.ENDED;
       }
 
@@ -218,8 +226,7 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
                   <textarea
                     placeholder="Enter your word list (one word per line or comma-separated)"
                     className="textarea textarea-bordered font-mono h-40"
-                    value={wordListText}
-                    onChange={(e) => setWordListText(e.target.value)}
+                    ref={textAreaInputReference}
                   />
                   <div className="card-actions justify-between">
                     <button
@@ -229,7 +236,7 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
                       <Check className="h-4 w-4 mr-2" />
                       Submit Words
                     </button>
-                    {words.length > 0 && (
+                    {(room?.words.length ?? 0) > 0 && (
                       <button className="btn btn-secondary" onClick={nextWord}>
                         Start Game
                         <ArrowRight className="h-4 w-4 ml-2" />
@@ -243,10 +250,10 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
                 <div className="card-body">
                   <div className="text-center space-y-4">
                     <h2 className="text-4xl font-bold">
-                      {words[currentWordIndex]}
+                      {room?.words[currentWordIndex]}
                     </h2>
                     <p className="text-base-content/70">
-                      Word {currentWordIndex + 1} of {words.length}
+                      Word {currentWordIndex + 1} of {room?.words.length}
                     </p>
                   </div>
 
@@ -254,13 +261,29 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
                     <button
                       className="btn btn-primary"
                       onClick={nextWord}
-                      disabled={currentWordIndex >= words.length - 1}
+                      disabled={
+                        currentWordIndex >= (room?.words.length ?? 1) - 1
+                      }
                     >
                       Next Word
                       <ArrowRight className="h-4 w-4 ml-2" />
                     </button>
 
-                    <button className="btn btn-error">End Game</button>
+                    {room?.status === undefined ||
+                    room?.wordIndex === undefined ? (
+                      <></>
+                    ) : (
+                      <button
+                        className="btn btn-error"
+                        disabled={
+                          room.wordIndex + 1 < room.words.length ||
+                          room.status === RoomStatus.ENDED
+                        }
+                        onClick={endGame}
+                      >
+                        End Game
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
@@ -323,13 +346,13 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
                   </div>
                 ) : (
                   <div>
-                    {words.length > 0 ? (
+                    {(room?.words.length ?? 0) > 0 ? (
                       <div className="space-y-2">
                         <p className="text-sm text-base-content/70">
-                          {words.length} words in list
+                          {room?.words.length} words in list
                         </p>
                         <div className="max-h-96 overflow-y-auto space-y-2">
-                          {words.map((word, index) => (
+                          {room?.words.map((word, index) => (
                             <div
                               key={index}
                               className="flex justify-between p-2 bg-base-200 rounded-lg"

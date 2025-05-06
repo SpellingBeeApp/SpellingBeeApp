@@ -16,8 +16,6 @@ export const ActivityLog = ({
 }: ActivityLogProperties): React.JSX.Element => {
   const { type, timestamp } = activity;
 
-  console.log(activity);
-
   return (
     <div
       className="flex flex-row justify-between border rounded border-opacity-25 p-3"

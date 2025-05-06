@@ -8,7 +8,10 @@ import {
   convertPlayerSetsToArrays,
 } from "./convertPlayerSetsToArrays";
 
-type ModifiedRoom = Omit<Room, "players"> & { players: ModifiedPlayer[] };
+type ModifiedRoom = Omit<Room, "players" | "words"> & {
+  players: ModifiedPlayer[];
+  words: Array<string>;
+};
 
 /**
  * Takes in a room from the spelling bee game, and modifies it by converting all fields of type `set` to their respective array equivalent.
@@ -16,9 +19,10 @@ type ModifiedRoom = Omit<Room, "players"> & { players: ModifiedPlayer[] };
  * @returns The modified room.
  */
 export const convertRoomSetsToArrays = (room: Room): ModifiedRoom => {
-  const { players, ...rest } = room;
+  const { players, words, ...rest } = room;
   return {
     ...rest,
+    words: [...words.values()],
     players: players.map((eachPlayer) => convertPlayerSetsToArrays(eachPlayer)),
   };
 };

@@ -124,6 +124,11 @@ const connected = (socket: Socket) => {
           `room_${code}_modified`,
           convertRoomSetsToArrays({ ...rest } as Room)
         );
+
+        socket.emit(
+          `room_${code}_modified`,
+          convertRoomSetsToArrays(rooms[code])
+        );
       }
     }
   );
@@ -151,7 +156,7 @@ const connected = (socket: Socket) => {
    * listener for "submitWords"
    * handles when the host submits a word list for the room
    */
-  socket.on("submitWords", (data: SubmitWords, callback) => {
+  socket.on("submitWords", (data: SubmitWords) => {
     const { roomId, words } = data;
 
     if (roomId !== undefined && words !== undefined && roomId in rooms) {
@@ -160,7 +165,15 @@ const connected = (socket: Socket) => {
         rooms[roomId].words.add(eachWord);
       }
 
-      callback(JSON.stringify([...rooms[roomId].words.values()]));
+      console.log(
+        rooms[roomId].words,
+        data,
+        convertRoomSetsToArrays(rooms[roomId])
+      );
+      socket.emit(
+        `room_${roomId}_modified`,
+        convertRoomSetsToArrays(rooms[roomId])
+      );
     }
   });
 
@@ -242,6 +255,7 @@ const connected = (socket: Socket) => {
               },
             })
           );
+
           /** listener for "room_${roomId}_modified" is found in PlayerRoom.tsx */
           socket.broadcast.emit(
             `room_${roomId}_modified`,
