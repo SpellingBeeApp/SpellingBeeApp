@@ -1,5 +1,6 @@
 export type { Player } from "./Player";
 export type { Room } from "./Room";
+export type { RoomActivity } from "./RoomActivity";
 export type { RoomCode } from "./RoomCode";
 export type { Rooms } from "./Rooms";
 export type { CreateRoomData } from "./dto";

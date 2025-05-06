@@ -17,10 +17,12 @@ import type {
 } from "./types";
 import { SubmitGuess } from "./types/dto/SubmitGuess";
 import { SubmitWords } from "./types/dto/SubmitWords";
-import { RoomStatus } from "./common/enum";
+import { ActivityType, RoomStatus } from "./common/enum";
 import { convertPlayerSetsToArrays } from "./helpers/convertPlayerSetsToArrays";
 import { isPlayerInRoom } from "./helpers/isPlayerInRoom";
 import { convertRoomSetsToArrays } from "./helpers/convertRoomSetsToArrays";
+import { createActivity } from "./helpers/createActivity";
+import { isGuessRight } from "./helpers/isGuessRight";
 
 const app = express();
 const port = 5500;
@@ -62,9 +64,20 @@ const connected = (socket: Socket) => {
         ...rest,
         idNumber: rooms[code].players.length,
         isHost: false,
-        guesses: new Set<string>(),
+        guesses: [],
         roundGuesses: new Set<number>(),
       });
+
+      /**
+       * Adds an activity to the room.
+       */
+      rooms[code].activities.push(
+        createActivity({
+          isHost: false,
+          playerName: rest.name,
+          type: ActivityType.JOIN,
+        })
+      );
 
       /**
        * emit to the "room_{ROOMID}_modified" listener for EVERY client (but the sender) that the room was updated
@@ -115,6 +128,7 @@ const connected = (socket: Socket) => {
 
     if (!(code in rooms)) {
       rooms[code] = {
+        activities: [],
         host,
         players: [],
         status: RoomStatus.CREATED,
@@ -130,8 +144,6 @@ const connected = (socket: Socket) => {
    */
   socket.on("submitWords", (data: SubmitWords, callback) => {
     const { roomId, words } = data;
-
-    console.log(data);
 
     if (roomId !== undefined && words !== undefined && roomId in rooms) {
       // TODO: convert to set concatenation (ie union)
@@ -184,13 +196,13 @@ const connected = (socket: Socket) => {
             return;
           }
 
-          foundPlayer.guesses.add(guess);
+          foundPlayer.guesses.push(guess);
           foundPlayer.roundGuesses.add(rooms[roomId].wordIndex);
 
-          console.log(foundPlayer.guesses.values());
-
-          const numberCorrect = [...rooms[roomId].words.values()].filter(
-            (eachWord) => foundPlayer.guesses?.has(eachWord)
+          const roomWords = [...rooms[roomId].words.values()];
+          const numberCorrect = foundPlayer.guesses.filter(
+            (eachPlayerGuess, eachPlayerGuessIndex) =>
+              roomWords[eachPlayerGuessIndex] == eachPlayerGuess
           ).length;
 
           const score =
@@ -200,8 +212,27 @@ const connected = (socket: Socket) => {
               : rooms[roomId].wordIndex + 1);
           foundPlayer.score = Math.round(score * 100);
 
+          const isPlayerGuessRight = isGuessRight(
+            guess,
+            rooms[roomId].words,
+            rooms[roomId].wordIndex
+          );
+
           /** Update the room */
           rooms[roomId].players[foundPlayerIndex] = foundPlayer;
+          rooms[roomId].activities.push(
+            createActivity({
+              isHost: false,
+              playerName: foundPlayer.name,
+              type: isPlayerGuessRight
+                ? ActivityType.GUESS_RIGHT
+                : ActivityType.GUESS_WRONG,
+              metadata: {
+                guess,
+                round: (rooms[roomId].wordIndex + 1).toString(),
+              },
+            })
+          );
           /** listener for "room_${roomId}_modified" is found in PlayerRoom.tsx */
           socket.broadcast.emit(
             `room_${roomId}_modified`,

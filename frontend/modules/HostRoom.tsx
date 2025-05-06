@@ -12,6 +12,7 @@ import useSocket from "@/hooks/useSocket";
 import { SubmitWords } from "@/types/dto/SubmitWords";
 import { Room } from "@/types";
 import { RoomStatus } from "@/common/enum";
+import { ActivityLog } from "./HostRoom/ActivityLog";
 
 export default function HostRoom({ params }: { params: { roomId: string } }) {
   const router = useRouter();
@@ -173,6 +174,8 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
 
   /**TODO: Need to get player scores to update properly for host and implement activity log */
 
+  console.log(room);
+
   return (
     <div className="min-h-screen p-4 md:p-6 honeycomb-bg">
       <div className="max-w-6xl mx-auto">
@@ -267,9 +270,18 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
               <div className="card-body">
                 <h2 className="card-title">Activity Log</h2>
                 <div className="h-[300px] overflow-y-auto">
-                  <p className="text-center text-base-content/70">
-                    No activity yet
-                  </p>
+                  {room?.activities.length === 0 ? (
+                    <p className="text-center text-base-content/70">
+                      No activity yet
+                    </p>
+                  ) : (
+                    room?.activities.map((eachActivity, activity_index) => (
+                      <ActivityLog
+                        activity={eachActivity}
+                        key={`activity_index_${activity_index}`}
+                      />
+                    ))
+                  )}
                 </div>
               </div>
             </div>
