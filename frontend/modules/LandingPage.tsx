@@ -127,10 +127,10 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 honeycomb-bg">
-      <div className="card w-96 bg-base-100 shadow-xl">
+      <div className="card w-96 bg-base-100 shadow-xl animate-fade">
         <div className="card-body">
           <div className="flex justify-center mb-4">
-            <div className="relative">
+            <div className="relative animate-fade-right">
               <Image
                 alt="Scripps Spelling Bee Logo"
                 src="\logo.svg"

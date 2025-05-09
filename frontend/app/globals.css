@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import "tailwindcss-animated";
 
 .honeycomb-bg {
   background-color: hsl(0, 0%, 98%);
@@ -12,7 +13,8 @@
 }
 
 @keyframes bounce {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0);
   }
   50% {
@@ -40,7 +42,8 @@
 }
 
 @keyframes correct {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
   }
   50% {
@@ -54,7 +57,8 @@
 }
 
 @keyframes incorrect {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
   }
   50% {
