@@ -109,8 +109,12 @@ export default function LandingPage() {
     /**
      * emitting the payload to the "joinRoom" listener in the server
      */
+  
+    console.log("testing3")
     socket?.emit("joinRoom", payload, (result: boolean) => {
+      console.log("testing1")
       if (result) {
+        console.log("testing")
         router.push(`/room/${roomCode}/play`);
       } else {
         alert(
@@ -136,6 +140,7 @@ export default function LandingPage() {
                 src="\logo.svg"
                 width={200}
                 height={300}
+                className="animate-roll"
               />
             </div>
           </div>

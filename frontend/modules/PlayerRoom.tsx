@@ -118,6 +118,7 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
               src="\logo.svg"
               width={200}
               height={300}
+               className="animate-roll"
             />
             <p className="text-base-content/70">Player View</p>
           </div>
