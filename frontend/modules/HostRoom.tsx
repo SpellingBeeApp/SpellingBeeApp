@@ -194,6 +194,7 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
               src="\logo.svg"
               width={200}
               height={300}
+               className="animate-roll"
             />
             <p className="text-base-content/70">Host Room</p>
           </div>
