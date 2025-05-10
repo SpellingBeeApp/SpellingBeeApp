@@ -2,13 +2,13 @@ import React, { useEffect } from "react";
 import { motion } from "framer-motion";
 import confetti from "canvas-confetti";
 
-type Winner = {
+type Player = {
   name: string;
   score: number;
 };
 
 interface ScoreboardProps {
-  winners: Winner[];
+  winners: Player[];
 }
 
 const podiumColors: Record<number, string> = {
@@ -40,7 +40,7 @@ const Scoreboard: React.FC<ScoreboardProps> = ({ winners }) => {
   }, []);
 
   return (
-    <div className="flex items-end justify-center gap-6 h-80 mt-10">
+    <div className="flex items-end justify-center gap-6 h-40 mt-10">
       {ordered.map((displayIndex, i) => {
         const winner = winners[displayIndex];
         if (!winner) return null;
