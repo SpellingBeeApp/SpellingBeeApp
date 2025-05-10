@@ -39,6 +39,31 @@
   animation: roll 3s linear;
 }
 
+
+.drop-shadow-glow {
+  text-shadow: 0 0 10px rgba(255,255,255,0.8), 0 0 20px rgba(255,255,255,0.6);
+}
+
+
+@keyframes partyBounce {
+  0%, 100% {
+    transform: scale(1);
+    color: #facc15;
+    text-shadow: 0 0 4px #facc15, 0 0 8px #f59e0b;
+  }
+  50% {
+    transform: scale(1.1);
+    color: #f472b6;
+    text-shadow: 0 0 6px #f472b6, 0 0 12px #ec4899;
+  }
+}
+
+.animate-party {
+  animation: partyBounce 1s ease-in-out infinite;
+  will-change: transform, color, text-shadow;
+}
+
+
 @keyframes revealWord {
   0% {
     opacity: 0;
