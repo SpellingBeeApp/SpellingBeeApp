@@ -47,37 +47,40 @@ const Scoreboard: React.FC<ScoreboardProps> = ({ winners }) => {
         const position = displayIndex + 1;
 
         return (
-          <motion.div
-            key={winner.name}
-            className={`flex flex-col items-center justify-end w-24 rounded-t-lg shadow-lg ${
-              podiumColors[position]
-            }`}
-            style={{ height: `${heights[i]}px` }}
-            initial={{ scale: 0, y: 50, opacity: 0 }}
-            animate={{ scale: 1, y: 0, opacity: 1 }}
-            transition={{ duration: 0.6, delay: i * 0.6 }}
-          >
+<motion.div
+  key={winner.name}
+  className={`flex flex-col items-center justify-end w-24 rounded-t-lg shadow-lg ${podiumColors[position]}`}
+  style={{ height: `${heights[i]}px` }}
+  initial={{ scale: 0, y: 50, opacity: 0 }}
+  animate={{ scale: 1, y: 0, opacity: 1 }}
+  transition={{ duration: 0.6, delay: i * 0.6 }}
+>
+  <div className="mb-2">
+    {/* Medal emoji (visible on md and up) */}
+    <div className="hidden md:block text-4xl">
+      {position === 1 && "🥇"}
+      {position === 2 && "🥈"}
+      {position === 3 && "🥉"}
+    </div>
 
-     
-
-<div className="mb-2">
-  {/* Medal emoji (visible on md and up) */}
-  <div className="hidden md:block text-4xl">
-    {position === 1 && "🥇"}
-    {position === 2 && "🥈"}
-    {position === 3 && "🥉"}
+    {/* Number badge (visible on small screens) */}
+    <div className="block md:hidden bg-white text-black text-sm font-semibold px-3 py-1 rounded-full shadow ring-2 ring-offset-2 ring-black">
+      {position === 1 && "1st"}
+      {position === 2 && "2nd"}
+      {position === 3 && "3rd"}
+    </div>
   </div>
 
-  {/* Number badge (visible on small screens) */}
-  <div className="block md:hidden bg-white text-black text-sm font-semibold px-3 py-1 rounded-full shadow ring-2 ring-offset-2 ring-black drop-shadow-glow">
-    {position === 1 && "1st"}
-    {position === 2 && "2nd"}
-    {position === 3 && "3rd"}
+  {/* Winner's name */}
+  <div className="text-white text-base font-bold tracking-wide text-center px-2 mb-1">
+    {winner.name}
   </div>
-</div>
-            <div className="text-center text-white font-semibold">{winner.name}</div>
-            <div className="text-sm text-white mb-2">{winner.score} pts</div>
-          </motion.div>
+
+  {/* Winner's score */}
+  <div className="text-white text-sm font-medium bg-black/30 px-2 py-1 rounded-full backdrop-blur-sm">
+    {winner.score} pts
+  </div>
+</motion.div>
         );
       })}
     </div>
