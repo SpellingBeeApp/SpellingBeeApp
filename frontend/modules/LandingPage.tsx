@@ -10,6 +10,7 @@ import Image from "next/image";
 import useSocket from "@/hooks/useSocket";
 import { CreateRoomData } from "@/types/dto/CreateRoomData";
 import { JoinRoomData } from "@/types/dto/JoinRoomData";
+import Confetti from "./Confetti"
 
 export default function LandingPage() {
   const router = useRouter();
@@ -131,7 +132,12 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 honeycomb-bg">
+
+      <Confetti />
+      <div className="card w-96 bg-base-100 shadow-xl">
+
       <div className="card w-96 bg-base-100 shadow-xl animate-fade">
+
         <div className="card-body">
           <div className="flex justify-center mb-4">
             <div className="relative animate-fade-right">
@@ -139,7 +145,7 @@ export default function LandingPage() {
                 alt="Scripps Spelling Bee Logo"
                 src="\logo.svg"
                 width={200}
-                height={300}
+                height={300}  
                 className="animate-roll"
               />
             </div>
