@@ -1,5 +1,6 @@
 import { RoomStatus } from "@/common/enum";
 import React from "react";
+import Confetti from "../Confetti"
 
 /**
  * @file the client side Room Status display component
@@ -32,7 +33,9 @@ export const RoomStatusDisplay = ({
           className={`w-12 h-12 ${
             roomStatus === RoomStatus.ENDED ? "bg-green-500" : "bg-primary"
           } rounded-full transition-colors animate-pulse`}
-        ></div>
+        >
+          {roomStatus === RoomStatus.ENDED ? <Confetti/> : ""}
+          </div>
       </div>
       <p className="text-base-content/70 text-xl">{displayText}</p>
     </div>

@@ -14,6 +14,7 @@
     "@types/react-dom": "18.2.7",
     "autoprefixer": "^10.4.21",
     "bufferutil": "^4.0.9",
+    "canvas-confetti": "^1.9.3",
     "daisyui": "^4.7.3",
     "dayjs": "^1.11.13",
     "lucide-react": "^0.446.0",
