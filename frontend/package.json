@@ -17,6 +17,7 @@
     "canvas-confetti": "^1.9.3",
     "daisyui": "^4.7.3",
     "dayjs": "^1.11.13",
+    "framer-motion": "^12.10.5",
     "lucide-react": "^0.446.0",
     "next": "13.5.1",
     "postcss": "8.4.30",

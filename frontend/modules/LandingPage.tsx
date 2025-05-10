@@ -19,6 +19,7 @@ export default function LandingPage() {
   const [activeTab, setActiveTab] = React.useState("join");
   const { socket } = useSocket("http://localhost:5500");
 
+
   /**
    * creates a room for the spelling bee
    * @returns void
