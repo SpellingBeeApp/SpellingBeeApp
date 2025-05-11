@@ -180,10 +180,6 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
     alert("Room code copied to clipboard");
   };
 
-  /**TODO: Need to get player scores to update properly for host and implement activity log */
-
-  console.log(room);
-
   return (
     <div className="min-h-screen p-4 md:p-6 honeycomb-bg">
       <div className="max-w-6xl mx-auto">
