@@ -130,7 +130,7 @@ export default function LandingPage() {
       <div className="card w-96 bg-base-100 shadow-xl animate-fade">
         <div className="card-body">
           <div className="flex justify-center mb-4">
-            <div className="relative animate-fade-right">
+            <div className="relative animate-fade">
               <Image
                 alt="Scripps Spelling Bee Logo"
                 src="\logo.svg"
@@ -139,11 +139,11 @@ export default function LandingPage() {
               />
             </div>
           </div>
-          <p className="text-center text-base-content/70">
+          <p className="text-center text-base-content/70 animate-fade">
             Create or join a spelling competition
           </p>
 
-          <div className="tabs tabs-bordered grow justify-center my-4">
+          <div className="tabs tabs-bordered grow justify-center my-4 animate-fade">
             <a
               className={`tab ${activeTab === "join" ? "tab-active" : ""}`}
               onClick={() => setActiveTab("join")}
@@ -158,8 +158,8 @@ export default function LandingPage() {
             </a>
           </div>
 
-          <div className="space-y-4">
-            <div className="form-control">
+          <div className="space-y-4 animate-fade-right">
+            <div className="form-control transition-all">
               <label className="label">
                 <span className="label-text">Your Name</span>
               </label>
@@ -173,14 +173,14 @@ export default function LandingPage() {
             </div>
 
             {activeTab === "join" && (
-              <div className="form-control">
+              <div className="form-control transition-all">
                 <label className="label">
                   <span className="label-text">Room Code</span>
                 </label>
                 <input
                   type="text"
                   placeholder="Enter room code"
-                  className="input input-bordered w-full uppercase"
+                  className="input input-bordered w-full"
                   value={roomCode}
                   onChange={(e) => setRoomCode(e.target.value.toUpperCase())}
                   maxLength={6}
@@ -189,8 +189,8 @@ export default function LandingPage() {
             )}
 
             <button
-              className={`btn btn-primary w-full ${
-                activeTab === "join" ? "" : "btn-outline"
+              className={`btn btn-primary w-full transform duration-700 ease-in-out ${
+                activeTab === "join" ? "" : "btn-secondary"
               }`}
               onClick={activeTab === "join" ? joinRoom : createRoom}
             >

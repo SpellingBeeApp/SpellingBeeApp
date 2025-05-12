@@ -111,7 +111,7 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
   return (
     <div className="min-h-screen p-4 md:p-6 honeycomb-bg">
       <div className="max-w-xl mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4 transition-all duration-500 ease-in-out">
           <div className="animate-fade-right">
             <Image
               alt="Scripps Spelling Bee Logo"
@@ -122,7 +122,7 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
             <p className="text-base-content/70">Player View</p>
           </div>
 
-          <div className="flex gap-2 animate-fade-left">
+          <div className="flex gap-2 animate-fade-right">
             <div className="badge badge-outline gap-2">
               <Users className="h-4 w-4" />
               {room === undefined ? 0 : room.players.length} players
