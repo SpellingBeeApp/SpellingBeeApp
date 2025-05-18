@@ -176,23 +176,38 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
             </div>
           </div>
 
-          {room?.status === RoomStatus.ENDED && <div className="card bg-base-100 shadow-xl">
+          {/* {room?.status === RoomStatus.ENDED && <div className="card bg-base-100 shadow-xl">
              <div className="card-body" style={{}}>
             
              <div className="w-full flex justify-center">
-  <h2 className="text-2xl font-extrabold animate-party">
+  <h2 className="text-2xl font-sans animate-party">
     🎉 Top Three Winners 🏆
   </h2>
 </div>
             <Scoreboard winners={room.players} />
             </div>
-            </div>}
+            </div>} */}
 
 
           <div className="card bg-base-100 shadow-xl">
             <div className="card-body">
               <h2 className="card-title">Scoreboard</h2>
               <div className="space-y-4">
+
+
+              {room?.status === RoomStatus.ENDED && 
+             <div className="card-body" style={{}}>
+            
+             <div className="w-full flex justify-center">
+  <h2 className="text-2xl font-sans animate-party">
+    🎉 Top Three Winners 🏆
+  </h2>
+</div>
+            <Scoreboard winners={room.players} />
+            </div>
+            }
+
+
                 {playerRank && (
                   <div className="bg-base-200 p-3 rounded-lg text-center">
                     <p className="font-medium">
