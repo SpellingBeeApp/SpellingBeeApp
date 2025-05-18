@@ -112,7 +112,7 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
     <div className="min-h-screen p-4 md:p-6 honeycomb-bg">
       <div className="max-w-xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4 transition-all duration-500 ease-in-out">
-          <div className="animate-fade-right">
+          <div className="animate__animated animate__fadeInRight">
             <Image
               alt="Scripps Spelling Bee Logo"
               src="\logo.svg"

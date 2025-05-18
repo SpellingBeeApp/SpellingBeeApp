@@ -130,7 +130,7 @@ export default function LandingPage() {
       <div className="card w-96 bg-base-100 shadow-xl animate-fade">
         <div className="card-body">
           <div className="flex justify-center mb-4">
-            <div className="relative animate-fade">
+            <div className="relative animate-fade animate__animated animate__bounce">
               <Image
                 alt="Scripps Spelling Bee Logo"
                 src="\logo.svg"
