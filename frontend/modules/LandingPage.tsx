@@ -112,11 +112,8 @@ export default function LandingPage() {
      * emitting the payload to the "joinRoom" listener in the server
      */
   
-    console.log("testing3")
     socket?.emit("joinRoom", payload, (result: boolean) => {
-      console.log("testing1")
       if (result) {
-        console.log("testing")
         router.push(`/room/${roomCode}/play`);
       } else {
         alert(
@@ -133,7 +130,6 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 honeycomb-bg">
-      <Confetti />
       <div className="card w-96 bg-base-100 shadow-xl">
         <div className="card-body">
           <div className="flex justify-center mb-4">

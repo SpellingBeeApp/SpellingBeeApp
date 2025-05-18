@@ -15,7 +15,7 @@ const PartySprinkles = () => {
         origin: { y: 0 },
         colors: ['#bb0000', '#ffffff', '#00ff00', '#0000ff', '#ffff00'],
       });
-    }, 100);
+    }, 200);
 
     return () => clearInterval(interval);
   }, []);

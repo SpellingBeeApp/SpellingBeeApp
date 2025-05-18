@@ -35,7 +35,7 @@ export const RoomStatusDisplay = ({
             roomStatus === RoomStatus.ENDED ? "bg-green-500" : "bg-primary"
           } rounded-full transition-colors animate-pulse`}
         >
-          {roomStatus === RoomStatus.ENDED ? <Confetti/>: ""}
+          {roomStatus === RoomStatus.ENDED && <Confetti/>}
           </div>
       </div>
       <p className="text-base-content/70 text-xl">{displayText}</p>
