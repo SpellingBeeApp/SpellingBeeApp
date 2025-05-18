@@ -180,15 +180,11 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
     alert("Room code copied to clipboard");
   };
 
-  /**TODO: Need to get player scores to update properly for host and implement activity log */
-
-  console.log(room);
-
   return (
     <div className="min-h-screen p-4 md:p-6 honeycomb-bg">
       <div className="max-w-6xl mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-          <div className="animate-fade-right">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4 transition-all duration-500 ease-in-out">
+          <div className="animate-fade">
             <Image
               alt="Scripps Spelling Bee Logo"
               src="\logo.svg"
@@ -199,7 +195,7 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
             <p className="text-base-content/70">Host Room</p>
           </div>
 
-          <div className="flex gap-2 animate-fade-left">
+          <div className="flex gap-2 animate-fade">
             <div className="badge badge-outline gap-2 mt-1">
               <Users className="h-4 w-4" />
               {room === undefined ? 0 : room.players.length} players
@@ -221,7 +217,7 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-6">
             {currentWordIndex === -1 ? (
-              <div className="card bg-base-100 shadow-xl animate-fade-right">
+              <div className="card bg-base-100 shadow-xl animate-fade">
                 <div className="card-body">
                   <h2 className="card-title">Word List</h2>
                   <textarea
@@ -290,7 +286,7 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
               </div>
             )}
 
-            <div className="card bg-base-100 shadow-xl animate-fade-right">
+            <div className="card bg-base-100 shadow-xl animate-fade">
               <div className="card-body">
                 <h2 className="card-title">Activity Log</h2>
                 <div className="h-[300px] overflow-y-auto">
@@ -311,7 +307,7 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
             </div>
           </div>
 
-          <div className="animate-fade-left">
+          <div className="animate-fade">
             <div className="tabs tabs-bordered justify-center mb-4">
               <a
                 className={`tab ${activeTab === "players" ? "tab-active" : ""}`}
