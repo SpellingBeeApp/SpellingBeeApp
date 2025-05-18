@@ -181,12 +181,12 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
               <h2 className="card-title">Scoreboard</h2>
               <div className="space-y-4">
                 {room?.status === RoomStatus.ENDED && (
-                  <div className="card-body" style={{}}>
-                    <div className="w-full flex justify-center">
+                  <div className="card-body" style={{padding:'0px'}}>
+                    {/* <div className="w-full flex justify-center">
                       <h2 className="text-2xl font-sans animate-party">
                         🎉 Top Three Winners 🏆
                       </h2>
-                    </div>
+                    </div> */}
                     <Scoreboard winners={room.players} />
                   </div>
                 )}
