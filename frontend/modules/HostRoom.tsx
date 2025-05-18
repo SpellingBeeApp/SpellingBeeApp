@@ -190,9 +190,8 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
               src="\logo.svg"
               width={200}
               height={300}
-            
             />
-            <p className="text-base-content/70">Host Room</p>
+            <p className="text-base-content/70">Host View</p>
           </div>
 
           <div className="flex gap-2 animate-fade">
@@ -334,9 +333,7 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
                         key={`${player.name}-${index}`}
                         className="flex items-center justify-between p-3 bg-base-200 rounded-lg"
                       >
-                        <span className="font-medium">
-                          {index + 1}. {player.name}
-                        </span>
+                        <span className="font-medium">{player.name}</span>
                         <span className="font-bold">{`${player.score}%`}</span>
                       </div>
                     ))}
