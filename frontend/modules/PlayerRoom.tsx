@@ -21,11 +21,6 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
   const [playerName, setPlayerName] = React.useState("");
   const [guess, setGuess] = React.useState("");
   const roomId = params.roomId?.trim();
-  const winners = [
-    { name: "Alice", score: 1400 },
-    { name: "Bob", score: 1200 },
-    { name: "Charlie", score: 900 },
-  ];
   const [room, setRoom] = React.useState<Room>();
 
   /**
@@ -140,7 +135,7 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
         <div className="space-y-6 animate-fade-up">
           <div className="card bg-base-100 shadow-xl">
             <div className="card-body">
-              <RoomStatusDisplay  
+              <RoomStatusDisplay
                 currentWordIndex={room?.wordIndex}
                 roomStatus={room?.status}
               />
@@ -181,23 +176,21 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
             </div>
           </div>
 
-          {room?.status === RoomStatus.ENDED && <div className="card bg-base-100 shadow-xl">
-             <div className="card-body" style={{}}>
-            
-             <div className="w-full flex justify-center">
-  <h2 className="text-3xl font-extrabold animate-party">
-    🎉 Top Three Winners 🏆
-  </h2>
-</div>
-            <Scoreboard winners={room.players} />
-            </div>
-            </div>}
-
-
           <div className="card bg-base-100 shadow-xl">
             <div className="card-body">
               <h2 className="card-title">Scoreboard</h2>
               <div className="space-y-4">
+                {room?.status === RoomStatus.ENDED && (
+                  <div className="card-body" style={{}}>
+                    <div className="w-full flex justify-center">
+                      <h2 className="text-2xl font-sans animate-party">
+                        🎉 Top Three Winners 🏆
+                      </h2>
+                    </div>
+                    <Scoreboard winners={room.players} />
+                  </div>
+                )}
+
                 {playerRank && (
                   <div className="bg-base-200 p-3 rounded-lg text-center">
                     <p className="font-medium">

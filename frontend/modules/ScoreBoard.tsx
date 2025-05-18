@@ -55,21 +55,15 @@ const Scoreboard: React.FC<ScoreboardProps> = ({ winners }) => {
   animate={{ scale: 1, y: 0, opacity: 1 }}
   transition={{ duration: 0.6, delay: i * 0.6 }}
 >
-  <div className="mb-2">
-    {/* Medal emoji (visible on md and up) */}
-    <div className="hidden md:block text-4xl">
-      {position === 1 && "🥇"}
-      {position === 2 && "🥈"}
-      {position === 3 && "🥉"}
-    </div>
-
-    {/* Number badge (visible on small screens) */}
-    <div className="block md:hidden bg-white text-black text-sm font-semibold px-3 py-1 rounded-full shadow ring-2 ring-offset-2 ring-black">
-      {position === 1 && "1st"}
-      {position === 2 && "2nd"}
-      {position === 3 && "3rd"}
-    </div>
+<div className="mb-2">
+  {/* Always-visible, elegant medal icon */}
+  <div className="flex justify-center text-5xl sm:text-6xl md:text-7xl transition-transform duration-300 ease-in-out drop-shadow-md">
+    {position === 1 && <span>🥇</span>}
+    {position === 2 && <span>🥈</span>}
+    {position === 3 && <span>🥉</span>}
   </div>
+</div>
+
 
   {/* Winner's name */}
   <div className="text-white text-base font-bold tracking-wide text-center px-2 mb-1">
