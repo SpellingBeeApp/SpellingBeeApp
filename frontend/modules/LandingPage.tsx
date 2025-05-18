@@ -139,7 +139,6 @@ export default function LandingPage() {
                 src="\logo.svg"
                 width={200}
                 height={300}  
-                className="animate-roll"
               />
             </div>
           </div>
