@@ -13,6 +13,7 @@ import { SubmitGuess } from "@/types/dto";
 import { Room } from "@/types";
 import { RoomStatusDisplay } from "./PlayerRoom/RoomStatusDisplay";
 import { RoomStatus } from "@/common/enum";
+import Scoreboard from "./ScoreBoard";
 
 export default function PlayerRoom({ params }: { params: { roomId: string } }) {
   const router = useRouter();
@@ -179,6 +180,17 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
             <div className="card-body">
               <h2 className="card-title">Scoreboard</h2>
               <div className="space-y-4">
+                {room?.status === RoomStatus.ENDED && (
+                  <div className="card-body" style={{padding:'0px'}}>
+                    {/* <div className="w-full flex justify-center">
+                      <h2 className="text-2xl font-sans animate-party">
+                        🎉 Top Three Winners 🏆
+                      </h2>
+                    </div> */}
+                    <Scoreboard winners={room.players} />
+                  </div>
+                )}
+
                 {playerRank && (
                   <div className="bg-base-200 p-3 rounded-lg text-center">
                     <p className="font-medium">

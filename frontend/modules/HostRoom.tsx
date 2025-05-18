@@ -190,6 +190,7 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
               src="\logo.svg"
               width={200}
               height={300}
+            
             />
             <p className="text-base-content/70">Host Room</p>
           </div>
@@ -289,12 +290,12 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
               <div className="card-body">
                 <h2 className="card-title">Activity Log</h2>
                 <div className="h-[300px] overflow-y-auto">
-                  {room?.activities.length === 0 ? (
+                  {room?.activities?.length === 0 ? (
                     <p className="text-center text-base-content/70">
                       No activity yet
                     </p>
                   ) : (
-                    room?.activities.map((eachActivity, activity_index) => (
+                    room?.activities?.map((eachActivity, activity_index) => (
                       <ActivityLog
                         activity={eachActivity}
                         key={`activity_index_${activity_index}`}

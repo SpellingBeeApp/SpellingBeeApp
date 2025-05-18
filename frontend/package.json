@@ -15,8 +15,10 @@
     "animate.css": "^4.1.1",
     "autoprefixer": "^10.4.21",
     "bufferutil": "^4.0.9",
+    "canvas-confetti": "^1.9.3",
     "daisyui": "^4.7.3",
     "dayjs": "^1.11.13",
+    "framer-motion": "^12.10.5",
     "lucide-react": "^0.446.0",
     "next": "13.5.1",
     "postcss": "8.4.30",
@@ -29,6 +31,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.25.1",
+    "@types/canvas-confetti": "^1.9.0",
     "eslint": "^9.25.1",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
