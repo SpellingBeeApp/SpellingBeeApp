@@ -10,7 +10,6 @@ import Image from "next/image";
 import useSocket from "@/hooks/useSocket";
 import { CreateRoomData } from "@/types/dto/CreateRoomData";
 import { JoinRoomData } from "@/types/dto/JoinRoomData";
-import Confetti from "./Confetti"
 
 export default function LandingPage() {
   const router = useRouter();
@@ -18,7 +17,6 @@ export default function LandingPage() {
   const [roomCode, setRoomCode] = React.useState("");
   const [activeTab, setActiveTab] = React.useState("join");
   const { socket } = useSocket("http://localhost:5500");
-
 
   /**
    * creates a room for the spelling bee
@@ -111,7 +109,7 @@ export default function LandingPage() {
     /**
      * emitting the payload to the "joinRoom" listener in the server
      */
-  
+
     socket?.emit("joinRoom", payload, (result: boolean) => {
       if (result) {
         router.push(`/room/${roomCode}/play`);
@@ -138,7 +136,7 @@ export default function LandingPage() {
                 alt="Scripps Spelling Bee Logo"
                 src="\logo.svg"
                 width={200}
-                height={300}  
+                height={300}
               />
             </div>
           </div>
