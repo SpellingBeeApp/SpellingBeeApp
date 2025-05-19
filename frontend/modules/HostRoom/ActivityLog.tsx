@@ -24,7 +24,7 @@ export const ActivityLog = ({
       <div className="ps-2 text-sm">
         {dayjs.utc(timestamp).local().format("hh:mm:ss A")}
       </div>
-      <div className="italic font-bold">
+      <div className="italic font-bold invisible md:visible md:text-sm">
         {activity.metadata === undefined ||
         (activity.metadata as Record<string, string>)["round"] === undefined
           ? ""

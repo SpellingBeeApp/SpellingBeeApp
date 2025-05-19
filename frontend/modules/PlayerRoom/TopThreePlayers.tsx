@@ -1,13 +1,9 @@
 import React, { useEffect } from "react";
 import { motion } from "framer-motion";
 import confetti from "canvas-confetti";
+import { Player } from "@/types";
 
-type Player = {
-  name: string;
-  score: number;
-};
-
-interface ScoreboardProps {
+interface TopThreePlayersProps {
   winners: Player[];
 }
 
@@ -17,14 +13,16 @@ const podiumColors: Record<number, string> = {
   3: "bg-[#CD7F32]", // Bronze
 };
 
-const Scoreboard: React.FC<ScoreboardProps> = ({ winners }) => {
+const TopThreePlayers: React.FC<TopThreePlayersProps> = ({ winners }) => {
   const ordered = [1, 0, 2]; // 2nd, 1st, 3rd
   const heights = [100, 120, 90];
-  const [topScoringPlayers, setTopScoringPlayers] = React.useState<Player[]>([])
+  const [topScoringPlayers, setTopScoringPlayers] = React.useState<Player[]>(
+    []
+  );
   // Confetti and sound for 1st place
   useEffect(() => {
     const topPlayers = winners.sort((a, b) => (b.score ?? 0) - (a.score ?? 0));
-    setTopScoringPlayers(topPlayers)
+    setTopScoringPlayers(topPlayers);
     // Step 3: (Optional) Print them
     // topScoringPlayers.forEach(player => {
     //   console.log(`${player.name} scored ${player.score}`);
@@ -37,16 +35,16 @@ const Scoreboard: React.FC<ScoreboardProps> = ({ winners }) => {
         zIndex: 9999,
       });
 
-      // Optional: play a trumpet sound or similar
-      const audio = new Audio("/trumpet-fanfare.mp3"); // place this in /public
-      audio.play();
+      // // Optional: play a trumpet sound or similar
+      // const audio = new Audio("/trumpet-fanfare.mp3"); // place this in /public
+      // audio.play();
     }, 1200); // aligns with 1st place animation delay
 
     return () => clearTimeout(timer);
   }, []);
 
   return (
-    <div className="flex items-end justify-center gap-6 h-40 mt-10">
+    <div className="flex items-end justify-center gap-6 lg:pt-4">
       {ordered.map((displayIndex, i) => {
         const winner = topScoringPlayers[displayIndex];
         if (!winner) return null;
@@ -86,4 +84,4 @@ const Scoreboard: React.FC<ScoreboardProps> = ({ winners }) => {
   );
 };
 
-export default Scoreboard;
+export default TopThreePlayers;
