@@ -3,7 +3,7 @@ FROM ubuntu:25.04
 # Step 1: docker build -t spellingbee .
 # Step 2: docker run -d --name spellingbee -p 1024:1024 -it spellingbee
 
-COPY run_apps.sh /root/run_apps.sh
+COPY --chmod=755 run_apps.sh /root/run_apps.sh
 RUN apt-get update
 RUN apt-get install -y nodejs
 RUN apt-get install -y npm
