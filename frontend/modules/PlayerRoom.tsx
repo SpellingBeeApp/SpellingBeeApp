@@ -17,7 +17,7 @@ import TopThreePlayers from "./PlayerRoom/TopThreePlayers";
 
 export default function PlayerRoom({ params }: { params: { roomId: string } }) {
   const router = useRouter();
-  const { emit, on } = useSocket("http://0.0.0.0:5500");
+  const { emit, on } = useSocket("http://localhost:3000");
   const [playerName, setPlayerName] = React.useState("");
   const [guess, setGuess] = React.useState("");
   const roomId = params.roomId?.trim();

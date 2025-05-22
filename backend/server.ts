@@ -25,11 +25,11 @@ import { createActivity } from "./helpers/createActivity";
 import { isGuessRight } from "./helpers/isGuessRight";
 
 const app = express();
-const port = 5500;
+const port = 3000;
 const server = app.listen(port);
 const io = new Server(server, {
   cors: {
-    origin: "*", // or '*' for all origins (not recommended in prod)
+    origin: "http://localhost:1024", // or '*' for all origins (not recommended in prod)
     methods: ["GET", "POST"],
   },
 });
