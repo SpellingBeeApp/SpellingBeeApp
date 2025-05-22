@@ -26,7 +26,7 @@ import { isGuessRight } from "./helpers/isGuessRight";
 
 const app = express();
 const port = 5500;
-const server = app.listen(port, "0.0.0.0");
+const server = app.listen(port, "http://secretbee.zipcode.rocks");
 const io = new Server(server, {
   cors: {
     origin: "*", // or '*' for all origins (not recommended in prod)
