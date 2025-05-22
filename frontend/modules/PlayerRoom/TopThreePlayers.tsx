@@ -41,7 +41,7 @@ const TopThreePlayers: React.FC<TopThreePlayersProps> = ({ winners }) => {
     }, 1200); // aligns with 1st place animation delay
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [winners]);
 
   return (
     <div className="flex items-end justify-center gap-6 lg:pt-4">
