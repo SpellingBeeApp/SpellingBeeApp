@@ -16,7 +16,7 @@ export default function LandingPage() {
   const [playerName, setPlayerName] = React.useState("");
   const [roomCode, setRoomCode] = React.useState("");
   const [activeTab, setActiveTab] = React.useState("join");
-  const { socket } = useSocket("http://secretbee.zipcode.rocks:1024/");
+  const { socket } = useSocket("http://secretbee.zipcode.rocks:5500");
 
   /**
    * creates a room for the spelling bee
