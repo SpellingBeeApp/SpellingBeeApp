@@ -16,7 +16,5 @@ RUN cd ~ && cd SpellingBeeApp && cd frontend && npm i && npm run build && cd ~
 # Installs & Builds backend
 RUN cd ~ && cd SpellingBeeApp && cd backend && npm i && npm run build && cd ~
 
-RUN sed -i 's/\r$//' /root/run_apps.sh
-
 SHELL ["/bin/bash", "-c"]
 CMD ["/root/run_apps.sh"]
