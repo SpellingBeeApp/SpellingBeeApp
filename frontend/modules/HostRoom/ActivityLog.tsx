@@ -18,7 +18,7 @@ export const ActivityLog = ({
 
   return (
     <div
-      className="flex flex-row justify-between border rounded border-opacity-25 p-3 animate__animated animate__lightSpeedInLeft"
+      className="flex flex-row justify-between border rounded border-opacity-25 p-3 animate__animated animate__fadeInLeft"
       style={{ backgroundColor: activityTypeToColor[type] }}
     >
       <div className="ps-2 text-sm">

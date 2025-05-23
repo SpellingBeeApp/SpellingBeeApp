@@ -12,6 +12,10 @@ function useSocket(
 
   useEffect(() => {
     // Initialize socket connection
+    // For dev
+    // const socketIo = io(url, options);
+
+    // For prod
     const socketIo = io({
       path: "/socket.io",
       transports: ["websocket", "polling"],

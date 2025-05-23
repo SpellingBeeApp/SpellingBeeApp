@@ -10,12 +10,13 @@ import Image from "next/image";
 import useSocket from "@/hooks/useSocket";
 import { CreateRoomData } from "@/types/dto/CreateRoomData";
 import { JoinRoomData } from "@/types/dto/JoinRoomData";
+import { AnimatePresence, motion } from "framer-motion";
 
 export default function LandingPage() {
   const router = useRouter();
   const [playerName, setPlayerName] = React.useState("");
   const [roomCode, setRoomCode] = React.useState("");
-  const [activeTab, setActiveTab] = React.useState("join");
+  const [activeTab, setActiveTab] = React.useState("create");
   const { socket } = useSocket("http://localhost:5000");
 
   /**
@@ -127,78 +128,95 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 honeycomb-bg">
-      <div className="card w-96 bg-base-100 shadow-xl animate-fade">
-        <div className="card-body">
-          <div className="flex justify-center mb-4">
-            <div className="relative animate-fade animate__animated animate__bounce">
-              <Image
-                alt="Scripps Spelling Bee Logo"
-                src="\logo.svg"
-                width={200}
-                height={300}
-              />
+      <motion.div
+        layout
+        className="overflow_hidden transition-all"
+        transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+      >
+        <div className="card w-96 bg-base-100 shadow-xl transition-all duration-500 ease-in-out animate-fade overflow-hidden">
+          <div className="card-body">
+            <div className="flex justify-center mb-4">
+              <div className="relative animate__animated animate__bounce">
+                <Image
+                  alt="Scripps Spelling Bee Logo"
+                  src="\logo.svg"
+                  width={200}
+                  height={300}
+                />
+              </div>
             </div>
-          </div>
-          <p className="text-center text-base-content/70 animate-fade">
-            Create or join a spelling competition
-          </p>
+            <p className="text-center text-base-content/70 animate-fade">
+              Create or join a spelling competition
+            </p>
 
-          <div className="tabs tabs-bordered grow justify-center my-4 animate-fade">
-            <a
-              className={`tab ${activeTab === "join" ? "tab-active" : ""}`}
-              onClick={() => setActiveTab("join")}
-            >
-              Join a Room
-            </a>
-            <a
-              className={`tab ${activeTab === "create" ? "tab-active" : ""}`}
-              onClick={() => setActiveTab("create")}
-            >
-              Create a Room
-            </a>
-          </div>
-
-          <div className="space-y-4 animate-fade-right">
-            <div className="form-control transition-all">
-              <label className="label">
-                <span className="label-text">Your Name</span>
-              </label>
-              <input
-                type="text"
-                placeholder="Enter your name"
-                className="input input-bordered w-full"
-                value={playerName}
-                onChange={(e) => setPlayerName(e.target.value)}
-              />
+            <div className="tabs tabs-bordered grow justify-center my-4 animate-fade">
+              <a
+                className={`tab ${activeTab === "join" ? "tab-active" : ""}`}
+                onClick={() => setActiveTab("join")}
+              >
+                Join a Room
+              </a>
+              <a
+                className={`tab ${activeTab === "create" ? "tab-active" : ""}`}
+                onClick={() => setActiveTab("create")}
+              >
+                Create a Room
+              </a>
             </div>
 
-            {activeTab === "join" && (
+            <div className="space-y-4 animate-fade-right">
               <div className="form-control transition-all">
                 <label className="label">
-                  <span className="label-text">Room Code</span>
+                  <span className="label-text">Your Name</span>
                 </label>
                 <input
                   type="text"
-                  placeholder="Enter room code"
+                  placeholder="Enter your name"
                   className="input input-bordered w-full"
-                  value={roomCode}
-                  onChange={(e) => setRoomCode(e.target.value.toUpperCase())}
-                  maxLength={6}
+                  value={playerName}
+                  onChange={(e) => setPlayerName(e.target.value)}
                 />
               </div>
-            )}
 
-            <button
-              className={`btn btn-primary w-full transform duration-700 ease-in-out ${
-                activeTab === "join" ? "" : "btn-secondary"
-              }`}
-              onClick={activeTab === "join" ? joinRoom : createRoom}
-            >
-              {activeTab === "join" ? "Join Room" : "Create New Room"}
-            </button>
+              <AnimatePresence mode="wait">
+                {activeTab === "join" && (
+                  <motion.div
+                    key="room-code"
+                    className="form-control"
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                  >
+                    <label className="label">
+                      <span className="label-text">Room Code</span>
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Enter room code"
+                      className="input input-bordered w-full"
+                      value={roomCode}
+                      onChange={(e) =>
+                        setRoomCode(e.target.value.toUpperCase())
+                      }
+                      maxLength={6}
+                    />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              <button
+                className={`btn btn-primary w-full transform duration-700 ease-in-out ${
+                  activeTab === "join" ? "" : "btn-secondary"
+                }`}
+                onClick={activeTab === "join" ? joinRoom : createRoom}
+              >
+                {activeTab === "join" ? "Join Room" : "Create New Room"}
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }
