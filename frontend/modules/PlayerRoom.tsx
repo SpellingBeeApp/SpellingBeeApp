@@ -30,7 +30,6 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
   React.useEffect(() => {
     if (roomId !== undefined) {
       on(`room_${roomId}_modified`, (partialRoom: Room) => {
-        console.log(partialRoom);
         setRoom((oldRoom) => {
           if (oldRoom === undefined) {
             return { ...partialRoom };

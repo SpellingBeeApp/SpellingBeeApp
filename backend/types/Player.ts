@@ -2,6 +2,8 @@
  * @file Represents the data structure of a player in the spelling bee game.
  */
 
+import { Guess } from "./Guess";
+
 /**
  * Player in the spelling bee. Can be host or participant.
  */
@@ -9,7 +11,7 @@ type Player = {
   /**
    * The guesses made by the player
    */
-  guesses?: Array<string>;
+  guesses?: Array<Guess>;
 
   /**
    * The index of the player (defaults to -1 for the host).

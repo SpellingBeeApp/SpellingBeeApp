@@ -11,15 +11,13 @@ function useSocket(
   const [socket, setSocket] = useState<Socket>();
 
   useEffect(() => {
-    // Initialize socket connection
-    // For dev
-    // const socketIo = io(url, options);
-
-    // For prod
-    const socketIo = io({
-      path: "/socket.io",
-      transports: ["websocket", "polling"],
-    });
+    const socketIo =
+      process.env.NODE_ENV === "development"
+        ? io(url, options)
+        : io({
+            path: "/socket.io",
+            transports: ["websocket", "polling"],
+          });
 
     setSocket(socketIo);
 

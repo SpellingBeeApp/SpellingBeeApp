@@ -23,6 +23,7 @@ import { isPlayerInRoom } from "./helpers/isPlayerInRoom";
 import { convertRoomSetsToArrays } from "./helpers/convertRoomSetsToArrays";
 import { createActivity } from "./helpers/createActivity";
 import { isGuessRight } from "./helpers/isGuessRight";
+import { calculateScoreboard } from "./helpers/calculateScoreboard";
 
 const app = express();
 const port = 5000;
@@ -120,6 +121,8 @@ const connected = (socket: Socket) => {
       if (doesPlayerExist) {
         rooms[code] = { ...rooms[code], ...partialRoom };
         const { host, ...rest } = rooms[code];
+        calculateScoreboard(rooms[code]);
+
         socket.broadcast.emit(
           `room_${code}_modified`,
           convertRoomSetsToArrays({ ...rest } as Room)
@@ -165,11 +168,6 @@ const connected = (socket: Socket) => {
         rooms[roomId].words.add(eachWord);
       }
 
-      console.log(
-        rooms[roomId].words,
-        data,
-        convertRoomSetsToArrays(rooms[roomId])
-      );
       socket.emit(
         `room_${roomId}_modified`,
         convertRoomSetsToArrays(rooms[roomId])
@@ -218,21 +216,12 @@ const connected = (socket: Socket) => {
             return;
           }
 
-          foundPlayer.guesses.push(guess);
+          foundPlayer.guesses.push([guess, rooms[roomId].wordIndex]);
           foundPlayer.roundGuesses.add(rooms[roomId].wordIndex);
 
-          const roomWords = [...rooms[roomId].words.values()];
-          const numberCorrect = foundPlayer.guesses.filter(
-            (eachPlayerGuess, eachPlayerGuessIndex) =>
-              roomWords[eachPlayerGuessIndex] == eachPlayerGuess
-          ).length;
+          // calculate leaderboard here
 
-          const score =
-            numberCorrect /
-            (rooms[roomId].wordIndex === undefined
-              ? 1
-              : rooms[roomId].wordIndex + 1);
-          foundPlayer.score = Math.round(score * 100);
+          calculateScoreboard(rooms[roomId]);
 
           const isPlayerGuessRight = isGuessRight(
             guess,

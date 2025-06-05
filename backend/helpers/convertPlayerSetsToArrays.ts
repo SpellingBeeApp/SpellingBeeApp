@@ -3,9 +3,10 @@
  */
 
 import { Player } from "../types";
+import { Guess } from "../types/Guess";
 
 type ModifiedPlayer = Omit<Player, "guesses" | "roundGuesses"> & {
-  guesses: Array<string>;
+  guesses: Array<Guess>;
   roundGuesses: Array<number>;
 };
 
