@@ -119,8 +119,9 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
   const endGame = React.useCallback(() => {
     emit("modifyRoom", roomId, playerName, {
       ...room,
+      wordIndex: (room?.wordIndex ?? 0) + 1,
       status: RoomStatus.ENDED,
-    });
+    } as Partial<Room>);
   }, [emit, playerName, room, roomId]);
 
   /**

@@ -121,7 +121,7 @@ const connected = (socket: Socket) => {
       if (doesPlayerExist) {
         rooms[code] = { ...rooms[code], ...partialRoom };
         const { host, ...rest } = rooms[code];
-        calculateScoreboard(rooms[code]);
+        calculateScoreboard(rooms[code], 0);
 
         socket.broadcast.emit(
           `room_${code}_modified`,
