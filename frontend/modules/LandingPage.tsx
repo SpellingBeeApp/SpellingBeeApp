@@ -174,6 +174,7 @@ export default function LandingPage() {
                   placeholder="Enter your name"
                   className="input input-bordered w-full"
                   value={playerName}
+                  maxLength={20}
                   onChange={(e) => setPlayerName(e.target.value)}
                 />
               </div>
