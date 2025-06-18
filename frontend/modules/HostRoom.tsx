@@ -37,15 +37,17 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
 
       if (detail !== undefined) {
         const { words } = detail;
-        const payload: SubmitWords = {
-          words,
-          roomId,
-        };
 
-        emit("submitWords", payload);
+        const wordListReference = textAreaInputReference.current;
+
+        if (wordListReference !== null) {
+          wordListReference.value = words
+            .map((eachWord) => `${eachWord}`)
+            .join("\n");
+        }
       }
     },
-    [emit, roomId]
+    [roomId]
   );
 
   /**
