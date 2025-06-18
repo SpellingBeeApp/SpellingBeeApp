@@ -13,6 +13,9 @@ import { SubmitWords } from "@/types/dto/SubmitWords";
 import { Room } from "@/types";
 import { RoomStatus } from "@/common/enum";
 import { ActivityLog } from "./HostRoom/ActivityLog";
+import CSVReader from "./HostRoom/CSVReader";
+import { UploadWordListEvent } from "@/types/event/UploadWordlistEvent";
+import { EVENTS } from "@/common/constants/Events";
 
 export default function HostRoom({ params }: { params: { roomId: string } }) {
   const router = useRouter();
@@ -23,6 +26,27 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
   const roomId = params.roomId;
   const { emit, on } = useSocket("http://localhost:5000");
   const [room, setRoom] = React.useState<Room>();
+
+  /**
+   * Callback that fires when the `wordFileUpload` event fires.
+   */
+  const onWordListUpload = React.useCallback(
+    (event: Event) => {
+      const customEvent = event as CustomEvent<UploadWordListEvent>;
+      const { detail } = customEvent;
+
+      if (detail !== undefined) {
+        const { words } = detail;
+        const payload: SubmitWords = {
+          words,
+          roomId,
+        };
+
+        emit("submitWords", payload);
+      }
+    },
+    [emit, roomId]
+  );
 
   /**
    * Reacting to a change in `roomId` or `on`.
@@ -42,6 +66,16 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
       });
     }
   }, [roomId, on]);
+
+  React.useEffect(() => {
+    if (document !== undefined) {
+      document.addEventListener(EVENTS.wordFileUpload, onWordListUpload);
+    }
+
+    return () => {
+      document.removeEventListener(EVENTS.wordFileUpload, onWordListUpload);
+    };
+  }, [onWordListUpload]);
 
   /**
    * Emitting the `getRoom` listener and receiving the room content in the callback.
@@ -239,6 +273,9 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
                         <ArrowRight className="h-4 w-4 ml-2" />
                       </button>
                     )}
+                    <div className="hover:cursor-pointer">
+                      <CSVReader />
+                    </div>
                   </div>
                 </div>
               </div>
