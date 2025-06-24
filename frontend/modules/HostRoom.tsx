@@ -30,25 +30,22 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
   /**
    * Callback that fires when the `wordFileUpload` event fires.
    */
-  const onWordListUpload = React.useCallback(
-    (event: Event) => {
-      const customEvent = event as CustomEvent<UploadWordListEvent>;
-      const { detail } = customEvent;
+  const onWordListUpload = React.useCallback((event: Event) => {
+    const customEvent = event as CustomEvent<UploadWordListEvent>;
+    const { detail } = customEvent;
 
-      if (detail !== undefined) {
-        const { words } = detail;
+    if (detail !== undefined) {
+      const { words } = detail;
 
-        const wordListReference = textAreaInputReference.current;
+      const wordListReference = textAreaInputReference.current;
 
-        if (wordListReference !== null) {
-          wordListReference.value = words
-            .map((eachWord) => `${eachWord}`)
-            .join("\n");
-        }
+      if (wordListReference !== null) {
+        wordListReference.value = words
+          .map((eachWord) => `${eachWord}`)
+          .join("\n");
       }
-    },
-    [roomId]
-  );
+    }
+  }, []);
 
   /**
    * Reacting to a change in `roomId` or `on`.
@@ -217,6 +214,12 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
     alert("Room code copied to clipboard");
   };
 
+  if (room === undefined) {
+    return <span className="hidden" />;
+  }
+
+  const { words } = room;
+
   return (
     <div className="min-h-screen p-4 md:p-6 honeycomb-bg">
       <div className="max-w-6xl mx-auto">
@@ -286,7 +289,7 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
                 <div className="card-body">
                   <div className="text-center space-y-4">
                     <h2 className="text-4xl font-bold">
-                      {room?.words[currentWordIndex]}
+                      {room.words[currentWordIndex]}
                     </h2>
                     <p className="text-base-content/70">
                       Word {currentWordIndex + 1} of {room?.words.length}
@@ -305,8 +308,8 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
                       <ArrowRight className="h-4 w-4 ml-2" />
                     </button>
 
-                    {room?.status === undefined ||
-                    room?.wordIndex === undefined ? (
+                    {room.status === undefined ||
+                    room.wordIndex === undefined ? (
                       <></>
                     ) : (
                       <button
@@ -329,12 +332,12 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
               <div className="card-body">
                 <h2 className="card-title">Activity Log</h2>
                 <div className="h-[300px] overflow-y-auto">
-                  {room?.activities?.length === 0 ? (
+                  {room.activities?.length === 0 ? (
                     <p className="text-center text-base-content/70">
                       No activity yet
                     </p>
                   ) : (
-                    room?.activities?.map((eachActivity, activity_index) => (
+                    room.activities?.map((eachActivity, activity_index) => (
                       <ActivityLog
                         activity={eachActivity}
                         key={`activity_index_${activity_index}`}
@@ -389,11 +392,16 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
                           {room?.words.map((word, index) => (
                             <div
                               key={index}
-                              className="flex justify-between p-2 bg-base-200 rounded-lg"
+                              className={`flex justify-center p-2 bg-base-200 rounded-lg ${
+                                index === room.wordIndex ? "bg-gray-400/50" : ""
+                              }`}
                             >
-                              <span className="font-medium">{word}</span>
-                              <span className="text-base-content/70">
-                                #{index + 1}
+                              <span
+                                className={`font-medium ${
+                                  index === room.wordIndex ? "!font-bold" : ""
+                                }`}
+                              >
+                                {word}
                               </span>
                             </div>
                           ))}
