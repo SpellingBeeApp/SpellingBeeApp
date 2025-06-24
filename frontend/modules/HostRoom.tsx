@@ -281,6 +281,15 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
                     <div className="hover:cursor-pointer">
                       <CSVReader />
                     </div>
+                    {room.words.length > 0 && (
+                      <ul className="menu menu-horizontal bg-base-200 rounded-box">
+                        {room.words.map((eachWord) => (
+                          <li key={`${eachWord}_pill`}>
+                            <a>{eachWord}</a>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   </div>
                 </div>
               </div>
