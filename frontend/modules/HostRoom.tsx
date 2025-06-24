@@ -278,17 +278,20 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
                         <ArrowRight className="h-4 w-4 ml-2" />
                       </button>
                     )}
-                    <div className="hover:cursor-pointer">
+                    {/* <div className="hover:cursor-pointer">
                       <CSVReader />
-                    </div>
+                    </div> */}
                     {room.words.length > 0 && (
-                      <ul className="menu menu-horizontal bg-base-200 rounded-box">
+                      <div className="flex flex-row flex-wrap gap-2">
                         {room.words.map((eachWord) => (
-                          <li key={`${eachWord}_pill`}>
-                            <a>{eachWord}</a>
-                          </li>
+                          <div
+                            key={`${eachWord}_pill`}
+                            className="badge bg-slate-500/50 font-semibold px-2 py-4 hover:cursor-pointer hover:bg-slate-500/75"
+                          >
+                            {eachWord}
+                          </div>
                         ))}
-                      </ul>
+                      </div>
                     )}
                   </div>
                 </div>
