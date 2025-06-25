@@ -16,6 +16,8 @@ import { ActivityLog } from "./HostRoom/ActivityLog";
 import CSVReader from "./HostRoom/CSVReader";
 import { UploadWordListEvent } from "@/types/event/UploadWordlistEvent";
 import { EVENTS } from "@/common/constants/Events";
+import { WordPill } from "./HostRoom/WordPill";
+import { WordPillClickState } from "@/common/enum/WordPillClickState";
 
 export default function HostRoom({ params }: { params: { roomId: string } }) {
   const router = useRouter();
@@ -170,6 +172,19 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
       return;
     }
 
+    const foundSelectedWordPill = document.querySelector("#selected_word_pill");
+    let selectedWordIndex: number;
+
+    if (foundSelectedWordPill !== null) {
+      const mappedSelectedWordPill = foundSelectedWordPill as HTMLDivElement;
+      const { dataset } = mappedSelectedWordPill;
+      const { index: selectedWordPillIndex } = dataset;
+      if (selectedWordPillIndex !== undefined) {
+        selectedWordIndex = Number(selectedWordPillIndex);
+        mappedSelectedWordPill.id = "word_pill";
+      }
+    }
+
     /**
      * setting the current word index in the word list
      */
@@ -179,7 +194,7 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
        * when emitted we will increment the index by 1
        */
       const payload: Partial<Room> = {
-        wordIndex: previousWordIndex + 1,
+        wordIndex: selectedWordIndex ?? previousWordIndex + 1,
       };
 
       /**
@@ -202,7 +217,7 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
       /**
        * increment the word list index
        */
-      return previousWordIndex + 1;
+      return selectedWordIndex ?? previousWordIndex + 1;
     });
   };
 
@@ -255,8 +270,8 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-fade-up md:animate-fade">
           <div className="lg:col-span-2 space-y-6">
-            {currentWordIndex === -1 ? (
-              <div className="card bg-base-100 shadow-xl animate-fade">
+            <div className="card bg-base-100 shadow-xl animate-fade">
+              {currentWordIndex === -1 ? (
                 <div className="card-body">
                   <h2 className="card-title">Word List</h2>
                   <textarea
@@ -272,7 +287,7 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
                       <Check className="h-4 w-4 mr-2" />
                       Submit Words
                     </button>
-                    {(room?.words.length ?? 0) > 0 && (
+                    {(words.length ?? 0) > 0 && (
                       <button className="btn btn-secondary" onClick={nextWord}>
                         Start Game
                         <ArrowRight className="h-4 w-4 ml-2" />
@@ -281,42 +296,27 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
                     {/* <div className="hover:cursor-pointer">
                       <CSVReader />
                     </div> */}
-                    {room.words.length > 0 && (
-                      <div className="flex flex-row flex-wrap gap-2">
-                        {room.words.map((eachWord) => (
-                          <div
-                            key={`${eachWord}_pill`}
-                            className="badge bg-slate-500/50 font-semibold px-2 py-4 hover:cursor-pointer hover:bg-slate-500/75"
-                          >
-                            {eachWord}
-                          </div>
-                        ))}
-                      </div>
-                    )}
                   </div>
                 </div>
-              </div>
-            ) : (
-              <div className="card bg-base-100 shadow-xl">
+              ) : (
                 <div className="card-body">
                   <div className="text-center space-y-4">
                     <h2 className="text-4xl font-bold">
-                      {room.words[currentWordIndex]}
+                      {words[currentWordIndex]}
                     </h2>
                     <p className="text-base-content/70">
-                      Word {currentWordIndex + 1} of {room?.words.length}
+                      Word {currentWordIndex + 1} of {words.length}
                     </p>
                   </div>
 
                   <div className="card-actions justify-between mt-6">
                     <button
                       className="btn btn-primary"
+                      id="next_word_button"
                       onClick={nextWord}
-                      disabled={
-                        currentWordIndex >= (room?.words.length ?? 1) - 1
-                      }
+                      disabled={currentWordIndex >= (words.length ?? 1) - 1}
                     >
-                      Next Word
+                      <span id="next_word_button_text">Next Word</span>
                       <ArrowRight className="h-4 w-4 ml-2" />
                     </button>
 
@@ -327,7 +327,7 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
                       <button
                         className="btn btn-error"
                         disabled={
-                          room.wordIndex + 1 < room.words.length ||
+                          room.wordIndex + 1 < words.length ||
                           room.status === RoomStatus.ENDED
                         }
                         onClick={endGame}
@@ -336,9 +336,20 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
                       </button>
                     )}
                   </div>
+                  {words.length > 0 && (
+                    <div className="flex flex-row flex-wrap gap-2 pt-3">
+                      {words.map((eachWord, eachWordIndex) => (
+                        <WordPill
+                          index={eachWordIndex}
+                          key={`${eachWord}_pill`}
+                          word={eachWord}
+                        />
+                      ))}
+                    </div>
+                  )}
                 </div>
-              </div>
-            )}
+              )}
+            </div>
 
             <div className="card bg-base-100 shadow-xl animate-fade-up md:animate-fade">
               <div className="card-body">
@@ -395,13 +406,13 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
                   </div>
                 ) : (
                   <div>
-                    {(room?.words.length ?? 0) > 0 ? (
+                    {(words.length ?? 0) > 0 ? (
                       <div className="space-y-2">
                         <p className="text-sm text-base-content/70">
-                          {room?.words.length} words in list
+                          {words.length} words in list
                         </p>
                         <div className="max-h-96 overflow-y-auto space-y-2">
-                          {room?.words.map((word, index) => (
+                          {words.map((word, index) => (
                             <div
                               key={index}
                               className={`flex justify-center p-2 bg-base-200 rounded-lg ${
