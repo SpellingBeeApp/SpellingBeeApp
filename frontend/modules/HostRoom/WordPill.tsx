@@ -36,7 +36,7 @@ export const WordPill = ({
             mappedWordPill.dataset.status =
               WordPillClickState.POTENTIAL_SKIP.toString();
 
-            nextWordButton.textContent = `Skip to word ${mappedWordPill.textContent}`;
+            nextWordButton.textContent = `Skip to "${mappedWordPill.textContent}"`;
             mappedWordPill.id = "selected_word_pill";
           } /** If clicking pill while already selected. */ else if (
             status === WordPillClickState.POTENTIAL_SKIP.toString()

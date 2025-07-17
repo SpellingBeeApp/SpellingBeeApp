@@ -293,9 +293,9 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
                         <ArrowRight className="h-4 w-4 ml-2" />
                       </button>
                     )}
-                    {/* <div className="hover:cursor-pointer">
+                    <div className="hover:cursor-pointer">
                       <CSVReader />
-                    </div> */}
+                    </div>
                   </div>
                 </div>
               ) : (
@@ -424,7 +424,7 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
                                   index === room.wordIndex ? "!font-bold" : ""
                                 }`}
                               >
-                                {word}
+                                #{index + 1}: {word}
                               </span>
                             </div>
                           ))}
