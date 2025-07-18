@@ -19,9 +19,13 @@ export const calculateScoreboard = (
       const numberCorrect = eachPlayer.guesses.filter(
         (eachPlayerGuess) => roomWords[eachPlayerGuess[1]] == eachPlayerGuess[0]
       ).length;
-      const score =
-        numberCorrect /
-        (room.wordIndex === undefined ? 1 : room.wordIndex + customIncrement);
+
+      const scoreDenominator =
+        room.wordIndex === undefined ? 1 : room.wordIndex + customIncrement;
+      const modifiedScoreDenominator =
+        scoreDenominator - (scoreDenominator - eachPlayer.guesses.length);
+
+      const score = numberCorrect / modifiedScoreDenominator;
       const safeScore = Number.isNaN(score) ? 0 : score;
       eachPlayer.score = Math.round(safeScore * 100);
 

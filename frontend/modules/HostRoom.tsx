@@ -14,7 +14,7 @@ import { Room } from "@/types";
 import { RoomStatus } from "@/common/enum";
 import { ActivityLog } from "./HostRoom/ActivityLog";
 import CSVReader from "./HostRoom/CSVReader";
-import { UploadWordListEvent } from "@/types/event/UploadWordlistEvent";
+import { UploadWordListEvent } from "@/types/event/UploadWordListEvent";
 import { EVENTS } from "@/common/constants/Events";
 import { WordPill } from "./HostRoom/WordPill";
 import { WordPillClickState } from "@/common/enum/WordPillClickState";

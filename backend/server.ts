@@ -25,8 +25,6 @@ import { createActivity } from "./helpers/createActivity";
 import { isGuessRight } from "./helpers/isGuessRight";
 import { calculateScoreboard } from "./helpers/calculateScoreboard";
 
-// TODO: Implement metadata for the words of the round. Say the current wordIndex is 0, and the server receives modifyRoom with wordIndex 20 (we skipped), add the metadata for all words from 0 -> 19 as "skipped". When calculating the total of the user's score, subtract the amount we divide by, by the # of skipped words. Example: If I skip to the 3rd word, then I subtract by 2 (skipping 0, 1), therefore, when the final calculation for score comes in, it is 1 / (3 - 2) -> 1 / 1 = 100%.
-
 const app = express();
 const port = 5000;
 const server = app.listen(port);
