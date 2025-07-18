@@ -13,11 +13,9 @@ import { SubmitWords } from "@/types/dto/SubmitWords";
 import { Room } from "@/types";
 import { RoomStatus } from "@/common/enum";
 import { ActivityLog } from "./HostRoom/ActivityLog";
-import CSVReader from "./HostRoom/CSVReader";
-import { UploadWordListEvent } from "@/types/event/UploadWordListEvent";
-import { EVENTS } from "@/common/constants/Events";
 import { WordPill } from "./HostRoom/WordPill";
-import { WordPillClickState } from "@/common/enum/WordPillClickState";
+import { readString } from "react-papaparse";
+// TODO: look at just using https://www.npmjs.com/package/csv-string instead, since we are only reading the csv string (we don't need the extra components).
 
 export default function HostRoom({ params }: { params: { roomId: string } }) {
   const router = useRouter();
@@ -32,22 +30,52 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
   /**
    * Callback that fires when the `wordFileUpload` event fires.
    */
-  const onWordListUpload = React.useCallback((event: Event) => {
-    const customEvent = event as CustomEvent<UploadWordListEvent>;
-    const { detail } = customEvent;
-
-    if (detail !== undefined) {
-      const { words } = detail;
-
+  const onWordListUpload = React.useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const { target } = event;
       const wordListReference = textAreaInputReference.current;
+      if (target !== undefined && wordListReference !== null) {
+        const { files } = target;
+        if (files !== null) {
+          const uploadedFile = files[0];
+          const fileReader = new FileReader();
+          fileReader.readAsText(uploadedFile, "UTF-8");
 
-      if (wordListReference !== null) {
-        wordListReference.value = words
-          .map((eachWord) => `${eachWord}`)
-          .join("\n");
+          fileReader.addEventListener(
+            "load",
+            (event: ProgressEvent<EventTarget>) => {
+              const { target: readFile } = event;
+
+              if (readFile !== null) {
+                const castedReadFile = readFile as FileReader;
+                const { result: readWords } = castedReadFile;
+
+                if (readWords !== null) {
+                  readString<string>(readWords.toString(), {
+                    worker: true,
+                    complete: (processedWords) => {
+                      const { data } = processedWords;
+                      console.log(data);
+                      const preProcessedWords = data
+                        .slice(1)
+                        .map((eachRow) => eachRow[0])
+                        .flat(2)
+                        .filter((eachWord) => eachWord.length > 0);
+
+                      console.log(preProcessedWords);
+
+                      wordListReference.value = preProcessedWords.join("\n");
+                    },
+                  });
+                }
+              }
+            }
+          );
+        }
       }
-    }
-  }, []);
+    },
+    []
+  );
 
   /**
    * Reacting to a change in `roomId` or `on`.
@@ -67,16 +95,6 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
       });
     }
   }, [roomId, on]);
-
-  React.useEffect(() => {
-    if (document !== undefined) {
-      document.addEventListener(EVENTS.wordFileUpload, onWordListUpload);
-    }
-
-    return () => {
-      document.removeEventListener(EVENTS.wordFileUpload, onWordListUpload);
-    };
-  }, [onWordListUpload]);
 
   /**
    * Emitting the `getRoom` listener and receiving the room content in the callback.
@@ -294,7 +312,12 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
                       </button>
                     )}
                     <div className="hover:cursor-pointer">
-                      <CSVReader />
+                      <input
+                        accept=".csv"
+                        onChange={onWordListUpload}
+                        type="file"
+                        className="file-input file-input-md file-input-primary"
+                      />
                     </div>
                   </div>
                 </div>
