@@ -260,7 +260,7 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
           <div className="animate__animated animate__fadeInLeft md:animate-fade">
             <Image
               alt="Scripps Spelling Bee Logo"
-              src="\logo_update.png"
+              src="\logo_update002.png"
               width={200}
               height={300}
             />
