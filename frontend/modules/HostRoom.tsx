@@ -69,12 +69,12 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
                   });
                 }
               }
-            }
+            },
           );
         }
       }
     },
-    []
+    [],
   );
 
   /**
@@ -260,8 +260,8 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
           <div className="animate__animated animate__fadeInLeft md:animate-fade">
             <Image
               alt="Scripps Spelling Bee Logo"
-              src="/logo.svg"
-              width={150}
+              src="/bee005.png"
+              width={200}
               height={200}
             />
             <p className="text-base-content/70">Host View</p>
