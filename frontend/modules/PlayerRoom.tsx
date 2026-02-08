@@ -57,6 +57,7 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
   React.useEffect(() => {
     const storedName = localStorage.getItem("playerName") || "";
     const isHost = localStorage.getItem("isHost") === "true";
+    console.log("storedName:", storedName, "isHost:", isHost);
 
     if (!storedName || isHost) {
       router.push("/");
@@ -71,8 +72,7 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
    * @returns void
    */
   const submitGuess = () => {
-    if (!guess.trim()) return;
-
+  if (!guess.trim()) return;
     /**
      * the payload we will emit to the server consisting of the guess, the roomId, and the playerName
      */
