@@ -18,7 +18,8 @@ export const calculateScoreboard = (
   for (const eachPlayer of players) {
     if (eachPlayer.guesses !== undefined) {
       const numberCorrect = eachPlayer.guesses.filter(
-        (eachPlayerGuess) => roomWords[eachPlayerGuess[1]] == eachPlayerGuess[0]
+        (eachPlayerGuess) =>
+          roomWords[eachPlayerGuess[1]]?.replace(/\s+/g, "") === eachPlayerGuess[0]?.replace(/\s+/g, "")
       ).length;
       // Missing guesses are counted as wrong
       const score = numberCorrect / totalWords;
