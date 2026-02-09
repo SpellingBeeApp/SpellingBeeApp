@@ -260,9 +260,9 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
           <div className="animate__animated animate__fadeInLeft md:animate-fade">
             <Image
               alt="Scripps Spelling Bee Logo"
-              src="/bee005.png"
-              width={200}
-              height={200}
+              src="/sb003.png"
+              width={275}
+              height={280}
             />
             <p className="text-base-content/70">Host View</p>
           </div>
