@@ -73,20 +73,20 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
    */
   const submitGuess = () => {
   if (!guess.trim()) return;
-    /**
-     * the payload we will emit to the server consisting of the guess, the roomId, and the playerName
-     */
-    const payload: SubmitGuess = {
-      guess,
-      roomId,
-      playerName,
-    };
+  /**
+   * the payload we will emit to the server consisting of the guess, the roomId, and the playerName
+   */
+  const payload: SubmitGuess = {
+    guess,
+    roomId,
+    playerName,
+  };
 
-    /**
-     * emitting tht guess to the "guessWord" listener in the server and setting the guess to the word inputted
-     */
-    emit("guessWord", payload);
-    setGuess(guess);
+  /**
+   * emitting tht guess to the "guessWord" listener in the server and setting the guess to the word inputted
+   */
+  emit("guessWord", payload);
+  setGuess("");
   };
 
   const getPlayerRank = () => {
