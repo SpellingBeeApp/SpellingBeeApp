@@ -69,12 +69,12 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
                   });
                 }
               }
-            }
+            },
           );
         }
       }
     },
-    []
+    [],
   );
 
   /**
@@ -257,11 +257,11 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
     <div className="min-h-screen p-4 md:p-6 honeycomb-bg">
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4 transition-all duration-500 ease-in-out">
-          <div className="animate__animated animate__fadeInLeft md:animate-fade">
+          <div className="animate__animated animate__fadeInLeft md:animate-fade self-start">
             <Image
               alt="Scripps Spelling Bee Logo"
-              src="\logo_update002.png"
-              width={200}
+              src="/sb003.png"
+              width={350}
               height={300}
             />
             <p className="text-base-content/70">Host View</p>

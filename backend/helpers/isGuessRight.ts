@@ -3,4 +3,6 @@ export const isGuessRight = (
   words: Set<string>,
   wordIndex?: number
 ) =>
-  wordIndex === undefined ? false : guess === [...words.values()][wordIndex];
+  wordIndex === undefined
+    ? false
+    : guess.replace(/\s+/g, "") === [...words.values()][wordIndex].replace(/\s+/g, "");

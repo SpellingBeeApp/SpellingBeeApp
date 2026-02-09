@@ -14,21 +14,17 @@ export const calculateScoreboard = (
   const roomWords = [...room.words.values()];
   const scoreboard: Scoreboard = {};
 
+  const totalWords = roomWords.length;
   for (const eachPlayer of players) {
     if (eachPlayer.guesses !== undefined) {
       const numberCorrect = eachPlayer.guesses.filter(
-        (eachPlayerGuess) => roomWords[eachPlayerGuess[1]] == eachPlayerGuess[0]
+        (eachPlayerGuess) =>
+          roomWords[eachPlayerGuess[1]]?.replace(/\s+/g, "") === eachPlayerGuess[0]?.replace(/\s+/g, "")
       ).length;
-
-      const scoreDenominator =
-        room.wordIndex === undefined ? 1 : room.wordIndex + customIncrement;
-      const modifiedScoreDenominator =
-        scoreDenominator - (scoreDenominator - eachPlayer.guesses.length);
-
-      const score = numberCorrect / modifiedScoreDenominator;
+      // Missing guesses are counted as wrong
+      const score = numberCorrect / totalWords;
       const safeScore = Number.isNaN(score) ? 0 : score;
       eachPlayer.score = Math.round(safeScore * 100);
-
       scoreboard[eachPlayer.idNumber] = eachPlayer.score;
     }
   }

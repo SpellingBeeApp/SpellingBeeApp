@@ -116,13 +116,14 @@ const connected = (socket: Socket) => {
   socket.on(
     "modifyRoom",
     (code: RoomCode, playerName: string, partialRoom: Partial<Room>) => {
-      const doesPlayerExist = isPlayerInRoom(playerName, code, rooms, true);
+    console.log('modifyRoom handler called:', code, playerName, partialRoom);
+    console.log('rooms keys:', Object.keys(rooms));
+    const doesPlayerExist = isPlayerInRoom(playerName, code, rooms, true);
 
-      if (doesPlayerExist) {
+    if (doesPlayerExist) {
         rooms[code] = { ...rooms[code], ...partialRoom };
         const { host, ...rest } = rooms[code];
         calculateScoreboard(rooms[code], 0);
-
         socket.broadcast.emit(
           `room_${code}_modified`,
           convertRoomSetsToArrays({ ...rest } as Room)

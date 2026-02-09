@@ -57,6 +57,7 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
   React.useEffect(() => {
     const storedName = localStorage.getItem("playerName") || "";
     const isHost = localStorage.getItem("isHost") === "true";
+    console.log("storedName:", storedName, "isHost:", isHost);
 
     if (!storedName || isHost) {
       router.push("/");
@@ -71,22 +72,21 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
    * @returns void
    */
   const submitGuess = () => {
-    if (!guess.trim()) return;
+  if (!guess.trim()) return;
+  /**
+   * the payload we will emit to the server consisting of the guess, the roomId, and the playerName
+   */
+  const payload: SubmitGuess = {
+    guess,
+    roomId,
+    playerName,
+  };
 
-    /**
-     * the payload we will emit to the server consisting of the guess, the roomId, and the playerName
-     */
-    const payload: SubmitGuess = {
-      guess,
-      roomId,
-      playerName,
-    };
-
-    /**
-     * emitting tht guess to the "guessWord" listener in the server and setting the guess to the word inputted
-     */
-    emit("guessWord", payload);
-    setGuess(guess);
+  /**
+   * emitting tht guess to the "guessWord" listener in the server and setting the guess to the word inputted
+   */
+  emit("guessWord", payload);
+  setGuess("");
   };
 
   const getPlayerRank = () => {
@@ -113,8 +113,8 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
           <div className="animate__animated animate__fadeInLeft md:animate-fade">
             <Image
               alt="Scripps Spelling Bee Logo"
-              src="\logo.svg"
-              width={200}
+              src="/sb003.png"
+              width={300}
               height={300}
             />
             <p className="text-base-content/70">Player View</p>
