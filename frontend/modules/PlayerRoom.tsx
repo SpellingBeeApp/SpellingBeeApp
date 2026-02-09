@@ -113,8 +113,8 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
           <div className="animate__animated animate__fadeInLeft md:animate-fade">
             <Image
               alt="Scripps Spelling Bee Logo"
-              src="/bee005.png"
-              width={250}
+              src="/sb003.png"
+              width={300}
               height={300}
             />
             <p className="text-base-content/70">Player View</p>
