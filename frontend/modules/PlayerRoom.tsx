@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { Send, Users } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import useSocket from "@/hooks/useSocket";
 import { SubmitGuess } from "@/types/dto";
 import { Room } from "@/types";
@@ -111,12 +112,15 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
       <div className="max-w-xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-center md:items-center mb-6 gap-4 transition-all duration-500 ease-in-out">
           <div className="animate__animated animate__fadeInLeft md:animate-fade self-center md:self-start text-center md:text-left">
-            <Image
-              alt="Scripps Spelling Bee Logo"
-              src="/sb003.png"
-              width={300}
-              height={300}
-            />
+            <Link href="/">
+              <Image
+                alt="Scripps Spelling Bee Logo"
+                src="/sb003.png"
+                width={300}
+                height={300}
+                style={{ cursor: "pointer" }}
+              />
+            </Link>
             <p className="text-base-content/70">Player View</p>
           </div>
 

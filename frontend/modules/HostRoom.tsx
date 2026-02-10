@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { ArrowRight, Check, Copy, List, Users } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import useSocket from "@/hooks/useSocket";
 import { SubmitWords } from "@/types/dto/SubmitWords";
 import { Room } from "@/types";
@@ -258,12 +259,15 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-center md:items-center mb-6 gap-4 transition-all duration-500 ease-in-out">
           <div className="animate__animated animate__fadeInLeft md:animate-fade self-center md:self-start text-center md:text-left">
-            <Image
-              alt="Scripps Spelling Bee Logo"
-              src="/sb003.png"
-              width={350}
-              height={300}
-            />
+            <Link href="/">
+              <Image
+                alt="Scripps Spelling Bee Logo"
+                src="/sb003.png"
+                width={350}
+                height={300}
+                style={{ cursor: "pointer" }}
+              />
+            </Link>
             <p className="text-base-content/70">Host View</p>
           </div>
 
