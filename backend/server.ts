@@ -116,11 +116,11 @@ const connected = (socket: Socket) => {
   socket.on(
     "modifyRoom",
     (code: RoomCode, playerName: string, partialRoom: Partial<Room>) => {
-    console.log('modifyRoom handler called:', code, playerName, partialRoom);
-    console.log('rooms keys:', Object.keys(rooms));
-    const doesPlayerExist = isPlayerInRoom(playerName, code, rooms, true);
+      console.log('modifyRoom handler called:', code, playerName, partialRoom);
+      console.log('rooms keys:', Object.keys(rooms));
+      const doesPlayerExist = isPlayerInRoom(playerName, code, rooms, true);
 
-    if (doesPlayerExist) {
+      if (doesPlayerExist) {
         rooms[code] = { ...rooms[code], ...partialRoom };
         const { host, ...rest } = rooms[code];
         calculateScoreboard(rooms[code], 0);
@@ -133,6 +133,12 @@ const connected = (socket: Socket) => {
           `room_${code}_modified`,
           convertRoomSetsToArrays(rooms[code])
         );
+
+        // Delete the room if the game is finished
+        if (rooms[code].status === RoomStatus.ENDED) {
+          console.log(`Deleting room ${code} as the game is finished.`);
+          delete rooms[code];
+        }
       }
     }
   );
