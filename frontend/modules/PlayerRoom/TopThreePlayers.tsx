@@ -16,17 +16,29 @@ const podiumColors: Record<number, string> = {
 const TopThreePlayers: React.FC<TopThreePlayersProps> = ({ winners }) => {
   const ordered = [1, 0, 2]; // 2nd, 1st, 3rd
   const heights = [100, 120, 90];
-  const [topScoringPlayers, setTopScoringPlayers] = React.useState<Player[]>(
-    []
-  );
-  // Confetti and sound for 1st place
+  const [topScoringPlayers, setTopScoringPlayers] = React.useState<Player[]>([]);
+
+  // Tiebreaker: sort by score, then by fastest correct guess for last word
   useEffect(() => {
-    const topPlayers = winners.sort((a, b) => (b.score ?? 0) - (a.score ?? 0));
+    const topPlayers = [...winners].sort((a, b) => {
+      if ((b.score ?? 0) !== (a.score ?? 0)) return (b.score ?? 0) - (a.score ?? 0);
+      // Tiebreaker: fastest correct guess for last word
+      const getLastTime = (player: Player) => {
+        if (!player.guesses) return Infinity;
+        // Ensure all word indices are numbers
+        const allWordIndices = winners.flatMap(p => (p.guesses ?? []).map(g => typeof g[1] === 'string' ? parseInt(g[1], 10) : g[1]));
+        const lastWordIndex = allWordIndices.length ? Math.max(...allWordIndices) : 0;
+        return (player.guesses ?? [])
+          .filter(g => {
+            const idx = typeof g[1] === 'string' ? parseInt(g[1], 10) : g[1];
+            return idx === lastWordIndex && g[0] && typeof g[2] === 'number';
+          })
+          .reduce((min, g) => (typeof g[2] === 'number' && g[2] < min ? g[2] : min), Infinity);
+      };
+      return getLastTime(a) - getLastTime(b);
+    });
     setTopScoringPlayers(topPlayers);
-    // Step 3: (Optional) Print them
-    // topScoringPlayers.forEach(player => {
-    //   console.log(`${player.name} scored ${player.score}`);
-    // });
+
     const timer = setTimeout(() => {
       confetti({
         particleCount: 100,
@@ -34,11 +46,7 @@ const TopThreePlayers: React.FC<TopThreePlayersProps> = ({ winners }) => {
         origin: { y: 0.3 },
         zIndex: 9999,
       });
-
-      // // Optional: play a trumpet sound or similar
-      // const audio = new Audio("/trumpet-fanfare.mp3"); // place this in /public
-      // audio.play();
-    }, 1200); // aligns with 1st place animation delay
+    }, 1200);
 
     return () => clearTimeout(timer);
   }, [winners]);
