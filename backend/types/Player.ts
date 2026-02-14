@@ -37,6 +37,11 @@ type Player = {
    * The score of the player.
    */
   score?: number;
+
+  /**
+   * Used for tiebreaking: sum of correct guess timestamps (lower is better)
+   */
+  tiebreaker?: number;
 };
 
 export type { Player };
