@@ -217,7 +217,7 @@ const connected = (socket: Socket) => {
             return;
           }
 
-          foundPlayer.guesses.push([guess, rooms[roomId].wordIndex]);
+          foundPlayer.guesses.push([guess, rooms[roomId].wordIndex, Date.now()]);
           foundPlayer.roundGuesses.add(rooms[roomId].wordIndex);
 
           // calculate leaderboard here
