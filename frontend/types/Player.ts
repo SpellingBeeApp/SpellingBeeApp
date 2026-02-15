@@ -9,7 +9,7 @@ type Player = {
   /**
    * The guesses made by the player
    */
-  guesses?: Array<string>;
+  guesses?: Array<[string, number, number?]>;
 
   /**
    * The index of the player (defaults to -1 for the host).
