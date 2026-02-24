@@ -21,6 +21,8 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
   const { emit, on } = useSocket("http://localhost:5000");
   const [playerName, setPlayerName] = React.useState("");
   const [guess, setGuess] = React.useState("");
+  // Track start time for the current word
+  const [wordStartTime, setWordStartTime] = React.useState<number | null>(null);
   const roomId = params.roomId?.trim();
   const [room, setRoom] = React.useState<Room>();
 
@@ -37,9 +39,16 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
           }
           return { ...oldRoom, ...partialRoom };
         });
+        // If the word index changes, update the start time
+        if (
+          partialRoom.wordIndex !== undefined &&
+          partialRoom.wordIndex !== room?.wordIndex
+        ) {
+          setWordStartTime(Date.now());
+        }
       });
     }
-  }, [roomId, on]);
+  }, [roomId, on, room?.wordIndex]);
 
   /**
    * emitting to the get Room listener and getting the room info in server
@@ -73,28 +82,28 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
    * @returns void
    */
   const submitGuess = () => {
-  if (!guess.trim()) return;
-  /**
-   * the payload we will emit to the server consisting of the guess, the roomId, and the playerName
-   */
-  const payload: SubmitGuess = {
-    guess,
-    roomId,
-    playerName,
-  };
-
-  /**
-   * emitting tht guess to the "guessWord" listener in the server and setting the guess to the word inputted
-   */
-  emit("guessWord", payload);
-  setGuess("");
+    if (!guess.trim()) return;
+    // Calculate time taken for this word
+    const endTime = Date.now();
+    const timeTaken = wordStartTime
+      ? Math.round((endTime - wordStartTime) / 1000)
+      : null;
+    // Add timeTaken to the payload
+    const payload: SubmitGuess = {
+      guess,
+      roomId,
+      playerName,
+      timeTaken, // Add this field to backend SubmitGuess type
+    };
+    emit("guessWord", payload);
+    setGuess("");
   };
 
   const getPlayerRank = () => {
     if (!playerName || !room) return null;
     const { players } = room;
     const sortedPlayers = [...players].sort(
-      (a, b) => (b.score ?? 0) - (a.score ?? 0)
+      (a, b) => (b.score ?? 0) - (a.score ?? 0),
     );
     const playerIndex = sortedPlayers.findIndex((p) => p.name === playerName);
 
@@ -104,7 +113,7 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
   const playerRank = getPlayerRank();
 
   const currentPlayer = room?.players.find(
-    (eachPlayer) => eachPlayer.name === playerName
+    (eachPlayer) => eachPlayer.name === playerName,
   );
 
   return (
@@ -166,7 +175,7 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
                     disabled={
                       !guess.trim() ||
                       currentPlayer?.roundGuesses?.includes(
-                        room?.wordIndex ?? -1
+                        room?.wordIndex ?? -1,
                       )
                     }
                   >
