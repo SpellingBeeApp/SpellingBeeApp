@@ -138,12 +138,22 @@ const TopThreePlayers: React.FC<TopThreePlayersProps> = ({ winners }) => {
               {winner.name}
             </div>
 
-            {/* Winner's score (bigger) */}
+            {/* Winner's score and total time (bigger) */}
             <div
-              className="text-white text-base font-semibold bg-black/30 px-2 py-1 rounded-full backdrop-blur-sm"
+              className="text-white text-base font-semibold bg-black/30 px-2 py-1 rounded-full backdrop-blur-sm flex flex-col items-center"
               style={{ fontSize: "15px" }}
             >
-              {winner.score} pts
+              <span>{winner.score} pts</span>
+              {/* Total time taken for all words */}
+              {winner.guesses && winner.guesses.length > 0 && (
+                <span style={{ fontSize: "12px", marginTop: 2 }}>
+                  ⏱️ Total:{" "}
+                  {winner.guesses
+                    .map((g) => (typeof g[3] === "number" ? g[3] : 0))
+                    .reduce((sum, t) => sum + t, 0)}
+                  s
+                </span>
+              )}
             </div>
 
             {/* Show last word time if there is a valid time (smaller) */}

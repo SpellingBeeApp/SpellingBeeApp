@@ -8,8 +8,9 @@
 type Player = {
   /**
    * The guesses made by the player
+   * [word, wordIndex, timestamp, timeTaken]
    */
-  guesses?: Array<[string, number, number?]>;
+  guesses?: Array<[string, number, number?, number?]>;
 
   /**
    * The index of the player (defaults to -1 for the host).

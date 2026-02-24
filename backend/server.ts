@@ -187,7 +187,7 @@ const connected = (socket: Socket) => {
    * handles when players guess the current word
    */
   socket.on("guessWord", (data: SubmitGuess) => {
-    const { playerName, guess, roomId } = data;
+    const { playerName, guess, roomId, timeTaken } = data;
     /**
      * - Checking if playerId is valid.
      * - If guess is valid.
@@ -223,7 +223,13 @@ const connected = (socket: Socket) => {
             return;
           }
 
-          foundPlayer.guesses.push([guess, rooms[roomId].wordIndex, Date.now()]);
+          // Store guess with timeTaken
+          foundPlayer.guesses.push([
+            guess,
+            rooms[roomId].wordIndex,
+            Date.now(),
+            timeTaken ?? null,
+          ]);
           foundPlayer.roundGuesses.add(rooms[roomId].wordIndex);
 
           // calculate leaderboard here

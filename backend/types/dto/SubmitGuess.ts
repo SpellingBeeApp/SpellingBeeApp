@@ -17,6 +17,11 @@ type SubmitGuess = {
    * The id number of the player.
    */
   playerName: string;
+
+  /**
+   * The time taken to spell the word (seconds)
+   */
+  timeTaken?: number;
 };
 
 export type { SubmitGuess };
