@@ -36,6 +36,11 @@ type Room = {
    * The current index of the "guessable" word in the game.
    */
   wordIndex?: number;
+
+  /**
+   * The timestamp when the current word was shown (ms since epoch)
+   */
+  wordStartTime?: number;
 };
 
 export type { Room };

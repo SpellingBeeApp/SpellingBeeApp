@@ -121,7 +121,22 @@ const connected = (socket: Socket) => {
       const doesPlayerExist = isPlayerInRoom(playerName, code, rooms, true);
 
       if (doesPlayerExist) {
+        // Detect if host advanced to next word
+        const prevWordIndex = rooms[code].wordIndex;
+        const nextWordIndex = partialRoom.wordIndex;
+        const prevStatus = rooms[code].status;
+        const nextStatus = partialRoom.status;
         rooms[code] = { ...rooms[code], ...partialRoom };
+        // Set wordStartTime if game is started and wordIndex changes, or if game just started
+        if (
+          nextStatus === RoomStatus.STARTED &&
+          (
+            (typeof nextWordIndex === "number" && nextWordIndex !== prevWordIndex) ||
+            (prevStatus !== RoomStatus.STARTED && nextStatus === RoomStatus.STARTED)
+          )
+        ) {
+          rooms[code].wordStartTime = Date.now();
+        }
         const { host, ...rest } = rooms[code];
         calculateScoreboard(rooms[code], 0);
         socket.broadcast.emit(
@@ -228,7 +243,7 @@ const connected = (socket: Socket) => {
             guess,
             rooms[roomId].wordIndex,
             Date.now(),
-            timeTaken ?? null,
+            timeTaken !== undefined ? timeTaken : undefined,
           ]);
           foundPlayer.roundGuesses.add(rooms[roomId].wordIndex);
 

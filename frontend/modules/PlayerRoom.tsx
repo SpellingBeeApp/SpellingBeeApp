@@ -21,8 +21,7 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
   const { emit, on } = useSocket("http://localhost:5000");
   const [playerName, setPlayerName] = React.useState("");
   const [guess, setGuess] = React.useState("");
-  // Track start time for the current word
-  const [wordStartTime, setWordStartTime] = React.useState<number | null>(null);
+  // Use backend-provided wordStartTime for timing
   const roomId = params.roomId?.trim();
   const [room, setRoom] = React.useState<Room>();
 
@@ -39,16 +38,9 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
           }
           return { ...oldRoom, ...partialRoom };
         });
-        // If the word index changes, update the start time
-        if (
-          partialRoom.wordIndex !== undefined &&
-          partialRoom.wordIndex !== room?.wordIndex
-        ) {
-          setWordStartTime(Date.now());
-        }
       });
     }
-  }, [roomId, on, room?.wordIndex]);
+  }, [roomId, on]);
 
   /**
    * emitting to the get Room listener and getting the room info in server
@@ -82,18 +74,16 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
    * @returns void
    */
   const submitGuess = () => {
-    if (!guess.trim()) return;
-    // Calculate time taken for this word
+    if (!guess.trim() || !room?.wordStartTime) return;
+    // Calculate time taken for this word using backend-provided start time
     const endTime = Date.now();
-    const timeTaken = wordStartTime
-      ? Math.round((endTime - wordStartTime) / 1000)
-      : null;
+    const timeTaken = Math.round((endTime - room.wordStartTime) / 1000);
     // Add timeTaken to the payload
     const payload: SubmitGuess = {
       guess,
       roomId,
       playerName,
-      timeTaken, // Add this field to backend SubmitGuess type
+      timeTaken,
     };
     emit("guessWord", payload);
     setGuess("");
@@ -221,7 +211,22 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
                             <span className="badge badge-sm ml-2">You</span>
                           )}
                         </span>
-                        <span className="font-bold">{`${player.score}%`}</span>
+                        <span className="font-bold">
+                          {`${player.score}%`}
+                          {room?.status === RoomStatus.ENDED &&
+                            player.guesses &&
+                            player.guesses.length > 0 && (
+                              <span className="ml-2 text-xs text-gray-600">
+                                ⏱️{" "}
+                                {player.guesses
+                                  .map((g) =>
+                                    typeof g[3] === "number" ? g[3] : 0,
+                                  )
+                                  .reduce((sum, t) => sum + t, 0)}
+                                s
+                              </span>
+                            )}
+                        </span>
                       </div>
                     ))}
                 </div>

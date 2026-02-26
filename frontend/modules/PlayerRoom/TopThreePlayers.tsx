@@ -157,7 +157,7 @@ const TopThreePlayers: React.FC<TopThreePlayersProps> = ({ winners }) => {
             </div>
 
             {/* Show last word time if there is a valid time (smaller) */}
-            {lastGuessTime !== Infinity && (
+            {/* {lastGuessTime !== Infinity && (
               <div
                 style={{
                   fontSize: "10px",
@@ -205,7 +205,7 @@ const TopThreePlayers: React.FC<TopThreePlayersProps> = ({ winners }) => {
                   })()}
                 </span>
               </div>
-            )}
+            )} */}
           </motion.div>
         );
       })}
