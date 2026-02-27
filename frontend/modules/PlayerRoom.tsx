@@ -21,6 +21,7 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
   const { emit, on } = useSocket("http://localhost:5000");
   const [playerName, setPlayerName] = React.useState("");
   const [guess, setGuess] = React.useState("");
+  // Use backend-provided wordStartTime for timing
   const roomId = params.roomId?.trim();
   const [room, setRoom] = React.useState<Room>();
 
@@ -73,38 +74,46 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
    * @returns void
    */
   const submitGuess = () => {
-  if (!guess.trim()) return;
-  /**
-   * the payload we will emit to the server consisting of the guess, the roomId, and the playerName
-   */
-  const payload: SubmitGuess = {
-    guess,
-    roomId,
-    playerName,
+    if (!guess.trim() || !room?.wordStartTime) return;
+    // Calculate time taken for this word using backend-provided start time
+    const endTime = Date.now();
+    const timeTaken = Math.round((endTime - room.wordStartTime) / 1000);
+    // Add timeTaken to the payload
+    const payload: SubmitGuess = {
+      guess,
+      roomId,
+      playerName,
+      timeTaken,
+    };
+    emit("guessWord", payload);
+    setGuess("");
   };
 
-  /**
-   * emitting tht guess to the "guessWord" listener in the server and setting the guess to the word inputted
-   */
-  emit("guessWord", payload);
-  setGuess("");
+  const getTotalSeconds = (player: any) => {
+    if (!player.guesses || player.guesses.length === 0) return Infinity;
+    return player.guesses
+      .map((g: any) => (typeof g[3] === "number" ? g[3] : 0))
+      .reduce((sum: number, t: number) => sum + t, 0);
   };
 
   const getPlayerRank = () => {
     if (!playerName || !room) return null;
     const { players } = room;
-    const sortedPlayers = [...players].sort(
-      (a, b) => (b.score ?? 0) - (a.score ?? 0)
-    );
+    const sortedPlayers = [...players].sort((a, b) => {
+      // Sort by score descending
+      const scoreDiff = (b.score ?? 0) - (a.score ?? 0);
+      if (scoreDiff !== 0) return scoreDiff;
+      // If scores are equal, sort by total seconds ascending
+      return getTotalSeconds(a) - getTotalSeconds(b);
+    });
     const playerIndex = sortedPlayers.findIndex((p) => p.name === playerName);
-
     return playerIndex >= 0 ? playerIndex + 1 : null;
   };
 
   const playerRank = getPlayerRank();
 
   const currentPlayer = room?.players.find(
-    (eachPlayer) => eachPlayer.name === playerName
+    (eachPlayer) => eachPlayer.name === playerName,
   );
 
   return (
@@ -166,7 +175,7 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
                     disabled={
                       !guess.trim() ||
                       currentPlayer?.roundGuesses?.includes(
-                        room?.wordIndex ?? -1
+                        room?.wordIndex ?? -1,
                       )
                     }
                   >
@@ -197,7 +206,20 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
                 )}
                 <div className="space-y-2">
                   {room !== undefined &&
-                    room.players.map((player, index) => (
+                    [...room.players]
+                      .sort((a, b) => {
+                        const scoreDiff = (b.score ?? 0) - (a.score ?? 0);
+                        if (scoreDiff !== 0) return scoreDiff;
+                        // If scores are equal, sort by total seconds ascending
+                        const getTotalSeconds = (player: any) => {
+                          if (!player.guesses || player.guesses.length === 0) return Infinity;
+                          return player.guesses
+                            .map((g: any) => (typeof g[3] === "number" ? g[3] : 0))
+                            .reduce((sum: number, t: number) => sum + t, 0);
+                        };
+                        return getTotalSeconds(a) - getTotalSeconds(b);
+                      })
+                      .map((player, index) => (
                       <div
                         key={`${player.name}_${index}`}
                         className={`flex items-center justify-between p-3 rounded-lg ${
@@ -212,7 +234,40 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
                             <span className="badge badge-sm ml-2">You</span>
                           )}
                         </span>
-                        <span className="font-bold">{`${player.score}%`}</span>
+                        <span className="font-bold">
+                          {`${player.score}%`}
+                          {room?.status === RoomStatus.ENDED &&
+                            player.guesses &&
+                            player.guesses.length > 0 && (
+                              <span
+                                className="ml-2 inline-flex items-center px-3 py-1 rounded-full bg-gradient-to-r from-gray-900 via-black to-gray-700 border-2 border-yellow-400 text-yellow-300 font-mono font-extrabold text-base shadow-lg"
+                                style={{
+                                  letterSpacing: "0.05em",
+                                  boxShadow:
+                                    "0 2px 8px 0 #222 inset, 0 1px 8px 0 #000",
+                                }}
+                                title="Total race time (lower is better)"
+                              >
+                                <span className="mr-1 text-lg">🏁</span>
+                                <span
+                                  className="text-white drop-shadow-sm"
+                                  style={{
+                                    fontFamily: '"Share Tech Mono", monospace',
+                                  }}
+                                >
+                                  {player.guesses
+                                    .map((g) =>
+                                      typeof g[3] === "number" ? g[3] : 0,
+                                    )
+                                    .reduce((sum, t) => sum + t, 0)
+                                    .toFixed(2)}
+                                </span>
+                                <span className="ml-1 text-yellow-200 font-bold">
+                                  s
+                                </span>
+                              </span>
+                            )}
+                        </span>
                       </div>
                     ))}
                 </div>
