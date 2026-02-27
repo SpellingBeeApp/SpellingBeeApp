@@ -89,14 +89,24 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
     setGuess("");
   };
 
+  const getTotalSeconds = (player: any) => {
+    if (!player.guesses || player.guesses.length === 0) return Infinity;
+    return player.guesses
+      .map((g: any) => (typeof g[3] === "number" ? g[3] : 0))
+      .reduce((sum: number, t: number) => sum + t, 0);
+  };
+
   const getPlayerRank = () => {
     if (!playerName || !room) return null;
     const { players } = room;
-    const sortedPlayers = [...players].sort(
-      (a, b) => (b.score ?? 0) - (a.score ?? 0),
-    );
+    const sortedPlayers = [...players].sort((a, b) => {
+      // Sort by score descending
+      const scoreDiff = (b.score ?? 0) - (a.score ?? 0);
+      if (scoreDiff !== 0) return scoreDiff;
+      // If scores are equal, sort by total seconds ascending
+      return getTotalSeconds(a) - getTotalSeconds(b);
+    });
     const playerIndex = sortedPlayers.findIndex((p) => p.name === playerName);
-
     return playerIndex >= 0 ? playerIndex + 1 : null;
   };
 
