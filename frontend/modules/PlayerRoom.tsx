@@ -206,7 +206,20 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
                 )}
                 <div className="space-y-2">
                   {room !== undefined &&
-                    room.players.map((player, index) => (
+                    [...room.players]
+                      .sort((a, b) => {
+                        const scoreDiff = (b.score ?? 0) - (a.score ?? 0);
+                        if (scoreDiff !== 0) return scoreDiff;
+                        // If scores are equal, sort by total seconds ascending
+                        const getTotalSeconds = (player: any) => {
+                          if (!player.guesses || player.guesses.length === 0) return Infinity;
+                          return player.guesses
+                            .map((g: any) => (typeof g[3] === "number" ? g[3] : 0))
+                            .reduce((sum: number, t: number) => sum + t, 0);
+                        };
+                        return getTotalSeconds(a) - getTotalSeconds(b);
+                      })
+                      .map((player, index) => (
                       <div
                         key={`${player.name}_${index}`}
                         className={`flex items-center justify-between p-3 rounded-lg ${
