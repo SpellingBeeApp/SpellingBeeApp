@@ -217,17 +217,31 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
                             player.guesses &&
                             player.guesses.length > 0 && (
                               <span
-                                className="ml-2 inline-flex items-center px-2 py-0.5 rounded-full bg-black text-yellow-300 font-mono font-extrabold text-sm shadow"
-                                title="Total time (lower is better)"
+                                className="ml-2 inline-flex items-center px-3 py-1 rounded-full bg-gradient-to-r from-gray-900 via-black to-gray-700 border-2 border-yellow-400 text-yellow-300 font-mono font-extrabold text-base shadow-lg"
+                                style={{
+                                  letterSpacing: "0.05em",
+                                  boxShadow:
+                                    "0 2px 8px 0 #222 inset, 0 1px 8px 0 #000",
+                                }}
+                                title="Total race time (lower is better)"
                               >
-                                🏁
-                                {player.guesses
-                                  .map((g) =>
-                                    typeof g[3] === "number" ? g[3] : 0,
-                                  )
-                                  .reduce((sum, t) => sum + t, 0)
-                                  .toFixed(2)}
-                                s
+                                <span className="mr-1 text-lg">🏁</span>
+                                <span
+                                  className="text-white drop-shadow-sm"
+                                  style={{
+                                    fontFamily: '"Share Tech Mono", monospace',
+                                  }}
+                                >
+                                  {player.guesses
+                                    .map((g) =>
+                                      typeof g[3] === "number" ? g[3] : 0,
+                                    )
+                                    .reduce((sum, t) => sum + t, 0)
+                                    .toFixed(2)}
+                                </span>
+                                <span className="ml-1 text-yellow-200 font-bold">
+                                  s
+                                </span>
                               </span>
                             )}
                         </span>
