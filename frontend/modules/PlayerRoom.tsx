@@ -216,13 +216,17 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
                           {room?.status === RoomStatus.ENDED &&
                             player.guesses &&
                             player.guesses.length > 0 && (
-                              <span className="ml-2 text-xs text-gray-600">
-                                ⏱️{" "}
+                              <span
+                                className="ml-2 inline-flex items-center px-2 py-0.5 rounded-full bg-black text-yellow-300 font-mono font-extrabold text-sm shadow"
+                                title="Total time (lower is better)"
+                              >
+                                🏁
                                 {player.guesses
                                   .map((g) =>
                                     typeof g[3] === "number" ? g[3] : 0,
                                   )
-                                  .reduce((sum, t) => sum + t, 0)}
+                                  .reduce((sum, t) => sum + t, 0)
+                                  .toFixed(2)}
                                 s
                               </span>
                             )}
