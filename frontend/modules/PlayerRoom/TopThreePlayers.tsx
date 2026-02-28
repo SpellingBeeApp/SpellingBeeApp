@@ -138,16 +138,27 @@ const TopThreePlayers: React.FC<TopThreePlayersProps> = ({ winners }) => {
               {winner.name}
             </div>
 
-            {/* Winner's score and total time (bigger) */}
+            {/* Winner's score and total time (responsive, no overlap) */}
             <div
-              className="text-white text-base font-semibold bg-black/30 px-2 py-1 rounded-full backdrop-blur-sm flex flex-col items-center"
-              style={{ fontSize: "15px" }}
+              className="text-white font-semibold flex flex-col xs:flex-row items-center xs:space-x-2 xs:space-y-0 space-y-1 w-full justify-center"
+              style={{ minWidth: 0, wordBreak: "break-word" }}
             >
-              <span>{winner.score} pts</span>
+              <span
+                className="font-extrabold text-2xl xs:text-xl text-yellow-300 drop-shadow-sm whitespace-nowrap tracking-wide"
+                style={{ lineHeight: 1 }}
+              >
+                {winner.score}
+                <span className="text-base xs:text-sm font-bold text-yellow-100 ml-1 align-top">
+                  pts
+                </span>
+              </span>
               {/* Total time taken for all words */}
               {winner.guesses && winner.guesses.length > 0 && (
-                <span style={{ fontSize: "12px", marginTop: 2 }}>
-                  ⏱️ Total:{" "}
+                <span
+                  className="flex items-center text-xs xs:text-xs whitespace-nowrap text-gray-200 font-mono font-semibold opacity-90"
+                  style={{ marginTop: 0 }}
+                >
+                  <span className="mr-1">🏁</span>
                   {winner.guesses
                     .map((g) => (typeof g[3] === "number" ? g[3] : 0))
                     .reduce((sum, t) => sum + t, 0)}

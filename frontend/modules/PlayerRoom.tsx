@@ -195,6 +195,8 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
                     <TopThreePlayers winners={room.players} />
                   </div>
                 )}
+                {/* Add extra space between word scoreboard and ranking bars */}
+                <div className="my-4" />
 
                 {playerRank && (
                   <div className="bg-base-200 p-3 rounded-lg text-center">
@@ -212,64 +214,77 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
                         if (scoreDiff !== 0) return scoreDiff;
                         // If scores are equal, sort by total seconds ascending
                         const getTotalSeconds = (player: any) => {
-                          if (!player.guesses || player.guesses.length === 0) return Infinity;
+                          if (!player.guesses || player.guesses.length === 0)
+                            return Infinity;
                           return player.guesses
-                            .map((g: any) => (typeof g[3] === "number" ? g[3] : 0))
+                            .map((g: any) =>
+                              typeof g[3] === "number" ? g[3] : 0,
+                            )
                             .reduce((sum: number, t: number) => sum + t, 0);
                         };
                         return getTotalSeconds(a) - getTotalSeconds(b);
                       })
                       .map((player, index) => (
-                      <div
-                        key={`${player.name}_${index}`}
-                        className={`flex items-center justify-between p-3 rounded-lg ${
-                          player.name === playerName
-                            ? "bg-primary/20"
-                            : "bg-base-200"
-                        }`}
-                      >
-                        <span className="font-medium">
-                          {player.name}
-                          {player.name === playerName && (
-                            <span className="badge badge-sm ml-2">You</span>
-                          )}
-                        </span>
-                        <span className="font-bold">
-                          {`${player.score}%`}
-                          {room?.status === RoomStatus.ENDED &&
-                            player.guesses &&
-                            player.guesses.length > 0 && (
-                              <span
-                                className="ml-2 inline-flex items-center px-3 py-1 rounded-full bg-gradient-to-r from-gray-900 via-black to-gray-700 border-2 border-yellow-400 text-yellow-300 font-mono font-extrabold text-base shadow-lg"
-                                style={{
-                                  letterSpacing: "0.05em",
-                                  boxShadow:
-                                    "0 2px 8px 0 #222 inset, 0 1px 8px 0 #000",
-                                }}
-                                title="Total race time (lower is better)"
-                              >
-                                <span className="mr-1 text-lg">🏁</span>
-                                <span
-                                  className="text-white drop-shadow-sm"
-                                  style={{
-                                    fontFamily: '"Share Tech Mono", monospace',
-                                  }}
-                                >
-                                  {player.guesses
-                                    .map((g) =>
-                                      typeof g[3] === "number" ? g[3] : 0,
-                                    )
-                                    .reduce((sum, t) => sum + t, 0)
-                                    .toFixed(2)}
-                                </span>
-                                <span className="ml-1 text-yellow-200 font-bold">
-                                  s
-                                </span>
-                              </span>
+                        <div
+                          key={`${player.name}_${index}`}
+                          className={`flex flex-col sm:flex-row sm:items-center justify-between p-3 rounded-lg gap-2 sm:gap-0 overflow-hidden ${
+                            player.name === playerName
+                              ? "bg-primary/20"
+                              : "bg-base-200"
+                          }`}
+                          style={{ minWidth: 0 }}
+                        >
+                          <span className="font-medium truncate max-w-[50vw] sm:max-w-[200px]">
+                            {player.name}
+                            {player.name === playerName && (
+                              <span className="badge badge-sm ml-2">You</span>
                             )}
-                        </span>
-                      </div>
-                    ))}
+                          </span>
+                          <span className="flex items-center font-bold text-base sm:text-lg whitespace-nowrap overflow-hidden">
+                            {/* Trophy/medal for top 3 */}
+                            {index === 0 && <span className="mr-1">🥇🐝</span>}
+                            {index === 1 && <span className="mr-1">🥈🐝</span>}
+                            {index === 2 && <span className="mr-1">🥉🐝</span>}
+                            <span
+                              className="text-yellow-600 font-extrabold text-lg sm:text-xl"
+                              style={{ fontFamily: "monospace" }}
+                            >
+                              {player.score}%
+                            </span>
+                            {room?.status === RoomStatus.ENDED &&
+                              player.guesses &&
+                              player.guesses.length > 0 && (
+                                <span
+                                  className="ml-2 inline-flex items-center px-2 py-0.5 rounded-full bg-gradient-to-r from-gray-900 via-black to-gray-700 border-2 border-yellow-400 text-yellow-200 font-mono font-extrabold text-xs sm:text-base shadow"
+                                  style={{
+                                    letterSpacing: "0.05em",
+                                    maxWidth: "100%",
+                                    overflow: "hidden",
+                                  }}
+                                  title="Total race time (lower is better)"
+                                >
+                                  <span className="mr-1 text-base sm:text-lg">
+                                    🏁
+                                  </span>
+                                  <span
+                                    className="text-white drop-shadow-sm"
+                                    style={{ fontFamily: "monospace" }}
+                                  >
+                                    {player.guesses
+                                      .map((g) =>
+                                        typeof g[3] === "number" ? g[3] : 0,
+                                      )
+                                      .reduce((sum, t) => sum + t, 0)
+                                      .toFixed(2)}
+                                  </span>
+                                  <span className="ml-1 text-yellow-200 font-bold">
+                                    s
+                                  </span>
+                                </span>
+                              )}
+                          </span>
+                        </div>
+                      ))}
                 </div>
               </div>
             </div>
