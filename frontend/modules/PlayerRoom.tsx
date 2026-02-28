@@ -78,9 +78,9 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
     // Calculate time taken for this word using backend-provided start time
     const endTime = Date.now();
     const timeTaken = Math.round((endTime - room.wordStartTime) / 1000);
-    // Add timeTaken to the payload
+    // Always submit guess in lowercase
     const payload: SubmitGuess = {
-      guess,
+      guess: guess.toLowerCase(),
       roomId,
       playerName,
       timeTaken,
@@ -168,7 +168,7 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
                     placeholder="Type your answer..."
                     className="input input-bordered join-item w-full"
                     value={guess}
-                    onChange={(e) => setGuess(e.target.value)}
+                    onChange={(e) => setGuess(e.target.value.toLowerCase())}
                     onKeyDown={(e) => e.key === "Enter" && submitGuess()}
                   />
                   <button
