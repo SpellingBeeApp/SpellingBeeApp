@@ -130,7 +130,9 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
                 style={{ cursor: "pointer" }}
               />
             </Link>
-            <p className="text-base-content/70">Player View</p>
+            <p className="text-base-content/70 text-lg font-semibold">
+              Welcome, {playerName} !
+            </p>
           </div>
 
           <div className="flex gap-2 animate-fade-right md:animate-fade">
@@ -188,7 +190,7 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
 
           <div className="card bg-base-100 shadow-xl">
             <div className="card-body">
-              <h2 className="card-title">Scoreboard</h2>
+              <h2 className="card-title">Scoreboard ✨🐝</h2>
               <div className="space-y-4">
                 {room?.status === RoomStatus.ENDED && (
                   <div className="card-body" style={{ padding: "0px" }}>
@@ -242,9 +244,9 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
                           </span>
                           <span className="flex items-center font-bold text-base sm:text-lg whitespace-nowrap overflow-hidden">
                             {/* Trophy/medal for top 3 */}
-                            {index === 0 && <span className="mr-1">🥇🐝</span>}
-                            {index === 1 && <span className="mr-1">🥈🐝</span>}
-                            {index === 2 && <span className="mr-1">🥉🐝</span>}
+                            {index === 0 && <span className="mr-1">🏆</span>}
+                            {index === 1 && <span className="mr-1">🏁</span>}
+                            {index === 2 && <span className="mr-1">⭐</span>}
                             <span
                               className="text-yellow-600 font-extrabold text-lg sm:text-xl"
                               style={{ fontFamily: "monospace" }}

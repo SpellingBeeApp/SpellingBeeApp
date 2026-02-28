@@ -268,7 +268,9 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
                 style={{ cursor: "pointer" }}
               />
             </Link>
-            <p className="text-base-content/70">Host View</p>
+            <p className="text-base-content/70 text-lg font-semibold">
+              Welcome, {playerName} !
+            </p>
           </div>
 
           <div className="flex gap-2 animate-fade-right md:animate-fade">
