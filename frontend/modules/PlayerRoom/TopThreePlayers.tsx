@@ -109,34 +109,31 @@ const TopThreePlayers: React.FC<TopThreePlayersProps> = ({ winners }) => {
         return (
           <motion.div
             key={winner.name}
-            className={`flex flex-col items-center justify-end w-24 sm:w-32 md:w-40 rounded-t-lg shadow-lg ${podiumColors[position]}`}
+            className={`relative flex flex-col items-center justify-end w-24 sm:w-32 md:w-40 rounded-t-lg shadow-lg ${podiumColors[position]}`}
             style={{ height: `${heights[i]}px` }}
             initial={{ scale: 0, y: 50, opacity: 0 }}
             animate={{ scale: 1, y: 0, opacity: 1 }}
             transition={{ duration: 0.6, delay: i * 0.6 }}
           >
-            <div className="mb-2 w-full flex flex-col items-center">
-              {/* Always-visible, elegant medal icon, smaller on mobile */}
-              <div className="flex justify-center text-3xl sm:text-5xl md:text-6xl transition-transform duration-300 ease-in-out drop-shadow-md w-full">
-                {position === 1 && <span>🥇</span>}
-                {position === 2 && <span>🥈</span>}
-                {position === 3 && <span>🥉</span>}
-              </div>
-            </div>
-
-            {/* Winner's name */}
+            {/* Winner's name always at the top of the bar */}
             <div
-              className="text-white text-base font-bold tracking-wide text-center px-1 mb-1 w-full"
+              className="text-white text-base font-bold tracking-wide text-center px-1 pt-2 w-full"
               style={{
                 maxWidth: "100%",
                 overflowWrap: "break-word",
                 wordBreak: "break-word",
                 whiteSpace: "normal",
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                zIndex: 2,
               }}
               title={winner.name}
             >
               {winner.name}
             </div>
+            <div style={{ height: "2.2em" }} />
 
             {/* Winner's score and total time (responsive, no overlap) */}
             <div
@@ -144,13 +141,14 @@ const TopThreePlayers: React.FC<TopThreePlayersProps> = ({ winners }) => {
               style={{ minWidth: 0, wordBreak: "break-word" }}
             >
               <span
-                className="font-extrabold text-2xl xs:text-xl text-yellow-300 drop-shadow-sm whitespace-nowrap tracking-wide"
+                className="flex items-center font-extrabold text-lg sm:text-xl text-yellow-600 drop-shadow-sm whitespace-nowrap tracking-wide font-mono"
                 style={{ lineHeight: 1 }}
               >
-                {winner.score}
-                <span className="text-base xs:text-sm font-bold text-yellow-100 ml-1 align-top">
-                  pts
-                </span>
+                {/* Trophy/medal for top 3 */}
+                {position === 1 && <span className="mr-1">🥇</span>}
+                {position === 2 && <span className="mr-1">🥈</span>}
+                {position === 3 && <span className="mr-1">🥉</span>}
+                <span>{winner.score}%</span>
               </span>
               {/* Total time taken for all words */}
               {winner.guesses && winner.guesses.length > 0 && (
