@@ -109,45 +109,54 @@ const TopThreePlayers: React.FC<TopThreePlayersProps> = ({ winners }) => {
         return (
           <motion.div
             key={winner.name}
-            className={`flex flex-col items-center justify-end w-24 sm:w-32 md:w-40 rounded-t-lg shadow-lg ${podiumColors[position]}`}
+            className={`relative flex flex-col items-center justify-end w-24 sm:w-32 md:w-40 rounded-t-lg shadow-lg ${podiumColors[position]}`}
             style={{ height: `${heights[i]}px` }}
             initial={{ scale: 0, y: 50, opacity: 0 }}
             animate={{ scale: 1, y: 0, opacity: 1 }}
             transition={{ duration: 0.6, delay: i * 0.6 }}
           >
-            <div className="mb-2 w-full flex flex-col items-center">
-              {/* Always-visible, elegant medal icon, smaller on mobile */}
-              <div className="flex justify-center text-3xl sm:text-5xl md:text-6xl transition-transform duration-300 ease-in-out drop-shadow-md w-full">
-                {position === 1 && <span>🥇</span>}
-                {position === 2 && <span>🥈</span>}
-                {position === 3 && <span>🥉</span>}
-              </div>
-            </div>
-
-            {/* Winner's name */}
+            {/* Winner's name always at the top of the bar */}
             <div
-              className="text-white text-base font-bold tracking-wide text-center px-1 mb-1 w-full"
+              className="text-white text-base font-bold tracking-wide text-center px-1 pt-2 w-full"
               style={{
                 maxWidth: "100%",
                 overflowWrap: "break-word",
                 wordBreak: "break-word",
                 whiteSpace: "normal",
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                zIndex: 2,
               }}
               title={winner.name}
             >
               {winner.name}
             </div>
+            <div style={{ height: "2.2em" }} />
 
-            {/* Winner's score and total time (bigger) */}
+            {/* Winner's score and total time (responsive, no overlap) */}
             <div
-              className="text-white text-base font-semibold bg-black/30 px-2 py-1 rounded-full backdrop-blur-sm flex flex-col items-center"
-              style={{ fontSize: "15px" }}
+              className="text-white font-semibold flex flex-col xs:flex-row items-center xs:space-x-2 xs:space-y-0 space-y-1 w-full justify-center"
+              style={{ minWidth: 0, wordBreak: "break-word" }}
             >
-              <span>{winner.score} pts</span>
+              <span
+                className="flex items-center font-extrabold text-lg sm:text-xl text-yellow-600 drop-shadow-sm whitespace-nowrap tracking-wide font-mono"
+                style={{ lineHeight: 1 }}
+              >
+                {/* Trophy/medal for top 3 */}
+                {position === 1 && <span className="mr-1">🥇</span>}
+                {position === 2 && <span className="mr-1">🥈</span>}
+                {position === 3 && <span className="mr-1">🥉</span>}
+                <span>{winner.score}%</span>
+              </span>
               {/* Total time taken for all words */}
               {winner.guesses && winner.guesses.length > 0 && (
-                <span style={{ fontSize: "12px", marginTop: 2 }}>
-                  ⏱️ Total:{" "}
+                <span
+                  className="flex items-center text-xs xs:text-xs whitespace-nowrap text-gray-200 font-mono font-semibold opacity-90"
+                  style={{ marginTop: 0 }}
+                >
+                  <span className="mr-1">🏁</span>
                   {winner.guesses
                     .map((g) => (typeof g[3] === "number" ? g[3] : 0))
                     .reduce((sum, t) => sum + t, 0)}
