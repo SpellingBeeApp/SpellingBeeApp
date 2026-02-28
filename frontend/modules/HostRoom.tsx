@@ -148,7 +148,7 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
      */
     const wordList = wordListText
       .split(/[\n,]/)
-      .map((word) => word.trim())
+      .map((word) => word.trim().toLowerCase())
       .filter((word) => word.length > 0);
     /**
      * check again to make sure word list contains an element
@@ -423,15 +423,83 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
               <div className="card-body">
                 {activeTab === "players" ? (
                   <div className="space-y-2">
-                    {room?.players.map((player, index) => (
-                      <div
-                        key={`${player.name}-${index}`}
-                        className="flex items-center justify-between p-3 bg-base-200 rounded-lg"
-                      >
-                        <span className="font-medium">{player.name}</span>
-                        <span className="font-bold">{`${player.score}%`}</span>
-                      </div>
-                    ))}
+                    {[...(room?.players ?? [])]
+                      .sort((a, b) => {
+                        const scoreDiff = (b.score ?? 0) - (a.score ?? 0);
+                        if (scoreDiff !== 0) return scoreDiff;
+                        // Tiebreaker: total seconds ascending
+                        const getTotalSeconds = (player: any) => {
+                          if (!player.guesses || player.guesses.length === 0)
+                            return Infinity;
+                          return player.guesses
+                            .map((g: any) =>
+                              typeof g[3] === "number" ? g[3] : 0,
+                            )
+                            .reduce((sum: number, t: number) => sum + t, 0);
+                        };
+                        return getTotalSeconds(a) - getTotalSeconds(b);
+                      })
+                      .map((player, index) => (
+                        <div
+                          key={`${player.name}-${index}`}
+                          className={`flex flex-col sm:flex-row sm:items-center justify-between p-3 rounded-lg gap-2 sm:gap-0 overflow-hidden ${
+                            player.name === playerName
+                              ? "bg-primary/20"
+                              : "bg-base-200"
+                          }`}
+                          style={{ minWidth: 0 }}
+                        >
+                          <span className="font-medium truncate max-w-[50vw] sm:max-w-[200px]">
+                            {player.name}
+                          </span>
+                          <span className="flex items-center font-bold text-base sm:text-lg whitespace-nowrap overflow-hidden">
+                            {/* Trophy/medal for top 3 */}
+                            {index === 0 && <span className="mr-1">🏆</span>}
+                            {index === 1 && <span className="mr-1">🏁</span>}
+                            {index === 2 && <span className="mr-1">⭐</span>}
+                            <span
+                              className="text-yellow-600 font-extrabold text-lg sm:text-xl"
+                              style={{ fontFamily: "monospace" }}
+                            >
+                              {player.score}%
+                            </span>
+                            {room?.status === RoomStatus.ENDED &&
+                              player.guesses &&
+                              player.guesses.length > 0 && (
+                                <span
+                                  className="ml-2 inline-flex items-center px-2 py-0.5 rounded-full bg-gradient-to-r from-gray-900 via-black to-gray-700 border-2 border-yellow-400 text-yellow-200 font-mono font-extrabold text-xs sm:text-base shadow"
+                                  style={{
+                                    letterSpacing: "0.05em",
+                                    maxWidth: "100%",
+                                    overflow: "hidden",
+                                  }}
+                                  title="Total race time (lower is better)"
+                                >
+                                  <span className="mr-1 text-base sm:text-lg">
+                                    🏁
+                                  </span>
+                                  <span
+                                    className="text-white drop-shadow-sm"
+                                    style={{ fontFamily: "monospace" }}
+                                  >
+                                    {player.guesses
+                                      .map((g: any) =>
+                                        typeof g[3] === "number" ? g[3] : 0,
+                                      )
+                                      .reduce(
+                                        (sum: number, t: number) => sum + t,
+                                        0,
+                                      )
+                                      .toFixed(2)}
+                                  </span>
+                                  <span className="ml-1 text-yellow-200 font-bold">
+                                    s
+                                  </span>
+                                </span>
+                              )}
+                          </span>
+                        </div>
+                      ))}
                   </div>
                 ) : (
                   <div>
