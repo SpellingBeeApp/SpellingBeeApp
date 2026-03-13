@@ -116,6 +116,22 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
     (eachPlayer) => eachPlayer.name === playerName,
   );
 
+  // Defensive check: if room is missing, show a friendly message
+  if (!room) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold mb-4">
+            Room not found or has expired.
+          </h2>
+          <Link href="/" className="btn btn-primary">
+            Go Home
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen p-4 md:p-6 honeycomb-bg">
       <div className="max-w-xl mx-auto">

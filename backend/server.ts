@@ -151,8 +151,13 @@ const connected = (socket: Socket) => {
 
         // Delete the room if the game is finished
         if (rooms[code].status === RoomStatus.ENDED) {
-          console.log(`Deleting room ${code} as the game is finished.`);
-          delete rooms[code];
+          console.log(`Room ${code} marked as ENDED. Scheduling deletion in 60 seconds.`);
+          setTimeout(() => {
+            if (rooms[code] && rooms[code].status === RoomStatus.ENDED) {
+              console.log(`Deleting room ${code} after delay.`);
+              delete rooms[code];
+            }
+          }, 60000); // 60 seconds
         }
       }
     }
