@@ -25,7 +25,8 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
   const [currentWordIndex, setCurrentWordIndex] = React.useState(-1);
   const [activeTab, setActiveTab] = React.useState("players");
   const roomId = params.roomId;
-  const { emit, on } = useSocket("http://localhost:5000");
+  // const { emit, on } = useSocket("http://localhost:5000"); // For local development
+  const { emit, on } = useSocket("http://54.149.199.75:5000"); // For EC2 deployment
   const [room, setRoom] = React.useState<Room>();
 
   /**

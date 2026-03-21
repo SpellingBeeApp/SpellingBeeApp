@@ -18,7 +18,8 @@ import TopThreePlayers from "./PlayerRoom/TopThreePlayers";
 
 export default function PlayerRoom({ params }: { params: { roomId: string } }) {
   const router = useRouter();
-  const { emit, on } = useSocket("http://localhost:5000");
+  // const { emit, on } = useSocket("http://localhost:5000"); // For local development
+  const { emit, on } = useSocket("http://54.149.199.75:5000"); // For EC2 deployment
   const [playerName, setPlayerName] = React.useState("");
   const [guess, setGuess] = React.useState("");
   // Use backend-provided wordStartTime for timing
@@ -121,9 +122,7 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold mb-4">
-            Room not found or has expired.
-          </h2>
+          <h2 className="text-2xl font-bold mb-4">Loading...</h2>
           <Link href="/" className="btn btn-primary">
             Go Home
           </Link>
