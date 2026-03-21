@@ -17,7 +17,8 @@ export default function LandingPage() {
   const [playerName, setPlayerName] = React.useState("");
   const [roomCode, setRoomCode] = React.useState("");
   const [activeTab, setActiveTab] = React.useState("create");
-  const { socket } = useSocket("http://localhost:5000");
+  // const { socket } = useSocket("http://localhost:5000"); // For local development
+  const { socket } = useSocket("http://54.149.199.75:5000"); // For EC2 deployment
 
   /**
    * creates a room for the spelling bee
@@ -115,7 +116,7 @@ export default function LandingPage() {
         router.push(`/room/${roomCode}/play`);
       } else {
         alert(
-          `Player ${playerName} already exists in room ${roomCode}. Please pick another name.`
+          `Player ${playerName} already exists in room ${roomCode}. Please pick another name.`,
         );
       }
     });
