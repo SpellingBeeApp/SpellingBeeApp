@@ -18,7 +18,6 @@ export default function LandingPage() {
   const [roomCode, setRoomCode] = React.useState("");
   const [activeTab, setActiveTab] = React.useState("create");
   // const { socket } = useSocket("http://localhost:5000"); // For local development
-  // const { socket } = useSocket("http://54.149.199.75:5000"); // For previous EC2 deployment
   const { socket } = useSocket(process.env.NEXT_PUBLIC_BACKEND_URL!); // Uses env variable
 
   /**
@@ -129,13 +128,13 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 honeycomb-bg">
+    <div className="min-h-screen flex items-center justify-center p-4 honeycomb-bg overflow-x-hidden w-full max-w-[100vw]">
       <motion.div
         layout
         className="overflow_hidden transition-all"
         transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
       >
-        <div className="card w-96 bg-base-100 shadow-xl transition-all duration-500 ease-in-out animate-fade overflow-hidden">
+        <div className="card w-full max-w-[100vw] bg-base-100 shadow-xl transition-all duration-500 ease-in-out animate-fade overflow-hidden">
           <div className="card-body">
             <div className="flex justify-center mb-0">
               <div className="relative animate__animated animate__bounce">
