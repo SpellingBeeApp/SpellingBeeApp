@@ -1,0 +1,14 @@
+{
+  "images" : [
+    {
+      "filename" : "secretbee_medium_icon.png",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "size" : "1024x1024"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

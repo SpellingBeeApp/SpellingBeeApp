@@ -18,7 +18,8 @@ export default function LandingPage() {
   const [roomCode, setRoomCode] = React.useState("");
   const [activeTab, setActiveTab] = React.useState("create");
   // const { socket } = useSocket("http://localhost:5000"); // For local development
-  const { socket } = useSocket("http://54.149.199.75:5000"); // For EC2 deployment
+  // const { socket } = useSocket("http://54.149.199.75:5000"); // For previous EC2 deployment
+  const { socket } = useSocket(process.env.NEXT_PUBLIC_BACKEND_URL!); // Uses env variable
 
   /**
    * creates a room for the spelling bee
