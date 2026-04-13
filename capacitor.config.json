@@ -1,0 +1,10 @@
+{
+  "appId": "com.secretbee.spellingbeeApp",
+  "appName": "SecretBee",
+  "webDir": "public",
+  "bundledWebRuntime": false,
+  "server": {
+    "url": "http://secretbee.zipcode.rocks",
+    "cleartext": true
+  }
+}

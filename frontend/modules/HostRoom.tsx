@@ -26,58 +26,58 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
   const [activeTab, setActiveTab] = React.useState("players");
   const roomId = params.roomId;
   // const { emit, on } = useSocket("http://localhost:5000"); // For local development
-  const { emit, on } = useSocket("http://54.149.199.75:5000"); // For EC2 deployment
+  const { emit, on } = useSocket(process.env.NEXT_PUBLIC_BACKEND_URL!); // Uses env variable
   const [room, setRoom] = React.useState<Room>();
 
   /**
    * Callback that fires when the `wordFileUpload` event fires.
    */
-  const onWordListUpload = React.useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const { target } = event;
-      const wordListReference = textAreaInputReference.current;
-      if (target !== undefined && wordListReference !== null) {
-        const { files } = target;
-        if (files !== null) {
-          const uploadedFile = files[0];
-          const fileReader = new FileReader();
-          fileReader.readAsText(uploadedFile, "UTF-8");
-
-          fileReader.addEventListener(
-            "load",
-            (event: ProgressEvent<EventTarget>) => {
-              const { target: readFile } = event;
-
-              if (readFile !== null) {
-                const castedReadFile = readFile as FileReader;
-                const { result: readWords } = castedReadFile;
-
-                if (readWords !== null) {
-                  readString<string>(readWords.toString(), {
-                    worker: true,
-                    complete: (processedWords) => {
-                      const { data } = processedWords;
-                      console.log(data);
-                      const preProcessedWords = data
-                        .slice(1)
-                        .map((eachRow) => eachRow[0])
-                        .flat(2)
-                        .filter((eachWord) => eachWord.length > 0);
-
-                      console.log(preProcessedWords);
-
-                      wordListReference.value = preProcessedWords.join("\n");
-                    },
-                  });
-                }
-              }
-            },
-          );
-        }
-      }
-    },
-    [],
-  );
+  // const onWordListUpload = React.useCallback(
+  //   (event: React.ChangeEvent<HTMLInputElement>) => {
+  //     const { target } = event;
+  //     const wordListReference = textAreaInputReference.current;
+  //     if (target !== undefined && wordListReference !== null) {
+  //       const { files } = target;
+  //       if (files !== null) {
+  //         const uploadedFile = files[0];
+  //         const fileReader = new FileReader();
+  //         fileReader.readAsText(uploadedFile, "UTF-8");
+  //
+  //         fileReader.addEventListener(
+  //           "load",
+  //           (event: ProgressEvent<EventTarget>) => {
+  //             const { target: readFile } = event;
+  //
+  //             if (readFile !== null) {
+  //               const castedReadFile = readFile as FileReader;
+  //               const { result: readWords } = castedReadFile;
+  //
+  //               if (readWords !== null) {
+  //                 readString<string>(readWords.toString(), {
+  //                   worker: true,
+  //                   complete: (processedWords) => {
+  //                     const { data } = processedWords;
+  //                     console.log(data);
+  //                     const preProcessedWords = data
+  //                       .slice(1)
+  //                       .map((eachRow) => eachRow[0])
+  //                       .flat(2)
+  //                       .filter((eachWord) => eachWord.length > 0);
+  //
+  //                     console.log(preProcessedWords);
+  //
+  //                     wordListReference.value = preProcessedWords.join("\n");
+  //                   },
+  //                 });
+  //               }
+  //             }
+  //           },
+  //         );
+  //       }
+  //     }
+  //   },
+  //   [],
+  // );
 
   /**
    * Reacting to a change in `roomId` or `on`.
@@ -256,21 +256,22 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
   const { words } = room;
 
   return (
-    <div className="min-h-screen p-4 md:p-6 honeycomb-bg">
-      <div className="max-w-6xl mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-center md:items-center mb-6 gap-4 transition-all duration-500 ease-in-out">
+    <div className="min-h-screen w-full p-2 sm:p-4 honeycomb-bg overflow-x-hidden">
+      <div className="w-full max-w-3xl mx-auto">
+        <div className="flex flex-col md:flex-row justify-between items-center md:items-center mb-6 gap-4 transition-all duration-500 ease-in-out w-full">
           <div className="animate__animated animate__fadeInLeft md:animate-fade self-center md:self-start text-center md:text-left">
             <Link href="/">
               <Image
                 alt="Scripps Spelling Bee Logo"
                 src="/sb003.png"
-                width={350}
-                height={300}
+                width={340}
+                height={180}
+                className="object-contain mx-auto"
                 style={{ cursor: "pointer" }}
               />
             </Link>
-            <p className="text-base-content/70 text-lg font-semibold">
-              Welcome, {playerName} !
+            <p className="text-base-content/70 text-sm font-medium mt-1 text-center">
+              Welcome, {playerName}!
             </p>
           </div>
 
@@ -293,9 +294,9 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-fade-up md:animate-fade">
-          <div className="lg:col-span-2 space-y-6">
-            <div className="card bg-base-100 shadow-xl animate-fade">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-fade-up md:animate-fade w-full">
+          <div className="lg:col-span-2 space-y-6 w-full">
+            <div className="card bg-base-100 shadow-xl animate-fade w-full p-4 rounded-xl">
               {currentWordIndex === -1 ? (
                 <div className="card-body">
                   <h2 className="card-title">Word List</h2>
@@ -304,6 +305,9 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
                     className="textarea textarea-bordered font-mono h-40"
                     ref={textAreaInputReference}
                   />
+                  <span className="text-xs text-gray-400 mt-1 ml-1 block">
+                    for example: car, toy, pen
+                  </span>
                   <div className="card-actions justify-between">
                     <button
                       className="btn btn-primary"
@@ -318,14 +322,16 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
                         <ArrowRight className="h-4 w-4 ml-2" />
                       </button>
                     )}
-                    <div className="hover:cursor-pointer">
+
+                    {/* need to revisit this upload file functionality and test it with the onWordListUpload callback with the papaparse library. currently it is not working and needs debugging, so for now we will just use the textarea input for word list submission */}
+                    {/*  <div className="hover:cursor-pointer">
                       <input
                         accept=".csv"
                         onChange={onWordListUpload}
                         type="file"
                         className="file-input file-input-md file-input-primary"
                       />
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               ) : (
