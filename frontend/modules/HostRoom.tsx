@@ -21,6 +21,9 @@ import { readString } from "react-papaparse";
 export default function HostRoom({ params }: { params: { roomId: string } }) {
   const router = useRouter();
   const textAreaInputReference = React.useRef<HTMLTextAreaElement | null>(null);
+  const questionsInputReference = React.useRef<HTMLTextAreaElement | null>(
+    null,
+  );
   const [playerName, setPlayerName] = React.useState("");
   const [currentWordIndex, setCurrentWordIndex] = React.useState(-1);
   const [activeTab, setActiveTab] = React.useState("players");
@@ -130,44 +133,28 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
    */
   const submitWordList = () => {
     const currentRef = textAreaInputReference.current;
-
-    if (currentRef === null) {
-      return;
-    }
-
+    const questionsRef = questionsInputReference.current;
+    if (currentRef === null) return;
     const wordListText = currentRef.value;
-
-    /**
-     * Checks if `wordListText` is empty, ensuring the user does not submit an empty word list.
-     */
     if (wordListText.trim().length === 0) {
       alert("Please enter at least one word");
       return;
     }
-    /**
-     * separates list by line breaks or commas and ensures words are at least one character
-     */
     const wordList = wordListText
       .split(/[\n,]/)
       .map((word) => word.trim().toLowerCase())
       .filter((word) => word.length > 0);
-    /**
-     * check again to make sure word list contains an element
-     */
     if (wordList.length === 0) {
       alert("Please enter at least one word!");
       return;
     }
-    /**
-     * the payload we will emit to the server consisting of the roomId and the word list
-     */
-    const payload: SubmitWords = {
-      roomId,
-      words: wordList,
-    };
-    /**
-     * emitting the word list to the "submitWords" listener
-     */
+    let payload: any = { roomId, words: wordList };
+    if (questionsRef && questionsRef.value.trim().length > 0) {
+      payload.questions = questionsRef.value
+        .split(/[\n,]/)
+        .map((q) => q.trim())
+        .filter((q) => q.length > 0);
+    }
     emit("submitWords", payload);
   };
 
@@ -308,6 +295,11 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
                   <span className="text-xs text-gray-400 mt-1 ml-1 block">
                     for example: car, toy, pen
                   </span>
+                  <textarea
+                    placeholder="(Optional) Questions for each word (comma or line separated)"
+                    className="textarea textarea-bordered font-mono h-24 mt-2"
+                    ref={questionsInputReference}
+                  />
                   <div className="card-actions justify-between">
                     <button
                       className="btn btn-primary"

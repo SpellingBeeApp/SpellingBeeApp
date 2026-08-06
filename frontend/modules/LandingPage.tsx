@@ -7,6 +7,7 @@
 import { useRouter } from "next/navigation";
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import useSocket from "@/hooks/useSocket";
 import { CreateRoomData } from "@/types/dto/CreateRoomData";
 import { JoinRoomData } from "@/types/dto/JoinRoomData";
@@ -149,6 +150,13 @@ export default function LandingPage() {
             <p className="text-center text-base-content/70 animate-fade">
               Create or join a spelling competition
             </p>
+
+            <Link
+              href="/practice"
+              className="btn btn-accent btn-outline w-full animate-fade"
+            >
+              Practice Solo — Quiz Mode
+            </Link>
 
             <div className="tabs tabs-bordered grow justify-center my-4 animate-fade">
               <a
