@@ -12,10 +12,17 @@ import {
   recordMissedWord,
 } from "@/helpers/practiceProgress";
 import useWordPronunciation from "@/hooks/useWordPronunciation";
-import { maskWordInText } from "@/helpers/maskWordInText";
+import Confetti from "./PlayerRoom/Confetti";
+import { maskWordInText, textContainsWord } from "@/helpers/maskWordInText";
 import { PracticeWord, QuizResult } from "@/types/PracticeWord";
 
 type QuizPhase = "setup" | "quiz" | "summary";
+
+const formatDuration = (totalSeconds: number): string => {
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return minutes > 0 ? `${minutes}m ${seconds}s` : `${seconds}s`;
+};
 
 export default function PracticeQuiz() {
   const [phase, setPhase] = React.useState<QuizPhase>("setup");
@@ -126,6 +133,9 @@ export default function PracticeQuiz() {
   const correctCount = results.filter((r) => r.correct).length;
   const scorePercent =
     results.length > 0 ? Math.round((correctCount / results.length) * 100) : 0;
+  const totalTimeTaken = results.reduce((sum, r) => sum + r.timeTaken, 0);
+  const averageTimeTaken =
+    results.length > 0 ? Math.round(totalTimeTaken / results.length) : 0;
   const progress = loadPracticeProgress();
 
   if (phase === "setup") {
@@ -203,17 +213,30 @@ export default function PracticeQuiz() {
 
     return (
       <div className="min-h-screen flex items-center justify-center p-4 honeycomb-bg">
+        <Confetti />
         <div className="card w-full max-w-lg bg-base-100 shadow-xl">
           <div className="card-body space-y-4">
             <h1 className="text-2xl font-bold text-center">Quiz Complete!</h1>
 
-            <div className="stat bg-primary/10 rounded-box">
-              <div className="stat-title text-center">Your Score</div>
-              <div className="stat-value text-center text-primary">
-                {scorePercent}%
+            <div className="stats stats-vertical sm:stats-horizontal w-full shadow bg-primary/10 rounded-box">
+              <div className="stat">
+                <div className="stat-title text-center">Your Score</div>
+                <div className="stat-value text-center text-primary">
+                  {scorePercent}%
+                </div>
+                <div className="stat-desc text-center">
+                  {correctCount} of {results.length} correct
+                </div>
               </div>
-              <div className="stat-desc text-center">
-                {correctCount} of {results.length} correct
+
+              <div className="stat">
+                <div className="stat-title text-center">Total Time</div>
+                <div className="stat-value text-center text-primary">
+                  {formatDuration(totalTimeTaken)}
+                </div>
+                <div className="stat-desc text-center">
+                  {averageTimeTaken}s avg per word
+                </div>
               </div>
             </div>
 
@@ -292,15 +315,16 @@ export default function PracticeQuiz() {
                     ? currentWord.definition
                     : maskWordInText(currentWord.definition, currentWord.word)}
                 </p>
-                {currentWord.sentence && (
-                  <p className="text-sm italic text-base-content/60">
-                    &ldquo;
-                    {hasSubmitted
-                      ? currentWord.sentence
-                      : maskWordInText(currentWord.sentence, currentWord.word)}
-                    &rdquo;
-                  </p>
-                )}
+                {currentWord.sentence &&
+                  textContainsWord(currentWord.sentence, currentWord.word) && (
+                    <p className="text-sm italic text-base-content/60">
+                      &ldquo;
+                      {hasSubmitted
+                        ? currentWord.sentence
+                        : maskWordInText(currentWord.sentence, currentWord.word)}
+                      &rdquo;
+                    </p>
+                  )}
               </div>
             )}
           </div>
