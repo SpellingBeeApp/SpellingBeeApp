@@ -5,11 +5,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { Volume2, Send, RotateCcw, Check, X, Clock } from "lucide-react";
-import { DIFFICULTY_LEVELS, GRADE_LEVELS, PRACTICE_GRADES } from "@/data/practiceWords";
+import {
+  ALL_PRACTICE_WORDS,
+  DIFFICULTY_LEVELS,
+  GRADE_LEVELS,
+  PRACTICE_GRADES,
+} from "@/data/practiceWords";
 import { isSpellingCorrect } from "@/helpers/isSpellingCorrect";
 import {
   loadPracticeProgress,
   recordCompletedSession,
+  recordCorrectAttempt,
   recordMissedWord,
 } from "@/helpers/practiceProgress";
 import useWordPronunciation from "@/hooks/useWordPronunciation";
@@ -24,6 +30,12 @@ const DIFFICULTY_LABELS: Record<Difficulty, string> = {
 };
 
 type QuizPhase = "setup" | "quiz" | "summary";
+type SpeechSpeed = "normal" | "slow";
+
+const SPEECH_RATES: Record<SpeechSpeed, number> = {
+  normal: 0.85,
+  slow: 0.5,
+};
 
 const formatDuration = (totalSeconds: number): string => {
   const minutes = Math.floor(totalSeconds / 60);
@@ -48,22 +60,41 @@ export default function PracticeQuiz() {
   } | null>(null);
   const [hasSubmitted, setHasSubmitted] = React.useState(false);
   const [elapsedSeconds, setElapsedSeconds] = React.useState(0);
+  const [isReviewMode, setIsReviewMode] = React.useState(false);
+  const [showOrigin, setShowOrigin] = React.useState(false);
+  const [speechSpeed, setSpeechSpeed] = React.useState<SpeechSpeed>("normal");
 
-  const { isSupported, isSpeaking, speak, stop } = useWordPronunciation();
+  const { isSupported, isSpeaking, speak, stop } = useWordPronunciation({
+    rate: SPEECH_RATES[speechSpeed],
+  });
 
   const currentWord = words[currentIndex];
   const isLastWord = currentIndex === words.length - 1;
+  const missedWordCount = Object.keys(loadPracticeProgress().missedWords).length;
 
-  const startQuiz = () => {
-    const list = PRACTICE_GRADES[selectedGrade][selectedDifficulty];
-    setWords([...list]);
+  const beginQuiz = (list: PracticeWord[], reviewMode: boolean) => {
+    setWords(list);
     setCurrentIndex(0);
     setResults([]);
     setGuess("");
     setLastFeedback(null);
     setHasSubmitted(false);
     setWordStartTime(Date.now());
+    setIsReviewMode(reviewMode);
     setPhase("quiz");
+  };
+
+  const startQuiz = () => {
+    beginQuiz([...PRACTICE_GRADES[selectedGrade][selectedDifficulty]], false);
+  };
+
+  const startReview = () => {
+    const missedWords = Object.keys(loadPracticeProgress().missedWords)
+      .map((word) => ALL_PRACTICE_WORDS[word])
+      .filter((word): word is PracticeWord => Boolean(word));
+
+    if (missedWords.length === 0) return;
+    beginQuiz(missedWords, true);
   };
 
   React.useEffect(() => {
@@ -72,6 +103,7 @@ export default function PracticeQuiz() {
     setGuess("");
     setLastFeedback(null);
     setHasSubmitted(false);
+    setShowOrigin(false);
     setWordStartTime(Date.now());
 
     const timer = window.setTimeout(() => {
@@ -120,7 +152,9 @@ export default function PracticeQuiz() {
     });
     setHasSubmitted(true);
 
-    if (!correct) {
+    if (correct) {
+      recordCorrectAttempt(currentWord.word);
+    } else {
       recordMissedWord(currentWord.word);
     }
   };
@@ -148,6 +182,7 @@ export default function PracticeQuiz() {
     setGuess("");
     setLastFeedback(null);
     setHasSubmitted(false);
+    setIsReviewMode(false);
   };
 
   const correctCount = results.filter((r) => r.correct).length;
@@ -234,6 +269,16 @@ export default function PracticeQuiz() {
             >
               Start Quiz 🎯
             </button>
+
+            {missedWordCount > 0 && (
+              <button
+                className="btn btn-outline btn-secondary rounded-full w-full"
+                onClick={startReview}
+                disabled={!isSupported}
+              >
+                📚 Review Missed Words ({missedWordCount})
+              </button>
+            )}
 
             {progress.sessionsCompleted > 0 && (
               <p className="text-center text-sm text-base-content/60">
@@ -356,6 +401,12 @@ export default function PracticeQuiz() {
             </div>
           </div>
 
+          {isReviewMode && (
+            <div className="badge badge-accent rounded-full gap-1 -mt-2">
+              📚 Reviewing missed words
+            </div>
+          )}
+
           <div className="card card-modern rounded-3xl bg-base-100 shadow-xl">
             <div className="card-body items-center text-center space-y-4 p-5 sm:p-8">
               <p className="text-base-content/70">Listen and spell the word</p>
@@ -374,6 +425,27 @@ export default function PracticeQuiz() {
               <p className="text-sm text-base-content/60">
                 {isSpeaking ? "Playing..." : "Tap to hear again"}
               </p>
+
+              <div className="join">
+                <button
+                  type="button"
+                  className={`btn btn-xs join-item rounded-l-full ${
+                    speechSpeed === "normal" ? "btn-active" : ""
+                  }`}
+                  onClick={() => setSpeechSpeed("normal")}
+                >
+                  🐇 Normal
+                </button>
+                <button
+                  type="button"
+                  className={`btn btn-xs join-item rounded-r-full ${
+                    speechSpeed === "slow" ? "btn-active" : ""
+                  }`}
+                  onClick={() => setSpeechSpeed("slow")}
+                >
+                  🐢 Slow
+                </button>
+              </div>
 
               {currentWord && (
                 <div className="w-full text-left bg-base-200 p-4 rounded-2xl space-y-1">
@@ -406,6 +478,23 @@ export default function PracticeQuiz() {
                         &rdquo;
                       </p>
                     )}
+                  {currentWord.origin && (
+                    <div className="pt-2">
+                      {showOrigin ? (
+                        <p className="text-sm text-secondary">
+                          🌍 Origin: {currentWord.origin}
+                        </p>
+                      ) : (
+                        <button
+                          type="button"
+                          className="btn btn-ghost btn-xs rounded-full px-0 text-secondary"
+                          onClick={() => setShowOrigin(true)}
+                        >
+                          🌍 Show word origin
+                        </button>
+                      )}
+                    </div>
+                  )}
                 </div>
               )}
             </div>

@@ -3,6 +3,7 @@ export type PracticeWord = {
   definition: string;
   partOfSpeech?: string;
   sentence?: string;
+  origin?: string;
 };
 
 export type Difficulty = "easy" | "medium" | "hard";
@@ -14,7 +15,13 @@ export type QuizResult = {
   timeTaken: number;
 };
 
+export type MissedWordEntry = {
+  count: number;
+  lastSeen: number;
+  correctStreak: number;
+};
+
 export type PracticeProgress = {
-  missedWords: Record<string, { count: number; lastSeen: number }>;
+  missedWords: Record<string, MissedWordEntry>;
   sessionsCompleted: number;
 };
