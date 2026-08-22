@@ -243,7 +243,7 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
   const { words } = room;
 
   return (
-    <div className="min-h-screen w-full p-2 sm:p-4 honeycomb-bg overflow-x-hidden">
+    <div className="min-h-screen w-full p-2 pt-safe pb-safe sm:p-4 honeycomb-bg overflow-x-hidden">
       <div className="w-full max-w-3xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-center md:items-center mb-6 gap-4 transition-all duration-500 ease-in-out w-full">
           <div className="animate__animated animate__fadeInLeft md:animate-fade self-center md:self-start text-center md:text-left">
@@ -253,7 +253,7 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
                 src="/sb003.png"
                 width={340}
                 height={180}
-                className="object-contain mx-auto"
+                className="object-contain mx-auto w-48 sm:w-64 h-auto"
                 style={{ cursor: "pointer" }}
               />
             </Link>
@@ -262,18 +262,19 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
             </p>
           </div>
 
-          <div className="flex gap-2 animate-fade-right md:animate-fade">
-            <div className="badge badge-outline gap-2 mt-1">
+          <div className="flex flex-wrap justify-center gap-2 animate-fade-right md:animate-fade">
+            <div className="badge badge-outline rounded-full gap-2">
               <Users className="h-4 w-4" />
               {room === undefined ? 0 : room.players.length} players
             </div>
             <div className="flex items-center gap-2">
-              <div className="badge badge-secondary gap-2 mb-1">
+              <div className="badge badge-secondary rounded-full gap-2">
                 Room: {roomId}
               </div>
               <button
-                className="btn btn-ghost btn-square btn-sm"
+                className="btn btn-ghost btn-square btn-sm rounded-full"
                 onClick={copyRoomCode}
+                aria-label="Copy room code"
               >
                 <Copy className="h-4 w-4" />
               </button>
@@ -283,13 +284,13 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-fade-up md:animate-fade w-full">
           <div className="lg:col-span-2 space-y-6 w-full">
-            <div className="card bg-base-100 shadow-xl animate-fade w-full p-4 rounded-xl">
+            <div className="card card-modern rounded-3xl bg-base-100 shadow-xl animate-fade w-full">
               {currentWordIndex === -1 ? (
-                <div className="card-body">
+                <div className="card-body p-4 sm:p-6">
                   <h2 className="card-title">Word List</h2>
                   <textarea
                     placeholder="Enter your word list (one word per line or comma-separated)"
-                    className="textarea textarea-bordered font-mono h-40"
+                    className="textarea textarea-bordered rounded-xl font-mono h-40"
                     ref={textAreaInputReference}
                   />
                   <span className="text-xs text-gray-400 mt-1 ml-1 block">
@@ -297,19 +298,22 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
                   </span>
                   <textarea
                     placeholder="(Optional) Questions for each word (comma or line separated)"
-                    className="textarea textarea-bordered font-mono h-24 mt-2"
+                    className="textarea textarea-bordered rounded-xl font-mono h-24 mt-2"
                     ref={questionsInputReference}
                   />
-                  <div className="card-actions justify-between">
+                  <div className="card-actions flex-col-reverse sm:flex-row sm:justify-between gap-2 mt-2">
                     <button
-                      className="btn btn-primary"
+                      className="btn btn-primary rounded-full w-full sm:w-auto"
                       onClick={submitWordList}
                     >
                       <Check className="h-4 w-4 mr-2" />
                       Submit Words
                     </button>
                     {(words.length ?? 0) > 0 && (
-                      <button className="btn btn-secondary" onClick={nextWord}>
+                      <button
+                        className="btn btn-secondary rounded-full w-full sm:w-auto"
+                        onClick={nextWord}
+                      >
                         Start Game
                         <ArrowRight className="h-4 w-4 ml-2" />
                       </button>
@@ -327,9 +331,9 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
                   </div>
                 </div>
               ) : (
-                <div className="card-body">
+                <div className="card-body p-4 sm:p-6">
                   <div className="text-center space-y-4">
-                    <h2 className="text-4xl font-bold">
+                    <h2 className="text-3xl sm:text-4xl font-bold break-words">
                       {words[currentWordIndex]}
                     </h2>
                     <p className="text-base-content/70">
@@ -337,9 +341,9 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
                     </p>
                   </div>
 
-                  <div className="card-actions justify-between mt-6">
+                  <div className="card-actions flex-col sm:flex-row sm:justify-between gap-2 mt-6">
                     <button
-                      className="btn btn-primary"
+                      className="btn btn-primary rounded-full w-full sm:w-auto"
                       id="next_word_button"
                       onClick={nextWord}
                       disabled={currentWordIndex >= (words.length ?? 1) - 1}
@@ -353,7 +357,7 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
                       <></>
                     ) : (
                       <button
-                        className="btn btn-error"
+                        className="btn btn-error rounded-full w-full sm:w-auto"
                         disabled={
                           room.wordIndex + 1 < words.length ||
                           room.status === RoomStatus.ENDED
@@ -379,10 +383,10 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
               )}
             </div>
 
-            <div className="card bg-base-100 shadow-xl animate-fade-up md:animate-fade">
-              <div className="card-body">
+            <div className="card card-modern rounded-3xl bg-base-100 shadow-xl animate-fade-up md:animate-fade">
+              <div className="card-body p-4 sm:p-6">
                 <h2 className="card-title">Activity Log</h2>
-                <div className="h-[300px] overflow-y-auto">
+                <div className="h-[300px] overflow-y-auto space-y-2 pr-1">
                   {room.activities?.length === 0 ? (
                     <p className="text-center text-base-content/70">
                       No activity yet
@@ -401,16 +405,16 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
           </div>
 
           <div className="animate-fade">
-            <div className="tabs tabs-bordered justify-center mb-4">
+            <div className="tabs tabs-boxed grid grid-cols-2 mb-4 bg-base-200 rounded-full p-1">
               <a
-                className={`tab ${activeTab === "players" ? "tab-active" : ""}`}
+                className={`tab rounded-full font-semibold ${activeTab === "players" ? "tab-active" : ""}`}
                 onClick={() => setActiveTab("players")}
               >
                 <Users className="h-4 w-4 mr-2" />
                 Players
               </a>
               <a
-                className={`tab ${activeTab === "words" ? "tab-active" : ""}`}
+                className={`tab rounded-full font-semibold ${activeTab === "words" ? "tab-active" : ""}`}
                 onClick={() => setActiveTab("words")}
               >
                 <List className="h-4 w-4 mr-2" />
@@ -418,8 +422,8 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
               </a>
             </div>
 
-            <div className="card bg-base-100 shadow-xl">
-              <div className="card-body">
+            <div className="card card-modern rounded-3xl bg-base-100 shadow-xl">
+              <div className="card-body p-4 sm:p-6">
                 {activeTab === "players" ? (
                   <div className="space-y-2">
                     {[...(room?.players ?? [])]
@@ -441,7 +445,7 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
                       .map((player, index) => (
                         <div
                           key={`${player.name}-${index}`}
-                          className={`flex flex-col sm:flex-row sm:items-center justify-between p-3 rounded-lg gap-2 sm:gap-0 overflow-hidden ${
+                          className={`flex flex-col sm:flex-row sm:items-center justify-between p-3 rounded-xl gap-2 sm:gap-0 overflow-hidden ${
                             player.name === playerName
                               ? "bg-primary/20"
                               : "bg-base-200"
@@ -511,7 +515,7 @@ export default function HostRoom({ params }: { params: { roomId: string } }) {
                           {words.map((word, index) => (
                             <div
                               key={index}
-                              className={`flex justify-center p-2 bg-base-200 rounded-lg ${
+                              className={`flex justify-center p-2 bg-base-200 rounded-xl ${
                                 index === room.wordIndex ? "bg-gray-400/50" : ""
                               }`}
                             >

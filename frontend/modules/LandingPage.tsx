@@ -129,14 +129,14 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 honeycomb-bg overflow-x-hidden w-full max-w-[100vw]">
+    <div className="min-h-screen flex items-center justify-center p-4 pt-safe pb-safe honeycomb-bg overflow-x-hidden w-full max-w-[100vw]">
       <motion.div
         layout
-        className="overflow_hidden transition-all"
+        className="overflow_hidden transition-all w-full max-w-md"
         transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
       >
-        <div className="card w-full max-w-[100vw] bg-base-100 shadow-xl transition-all duration-500 ease-in-out animate-fade overflow-hidden">
-          <div className="card-body">
+        <div className="card card-modern rounded-3xl w-full bg-base-100 shadow-2xl transition-all duration-500 ease-in-out animate-fade overflow-hidden">
+          <div className="card-body p-5 sm:p-8">
             <div className="flex justify-center mb-0">
               <div className="relative animate__animated animate__bounce">
                 <Image
@@ -144,6 +144,8 @@ export default function LandingPage() {
                   src="/sb003.png"
                   width={400}
                   height={500}
+                  className="w-56 sm:w-64 h-auto"
+                  priority
                 />
               </div>
             </div>
@@ -153,20 +155,20 @@ export default function LandingPage() {
 
             <Link
               href="/practice"
-              className="btn btn-accent btn-outline w-full animate-fade"
+              className="btn btn-accent btn-outline rounded-full w-full animate-fade"
             >
-              Practice Solo — Quiz Mode
+              🐝 Practice Solo — Quiz Mode
             </Link>
 
-            <div className="tabs tabs-bordered grow justify-center my-4 animate-fade">
+            <div className="tabs tabs-boxed grid grid-cols-2 my-4 animate-fade bg-base-200 rounded-full p-1">
               <a
-                className={`tab ${activeTab === "join" ? "tab-active" : ""}`}
+                className={`tab rounded-full font-semibold ${activeTab === "join" ? "tab-active" : ""}`}
                 onClick={() => setActiveTab("join")}
               >
                 Join a Room
               </a>
               <a
-                className={`tab ${activeTab === "create" ? "tab-active" : ""}`}
+                className={`tab rounded-full font-semibold ${activeTab === "create" ? "tab-active" : ""}`}
                 onClick={() => setActiveTab("create")}
               >
                 Create a Room
@@ -176,12 +178,12 @@ export default function LandingPage() {
             <div className="space-y-4 animate-fade-right">
               <div className="form-control transition-all">
                 <label className="label">
-                  <span className="label-text">Your Name</span>
+                  <span className="label-text font-medium">Your Name</span>
                 </label>
                 <input
                   type="text"
                   placeholder="Enter your name"
-                  className="input input-bordered w-full"
+                  className="input input-bordered rounded-xl w-full"
                   value={playerName}
                   maxLength={20}
                   onChange={(e) => setPlayerName(e.target.value)}
@@ -199,12 +201,14 @@ export default function LandingPage() {
                     transition={{ duration: 0.3, ease: "easeInOut" }}
                   >
                     <label className="label">
-                      <span className="label-text">Room Code</span>
+                      <span className="label-text font-medium">
+                        Room Code
+                      </span>
                     </label>
                     <input
                       type="text"
                       placeholder="Enter room code"
-                      className="input input-bordered w-full"
+                      className="input input-bordered rounded-xl w-full tracking-widest font-semibold"
                       value={roomCode}
                       onChange={(e) =>
                         setRoomCode(e.target.value.toUpperCase())
@@ -216,7 +220,7 @@ export default function LandingPage() {
               </AnimatePresence>
 
               <button
-                className={`btn btn-primary w-full transform duration-700 ease-in-out ${
+                className={`btn btn-primary rounded-full w-full transform duration-700 ease-in-out ${
                   activeTab === "join" ? "" : "btn-secondary"
                 }`}
                 onClick={activeTab === "join" ? joinRoom : createRoom}

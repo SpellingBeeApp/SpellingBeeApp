@@ -84,7 +84,7 @@ export const WordPill = ({
 
   return (
     <div
-      className="badge bg-slate-500/50 font-semibold px-2 py-4 hover:cursor-pointer hover:bg-slate-500/75"
+      className="badge badge-lg rounded-full bg-base-200 border-none font-semibold px-4 py-4 min-h-[2.5rem] hover:cursor-pointer hover:bg-secondary hover:text-secondary-content transition-colors"
       data-status={WordPillClickState.NOT_SKIPPING}
       data-index={index}
       id="word_pill"
