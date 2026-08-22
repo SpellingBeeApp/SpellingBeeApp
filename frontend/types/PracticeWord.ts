@@ -5,6 +5,8 @@ export type PracticeWord = {
   sentence?: string;
 };
 
+export type Difficulty = "easy" | "medium" | "hard";
+
 export type QuizResult = {
   word: string;
   guess: string;

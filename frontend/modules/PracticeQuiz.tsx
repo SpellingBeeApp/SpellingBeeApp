@@ -3,8 +3,9 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Volume2, Send, RotateCcw, Check, X } from "lucide-react";
-import { PRACTICE_LISTS } from "@/data/practiceWords";
+import { AnimatePresence, motion } from "framer-motion";
+import { Volume2, Send, RotateCcw, Check, X, Clock } from "lucide-react";
+import { DIFFICULTY_LEVELS, GRADE_LEVELS, PRACTICE_GRADES } from "@/data/practiceWords";
 import { isSpellingCorrect } from "@/helpers/isSpellingCorrect";
 import {
   loadPracticeProgress,
@@ -14,7 +15,13 @@ import {
 import useWordPronunciation from "@/hooks/useWordPronunciation";
 import Confetti from "./PlayerRoom/Confetti";
 import { maskWordInText, textContainsWord } from "@/helpers/maskWordInText";
-import { PracticeWord, QuizResult } from "@/types/PracticeWord";
+import { Difficulty, PracticeWord, QuizResult } from "@/types/PracticeWord";
+
+const DIFFICULTY_LABELS: Record<Difficulty, string> = {
+  easy: "Easy",
+  medium: "Medium",
+  hard: "Hard",
+};
 
 type QuizPhase = "setup" | "quiz" | "summary";
 
@@ -26,8 +33,9 @@ const formatDuration = (totalSeconds: number): string => {
 
 export default function PracticeQuiz() {
   const [phase, setPhase] = React.useState<QuizPhase>("setup");
-  const [selectedList, setSelectedList] =
-    React.useState<keyof typeof PRACTICE_LISTS>("grade5");
+  const [selectedGrade, setSelectedGrade] = React.useState<number>(5);
+  const [selectedDifficulty, setSelectedDifficulty] =
+    React.useState<Difficulty>("easy");
   const [words, setWords] = React.useState<PracticeWord[]>([]);
   const [currentIndex, setCurrentIndex] = React.useState(0);
   const [guess, setGuess] = React.useState("");
@@ -39,6 +47,7 @@ export default function PracticeQuiz() {
     answer: string;
   } | null>(null);
   const [hasSubmitted, setHasSubmitted] = React.useState(false);
+  const [elapsedSeconds, setElapsedSeconds] = React.useState(0);
 
   const { isSupported, isSpeaking, speak, stop } = useWordPronunciation();
 
@@ -46,7 +55,7 @@ export default function PracticeQuiz() {
   const isLastWord = currentIndex === words.length - 1;
 
   const startQuiz = () => {
-    const list = PRACTICE_LISTS[selectedList].words;
+    const list = PRACTICE_GRADES[selectedGrade][selectedDifficulty];
     setWords([...list]);
     setCurrentIndex(0);
     setResults([]);
@@ -71,6 +80,17 @@ export default function PracticeQuiz() {
 
     return () => window.clearTimeout(timer);
   }, [phase, currentIndex, currentWord, speak]);
+
+  React.useEffect(() => {
+    if (phase !== "quiz" || !wordStartTime || hasSubmitted) return;
+
+    setElapsedSeconds(Math.floor((Date.now() - wordStartTime) / 1000));
+    const interval = window.setInterval(() => {
+      setElapsedSeconds(Math.floor((Date.now() - wordStartTime) / 1000));
+    }, 1000);
+
+    return () => window.clearInterval(interval);
+  }, [phase, wordStartTime, hasSubmitted]);
 
   React.useEffect(() => {
     return () => stop();
@@ -140,9 +160,9 @@ export default function PracticeQuiz() {
 
   if (phase === "setup") {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4 honeycomb-bg">
-        <div className="card w-full max-w-lg bg-base-100 shadow-xl">
-          <div className="card-body">
+      <div className="min-h-screen flex items-center justify-center p-4 pt-safe pb-safe honeycomb-bg">
+        <div className="card card-modern rounded-3xl w-full max-w-lg bg-base-100 shadow-2xl">
+          <div className="card-body p-5 sm:p-8">
             <div className="flex justify-center">
               <Link href="/">
                 <Image
@@ -150,18 +170,20 @@ export default function PracticeQuiz() {
                   src="/sb003.png"
                   width={280}
                   height={200}
-                  className="object-contain"
+                  className="object-contain w-40 sm:w-56 h-auto"
                 />
               </Link>
             </div>
 
-            <h1 className="text-2xl font-bold text-center">Practice Quiz</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold text-center">
+              Practice Quiz
+            </h1>
             <p className="text-center text-base-content/70">
               Hear each word, spell it from memory, and track your progress.
             </p>
 
             {!isSupported && (
-              <div className="alert alert-warning">
+              <div className="alert alert-warning rounded-xl">
                 <span>
                   Audio pronunciation is not supported in this browser.
                 </span>
@@ -170,36 +192,52 @@ export default function PracticeQuiz() {
 
             <div className="form-control">
               <label className="label">
-                <span className="label-text font-medium">Word list</span>
+                <span className="label-text font-medium">Grade level</span>
               </label>
               <select
-                className="select select-bordered w-full"
-                value={selectedList}
+                className="select select-bordered rounded-xl w-full"
+                value={selectedGrade}
+                onChange={(e) => setSelectedGrade(Number(e.target.value))}
+              >
+                {GRADE_LEVELS.map((grade) => (
+                  <option key={grade} value={grade}>
+                    Grade {grade}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text font-medium">Difficulty</span>
+              </label>
+              <select
+                className="select select-bordered rounded-xl w-full"
+                value={selectedDifficulty}
                 onChange={(e) =>
-                  setSelectedList(
-                    e.target.value as keyof typeof PRACTICE_LISTS,
-                  )
+                  setSelectedDifficulty(e.target.value as Difficulty)
                 }
               >
-                {Object.entries(PRACTICE_LISTS).map(([key, list]) => (
-                  <option key={key} value={key}>
-                    {list.label} ({list.words.length} words)
+                {DIFFICULTY_LEVELS.map((difficulty) => (
+                  <option key={difficulty} value={difficulty}>
+                    {DIFFICULTY_LABELS[difficulty]} (
+                    {PRACTICE_GRADES[selectedGrade][difficulty].length} words)
                   </option>
                 ))}
               </select>
             </div>
 
             <button
-              className="btn btn-primary w-full"
+              className="btn btn-primary btn-lg rounded-full w-full mt-2"
               onClick={startQuiz}
               disabled={!isSupported}
             >
-              Start Quiz
+              Start Quiz 🎯
             </button>
 
             {progress.sessionsCompleted > 0 && (
               <p className="text-center text-sm text-base-content/60">
-                Sessions completed: {progress.sessionsCompleted}
+                🐝 Sessions completed: {progress.sessionsCompleted}
               </p>
             )}
           </div>
@@ -212,13 +250,15 @@ export default function PracticeQuiz() {
     const missed = results.filter((r) => !r.correct);
 
     return (
-      <div className="min-h-screen flex items-center justify-center p-4 honeycomb-bg">
+      <div className="min-h-screen flex items-center justify-center p-4 pt-safe pb-safe honeycomb-bg">
         <Confetti />
-        <div className="card w-full max-w-lg bg-base-100 shadow-xl">
-          <div className="card-body space-y-4">
-            <h1 className="text-2xl font-bold text-center">Quiz Complete!</h1>
+        <div className="card card-modern rounded-3xl w-full max-w-lg bg-base-100 shadow-2xl">
+          <div className="card-body p-5 sm:p-8 space-y-4">
+            <h1 className="text-2xl sm:text-3xl font-bold text-center">
+              🎉 Quiz Complete!
+            </h1>
 
-            <div className="stats stats-vertical sm:stats-horizontal w-full shadow bg-primary/10 rounded-box">
+            <div className="stats stats-vertical sm:stats-horizontal w-full shadow bg-primary/10 rounded-2xl">
               <div className="stat">
                 <div className="stat-title text-center">Your Score</div>
                 <div className="stat-value text-center text-primary">
@@ -243,26 +283,31 @@ export default function PracticeQuiz() {
             {missed.length > 0 && (
               <div className="space-y-2">
                 <h2 className="font-semibold">Words to review</h2>
-                {missed.map((result) => (
-                  <div
-                    key={result.word}
-                    className="flex justify-between items-center p-3 bg-base-200 rounded-lg"
-                  >
-                    <span className="line-through text-error/70">
-                      {result.guess}
-                    </span>
-                    <span className="font-medium">{result.word}</span>
-                  </div>
-                ))}
+                <div className="max-h-56 overflow-y-auto space-y-2 pr-1">
+                  {missed.map((result) => (
+                    <div
+                      key={result.word}
+                      className="flex justify-between items-center p-3 bg-base-200 rounded-xl"
+                    >
+                      <span className="line-through text-error/70">
+                        {result.guess}
+                      </span>
+                      <span className="font-medium">{result.word}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
 
             <div className="flex gap-2">
-              <button className="btn btn-primary flex-1" onClick={restartQuiz}>
+              <button
+                className="btn btn-primary rounded-full flex-1"
+                onClick={restartQuiz}
+              >
                 <RotateCcw className="h-4 w-4" />
                 Try Again
               </button>
-              <Link href="/" className="btn btn-outline flex-1">
+              <Link href="/" className="btn btn-outline rounded-full flex-1">
                 Home
               </Link>
             </div>
@@ -273,132 +318,165 @@ export default function PracticeQuiz() {
   }
 
   return (
-    <div className="min-h-screen p-4 md:p-6 honeycomb-bg">
-      <div className="max-w-xl mx-auto space-y-6">
-        <div className="flex justify-between items-center">
-          <Link href="/" className="btn btn-ghost btn-sm">
-            ← Home
-          </Link>
-          <span className="badge badge-secondary">
-            Word {currentIndex + 1} of {words.length}
-          </span>
-        </div>
+    <div className="min-h-screen honeycomb-bg flex flex-col">
+      <div className="flex-1 overflow-y-auto p-4 pt-safe md:p-6">
+        <div className="max-w-xl mx-auto space-y-6 pb-48">
+          <div className="flex justify-between items-center">
+            <Link href="/" className="btn btn-ghost btn-sm rounded-full">
+              ← Home
+            </Link>
+            <div className="flex items-center gap-2">
+              <span className="badge badge-outline rounded-full gap-1 overflow-hidden">
+                <motion.span
+                  key={elapsedSeconds}
+                  initial={{ scale: 1 }}
+                  animate={{ scale: [1.35, 1] }}
+                  transition={{ duration: 0.35, ease: "easeOut" }}
+                >
+                  <Clock className="h-3 w-3" />
+                </motion.span>
+                <span className="relative inline-grid overflow-hidden">
+                  <AnimatePresence mode="popLayout" initial={false}>
+                    <motion.span
+                      key={elapsedSeconds}
+                      initial={{ y: 10, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      exit={{ y: -10, opacity: 0 }}
+                      transition={{ duration: 0.2, ease: "easeOut" }}
+                      className="col-start-1 row-start-1 tabular-nums"
+                    >
+                      {formatDuration(elapsedSeconds)}
+                    </motion.span>
+                  </AnimatePresence>
+                </span>
+              </span>
+              <span className="badge badge-secondary rounded-full">
+                Word {currentIndex + 1} of {words.length}
+              </span>
+            </div>
+          </div>
 
-        <div className="card bg-base-100 shadow-xl">
-          <div className="card-body items-center text-center space-y-4">
-            <p className="text-base-content/70">Listen and spell the word</p>
+          <div className="card card-modern rounded-3xl bg-base-100 shadow-xl">
+            <div className="card-body items-center text-center space-y-4 p-5 sm:p-8">
+              <p className="text-base-content/70">Listen and spell the word</p>
 
-            <button
-              type="button"
-              className={`btn btn-circle btn-lg btn-primary ${
-                isSpeaking ? "animate-pulse" : ""
-              }`}
-              onClick={replayWord}
-              aria-label="Hear word again"
-            >
-              <Volume2 className="h-8 w-8" />
-            </button>
+              <button
+                type="button"
+                className={`btn btn-circle btn-lg btn-primary shadow-lg ${
+                  isSpeaking ? "animate-pulse" : ""
+                }`}
+                onClick={replayWord}
+                aria-label="Hear word again"
+              >
+                <Volume2 className="h-8 w-8" />
+              </button>
 
-            <p className="text-sm text-base-content/60">
-              {isSpeaking ? "Playing..." : "Tap to hear again"}
-            </p>
+              <p className="text-sm text-base-content/60">
+                {isSpeaking ? "Playing..." : "Tap to hear again"}
+              </p>
 
-            {currentWord && (
-              <div className="w-full text-left bg-base-200 p-4 rounded-lg space-y-1">
-                {currentWord.partOfSpeech && (
-                  <p className="text-sm font-medium text-secondary">
-                    {currentWord.partOfSpeech}
-                  </p>
-                )}
-                <p className="text-base-content/80">
-                  {hasSubmitted
-                    ? currentWord.definition
-                    : maskWordInText(currentWord.definition, currentWord.word)}
-                </p>
-                {currentWord.sentence &&
-                  textContainsWord(currentWord.sentence, currentWord.word) && (
-                    <p className="text-sm italic text-base-content/60">
-                      &ldquo;
-                      {hasSubmitted
-                        ? currentWord.sentence
-                        : maskWordInText(currentWord.sentence, currentWord.word)}
-                      &rdquo;
+              {currentWord && (
+                <div className="w-full text-left bg-base-200 p-4 rounded-2xl space-y-1">
+                  {currentWord.partOfSpeech && (
+                    <p className="text-sm font-medium text-secondary">
+                      {currentWord.partOfSpeech}
                     </p>
                   )}
-              </div>
-            )}
-          </div>
-        </div>
-
-        <div className="card bg-base-100 shadow-xl">
-          <div className="card-body">
-            {!hasSubmitted ? (
-              <>
-                <label className="label">
-                  <span className="label-text">Your spelling</span>
-                </label>
-                <div className="join w-full">
-                  <input
-                    type="text"
-                    placeholder="Type your answer..."
-                    className="input input-bordered join-item w-full"
-                    value={guess}
-                    onChange={(e) => setGuess(e.target.value.toLowerCase())}
-                    onKeyDown={(e) => e.key === "Enter" && submitGuess()}
-                    autoFocus
-                  />
-                  <button
-                    className="btn btn-primary join-item"
-                    onClick={submitGuess}
-                    disabled={!guess.trim()}
-                  >
-                    <Send className="h-4 w-4" />
-                  </button>
-                </div>
-              </>
-            ) : (
-              lastFeedback && (
-                <div className="space-y-4">
-                  <div
-                    className={`alert ${
-                      lastFeedback.correct ? "alert-success" : "alert-error"
-                    }`}
-                  >
-                    {lastFeedback.correct ? (
-                      <Check className="h-5 w-5" />
-                    ) : (
-                      <X className="h-5 w-5" />
+                  <p className="text-base-content/80">
+                    {hasSubmitted
+                      ? currentWord.definition
+                      : maskWordInText(
+                          currentWord.definition,
+                          currentWord.word,
+                        )}
+                  </p>
+                  {currentWord.sentence &&
+                    textContainsWord(
+                      currentWord.sentence,
+                      currentWord.word,
+                    ) && (
+                      <p className="text-sm italic text-base-content/60">
+                        &ldquo;
+                        {hasSubmitted
+                          ? currentWord.sentence
+                          : maskWordInText(
+                              currentWord.sentence,
+                              currentWord.word,
+                            )}
+                        &rdquo;
+                      </p>
                     )}
-                    <div>
-                      {lastFeedback.correct ? (
-                        <span>Correct! Well done.</span>
-                      ) : (
-                        <span>
-                          Not quite. You wrote{" "}
-                          <strong>{lastFeedback.guess}</strong>, the correct
-                          spelling is <strong>{lastFeedback.answer}</strong>.
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  <button
-                    className="btn btn-primary w-full"
-                    onClick={goToNextWord}
-                  >
-                    {isLastWord ? "See Results" : "Next Word"}
-                  </button>
                 </div>
-              )
-            )}
+              )}
+            </div>
           </div>
         </div>
+      </div>
 
-        <progress
-          className="progress progress-primary w-full"
-          value={currentIndex + (hasSubmitted ? 1 : 0)}
-          max={words.length}
-        />
+      <div className="fixed bottom-0 inset-x-0 bg-base-100/95 backdrop-blur border-t border-base-300 pb-safe z-10">
+        <div className="max-w-xl mx-auto p-4 space-y-3">
+          <progress
+            className="progress progress-primary w-full"
+            value={currentIndex + (hasSubmitted ? 1 : 0)}
+            max={words.length}
+          />
+
+          {!hasSubmitted ? (
+            <div className="join w-full">
+              <input
+                type="text"
+                placeholder="Type your answer..."
+                className="input input-bordered join-item rounded-l-full w-full"
+                value={guess}
+                onChange={(e) => setGuess(e.target.value.toLowerCase())}
+                onKeyDown={(e) => e.key === "Enter" && submitGuess()}
+                autoFocus
+              />
+              <button
+                className="btn btn-primary join-item rounded-r-full px-6"
+                onClick={submitGuess}
+                disabled={!guess.trim()}
+                aria-label="Submit answer"
+              >
+                <Send className="h-4 w-4" />
+              </button>
+            </div>
+          ) : (
+            lastFeedback && (
+              <div className="space-y-3">
+                <div
+                  className={`alert rounded-xl ${
+                    lastFeedback.correct ? "alert-success" : "alert-error"
+                  }`}
+                >
+                  {lastFeedback.correct ? (
+                    <Check className="h-5 w-5" />
+                  ) : (
+                    <X className="h-5 w-5" />
+                  )}
+                  <div>
+                    {lastFeedback.correct ? (
+                      <span>Correct! Well done.</span>
+                    ) : (
+                      <span>
+                        Not quite. You wrote{" "}
+                        <strong>{lastFeedback.guess}</strong>, the correct
+                        spelling is <strong>{lastFeedback.answer}</strong>.
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                <button
+                  className="btn btn-primary rounded-full w-full"
+                  onClick={goToNextWord}
+                >
+                  {isLastWord ? "See Results" : "Next Word"}
+                </button>
+              </div>
+            )
+          )}
+        </div>
       </div>
     </div>
   );

@@ -131,81 +131,61 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
     );
   }
 
+  const isAnswering =
+    room?.status === RoomStatus.STARTED &&
+    !currentPlayer?.roundGuesses?.includes(room?.wordIndex ?? -1);
+
   return (
-    <div className="min-h-screen p-4 md:p-6 honeycomb-bg">
-      <div className="max-w-xl mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-center md:items-center mb-6 gap-4 transition-all duration-500 ease-in-out">
-          <div className="animate__animated animate__fadeInLeft md:animate-fade self-center md:self-start text-center md:text-left">
-            <Link href="/">
-              <Image
-                alt="Scripps Spelling Bee Logo"
-                src="/sb003.png"
-                width={300}
-                height={300}
-                style={{ cursor: "pointer" }}
-              />
-            </Link>
-            <p className="text-base-content/70 text-lg font-semibold">
-              Welcome, {playerName} !
-            </p>
-          </div>
-
-          <div className="flex gap-2 animate-fade-right md:animate-fade">
-            <div className="badge badge-outline gap-2">
-              <Users className="h-4 w-4" />
-              {room === undefined ? 0 : room.players.length} players
+    <div className="min-h-screen honeycomb-bg flex flex-col">
+      <div className="flex-1 p-4 pt-safe md:p-6">
+        <div className={`max-w-xl mx-auto ${isAnswering ? "pb-28" : ""}`}>
+          <div className="flex flex-col md:flex-row justify-between items-center md:items-center mb-6 gap-4 transition-all duration-500 ease-in-out">
+            <div className="animate__animated animate__fadeInLeft md:animate-fade self-center md:self-start text-center md:text-left">
+              <Link href="/">
+                <Image
+                  alt="Scripps Spelling Bee Logo"
+                  src="/sb003.png"
+                  width={300}
+                  height={300}
+                  className="w-40 sm:w-48 h-auto"
+                  style={{ cursor: "pointer" }}
+                />
+              </Link>
+              <p className="text-base-content/70 text-lg font-semibold">
+                Welcome, {playerName} !
+              </p>
             </div>
-            <div className="badge badge-secondary">Room: {roomId}</div>
+
+            <div className="flex flex-wrap justify-center gap-2 animate-fade-right md:animate-fade">
+              <div className="badge badge-outline rounded-full gap-2">
+                <Users className="h-4 w-4" />
+                {room === undefined ? 0 : room.players.length} players
+              </div>
+              <div className="badge badge-secondary rounded-full">
+                Room: {roomId}
+              </div>
+            </div>
           </div>
-        </div>
 
-        <div className="space-y-6 animate-fade-up md:animate-fade">
-          <div className="card bg-base-100 shadow-xl">
-            <div className="card-body">
-              <RoomStatusDisplay
-                currentWordIndex={room?.wordIndex}
-                roomStatus={room?.status}
-              />
+          <div className="space-y-6 animate-fade-up md:animate-fade">
+            <div className="card card-modern rounded-3xl bg-base-100 shadow-xl">
+              <div className="card-body p-4 sm:p-6">
+                <RoomStatusDisplay
+                  currentWordIndex={room?.wordIndex}
+                  roomStatus={room?.status}
+                />
 
-              <div className="mt-8 mb-2">
-                {" "}
-                {room?.status === RoomStatus.STARTED ? (
-                  <p className="text-center text-lg font-medium">
-                    Spell the word:
+                {room?.status === RoomStatus.STARTED && !isAnswering ? (
+                  <p className="text-center text-base-content/60 mt-6">
+                    Answer submitted — waiting for the next word...
                   </p>
                 ) : null}
               </div>
-
-              {room?.status === RoomStatus.STARTED ? (
-                <div className="join w-full">
-                  <input
-                    type="text"
-                    placeholder="Type your answer..."
-                    className="input input-bordered join-item w-full"
-                    value={guess}
-                    onChange={(e) => setGuess(e.target.value.toLowerCase())}
-                    onKeyDown={(e) => e.key === "Enter" && submitGuess()}
-                  />
-                  <button
-                    className="btn btn-primary join-item"
-                    onClick={submitGuess}
-                    disabled={
-                      !guess.trim() ||
-                      currentPlayer?.roundGuesses?.includes(
-                        room?.wordIndex ?? -1,
-                      )
-                    }
-                  >
-                    <Send className="h-4 w-4" />
-                  </button>
-                </div>
-              ) : null}
             </div>
-          </div>
 
-          <div className="card bg-base-100 shadow-xl">
-            <div className="card-body">
-              <h2 className="card-title">Scoreboard ✨🐝</h2>
+            <div className="card card-modern rounded-3xl bg-base-100 shadow-xl">
+              <div className="card-body p-4 sm:p-6">
+                <h2 className="card-title">Scoreboard ✨🐝</h2>
               <div className="space-y-4">
                 {room?.status === RoomStatus.ENDED && (
                   <div className="card-body" style={{ padding: "0px" }}>
@@ -216,7 +196,7 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
                 <div className="my-4" />
 
                 {playerRank && (
-                  <div className="bg-base-200 p-3 rounded-lg text-center">
+                  <div className="bg-base-200 p-3 rounded-xl text-center">
                     <p className="font-medium">
                       Your Rank: {playerRank} of{" "}
                       {room === undefined ? 0 : room.players.length}
@@ -244,7 +224,7 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
                       .map((player, index) => (
                         <div
                           key={`${player.name}_${index}`}
-                          className={`flex flex-col sm:flex-row sm:items-center justify-between p-3 rounded-lg gap-2 sm:gap-0 overflow-hidden ${
+                          className={`flex flex-col sm:flex-row sm:items-center justify-between p-3 rounded-xl gap-2 sm:gap-0 overflow-hidden ${
                             player.name === playerName
                               ? "bg-primary/20"
                               : "bg-base-200"
@@ -308,6 +288,39 @@ export default function PlayerRoom({ params }: { params: { roomId: string } }) {
           </div>
         </div>
       </div>
+      </div>
+
+      {isAnswering && (
+        <div className="fixed bottom-0 inset-x-0 bg-base-100/95 backdrop-blur border-t border-base-300 pb-safe z-10">
+          <div className="max-w-xl mx-auto p-4">
+            <p className="text-center text-sm font-medium text-base-content/70 mb-2">
+              Spell the word:
+            </p>
+            <div className="join w-full">
+              <input
+                type="text"
+                placeholder="Type your answer..."
+                className="input input-bordered join-item rounded-l-full w-full"
+                value={guess}
+                onChange={(e) => setGuess(e.target.value.toLowerCase())}
+                onKeyDown={(e) => e.key === "Enter" && submitGuess()}
+                autoFocus
+              />
+              <button
+                className="btn btn-primary join-item rounded-r-full px-6"
+                onClick={submitGuess}
+                disabled={
+                  !guess.trim() ||
+                  currentPlayer?.roundGuesses?.includes(room?.wordIndex ?? -1)
+                }
+                aria-label="Submit answer"
+              >
+                <Send className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -31,14 +31,16 @@ export const RoomStatusDisplay = ({
       <div className="text-center space-y-4">
         <div className="flex items-center justify-center">
           <div
-            className={`w-12 h-12 ${
+            className={`w-14 h-14 ${
               roomStatus === RoomStatus.ENDED ? "bg-green-500" : "bg-primary"
-            } rounded-full transition-colors animate-pulse`}
+            } rounded-full transition-colors animate-pulse shadow-lg`}
           >
             {roomStatus === RoomStatus.ENDED && <Confetti />}
           </div>
         </div>
-        <p className="text-base-content/70 text-xl">{displayText}</p>
+        <p className="text-base-content/70 text-lg sm:text-xl font-medium">
+          {displayText}
+        </p>
       </div>
     </>
   );

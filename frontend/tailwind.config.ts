@@ -15,6 +15,14 @@ const config: Config = {
         accent: "hsl(152, 70%, 50%)",
         "accent-content": "hsl(152, 70%, 10%)",
       },
+      fontFamily: {
+        heading: ["var(--font-heading)"],
+        body: ["var(--font-body)"],
+      },
+      spacing: {
+        "safe-top": "env(safe-area-inset-top)",
+        "safe-bottom": "env(safe-area-inset-bottom)",
+      },
     },
   },
   plugins: [require("daisyui"), require("tailwindcss-animated")],
