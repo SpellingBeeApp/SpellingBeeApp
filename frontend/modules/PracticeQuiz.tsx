@@ -48,7 +48,7 @@ const SPEECH_RATES: Record<SpeechSpeed, number> = {
   slow: 0.5,
 };
 
-const SESSION_SIZE = 10;
+const SESSION_SIZE_OPTIONS = [5, 10, 15, 20];
 
 const formatDuration = (totalSeconds: number): string => {
   const minutes = Math.floor(totalSeconds / 60);
@@ -65,6 +65,7 @@ export default function PracticeQuiz() {
   const [selectedPattern, setSelectedPattern] = React.useState<
     SpellingPattern | "random-mix"
   >("random-mix");
+  const [selectedSessionSize, setSelectedSessionSize] = React.useState(10);
   const [words, setWords] = React.useState<PracticeWord[]>([]);
   const [currentIndex, setCurrentIndex] = React.useState(0);
   const [guess, setGuess] = React.useState("");
@@ -118,18 +119,23 @@ export default function PracticeQuiz() {
     setPhase("quiz");
   };
 
-  const startQuiz = () => {
-    if (practiceMode === "category") {
-      const pool =
-        selectedPattern === "random-mix"
-          ? Object.values(ALL_PRACTICE_WORDS)
-          : (WORDS_BY_PATTERN[selectedPattern] ?? []);
-      beginQuiz(shuffleArray(pool).slice(0, SESSION_SIZE), false);
-      return;
-    }
+  const currentPool =
+    practiceMode === "category"
+      ? selectedPattern === "random-mix"
+        ? Object.values(ALL_PRACTICE_WORDS)
+        : (WORDS_BY_PATTERN[selectedPattern] ?? [])
+      : PRACTICE_GRADES[selectedGrade][selectedDifficulty];
 
-    const gradeWords = PRACTICE_GRADES[selectedGrade][selectedDifficulty];
-    beginQuiz(shuffleArray(gradeWords), false);
+  const sessionSizeOptions = SESSION_SIZE_OPTIONS.filter(
+    (size) => size <= currentPool.length,
+  );
+  if (sessionSizeOptions.length === 0) {
+    sessionSizeOptions.push(currentPool.length);
+  }
+
+  const startQuiz = () => {
+    const count = Math.min(selectedSessionSize, currentPool.length);
+    beginQuiz(shuffleArray(currentPool).slice(0, count), false);
   };
 
   const startReview = () => {
@@ -286,7 +292,7 @@ export default function PracticeQuiz() {
                 className={`tab rounded-full font-semibold ${practiceMode === "grade" ? "tab-active" : ""}`}
                 onClick={() => setPracticeMode("grade")}
               >
-                By Grade
+                By Level
               </a>
               <a
                 className={`tab rounded-full font-semibold ${practiceMode === "category" ? "tab-active" : ""}`}
@@ -300,7 +306,7 @@ export default function PracticeQuiz() {
               <>
                 <div className="form-control">
                   <label className="label">
-                    <span className="label-text font-medium">Grade level</span>
+                    <span className="label-text font-medium">Level</span>
                   </label>
                   <select
                     className="select select-bordered rounded-xl w-full"
@@ -309,7 +315,7 @@ export default function PracticeQuiz() {
                   >
                     {GRADE_LEVELS.map((grade) => (
                       <option key={grade} value={grade}>
-                        Grade {grade}
+                        Level {grade}
                       </option>
                     ))}
                   </select>
@@ -328,8 +334,7 @@ export default function PracticeQuiz() {
                   >
                     {DIFFICULTY_LEVELS.map((difficulty) => (
                       <option key={difficulty} value={difficulty}>
-                        {DIFFICULTY_LABELS[difficulty]} (
-                        {PRACTICE_GRADES[selectedGrade][difficulty].length} words)
+                        {DIFFICULTY_LABELS[difficulty]}
                       </option>
                     ))}
                   </select>
@@ -366,6 +371,27 @@ export default function PracticeQuiz() {
                 </span>
               </div>
             )}
+
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text font-medium">Number of words</span>
+              </label>
+              <select
+                className="select select-bordered rounded-xl w-full"
+                value={
+                  sessionSizeOptions.includes(selectedSessionSize)
+                    ? selectedSessionSize
+                    : sessionSizeOptions[sessionSizeOptions.length - 1]
+                }
+                onChange={(e) => setSelectedSessionSize(Number(e.target.value))}
+              >
+                {sessionSizeOptions.map((size) => (
+                  <option key={size} value={size}>
+                    {size} words
+                  </option>
+                ))}
+              </select>
+            </div>
 
             <button
               className="btn btn-primary btn-lg rounded-full w-full mt-2"
