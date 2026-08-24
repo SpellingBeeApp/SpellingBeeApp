@@ -1,10 +1,13 @@
-import { PracticeProgress } from "@/types/PracticeWord";
+import { AttemptRecord, Difficulty, MistakeType, PracticeProgress } from "@/types/PracticeWord";
 
 const STORAGE_KEY = "secretbee_practice_progress";
+const MAX_HISTORY = 500;
 
 const defaultProgress = (): PracticeProgress => ({
   missedWords: {},
   sessionsCompleted: 0,
+  history: [],
+  wordsMastered: 0,
 });
 
 export const loadPracticeProgress = (): PracticeProgress => {
@@ -56,6 +59,7 @@ export const recordCorrectAttempt = (word: string): PracticeProgress => {
   const correctStreak = existing.correctStreak + 1;
   if (correctStreak >= MASTERY_STREAK) {
     delete progress.missedWords[word];
+    progress.wordsMastered += 1;
   } else {
     progress.missedWords[word] = {
       ...existing,
@@ -71,6 +75,31 @@ export const recordCorrectAttempt = (word: string): PracticeProgress => {
 export const recordCompletedSession = (): PracticeProgress => {
   const progress = loadPracticeProgress();
   progress.sessionsCompleted += 1;
+  savePracticeProgress(progress);
+  return progress;
+};
+
+/**
+ * Logs a single quiz attempt so the dashboard can look for patterns later
+ * (accuracy by grade/difficulty, which mistake types show up most). Keeps
+ * only the most recent MAX_HISTORY attempts so localStorage doesn't grow
+ * without bound.
+ */
+export const recordAttempt = (entry: {
+  word: string;
+  grade: number;
+  difficulty: Difficulty;
+  correct: boolean;
+  mistakeType?: MistakeType;
+}): PracticeProgress => {
+  const progress = loadPracticeProgress();
+  const record: AttemptRecord = { ...entry, timestamp: Date.now() };
+
+  progress.history.push(record);
+  if (progress.history.length > MAX_HISTORY) {
+    progress.history = progress.history.slice(-MAX_HISTORY);
+  }
+
   savePracticeProgress(progress);
   return progress;
 };

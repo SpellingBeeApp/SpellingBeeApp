@@ -10,10 +10,13 @@ import {
   DIFFICULTY_LEVELS,
   GRADE_LEVELS,
   PRACTICE_GRADES,
+  WORD_LOCATION,
 } from "@/data/practiceWords";
 import { isSpellingCorrect } from "@/helpers/isSpellingCorrect";
+import { classifyMistake } from "@/helpers/classifyMistake";
 import {
   loadPracticeProgress,
+  recordAttempt,
   recordCompletedSession,
   recordCorrectAttempt,
   recordMissedWord,
@@ -70,7 +73,24 @@ export default function PracticeQuiz() {
 
   const currentWord = words[currentIndex];
   const isLastWord = currentIndex === words.length - 1;
-  const missedWordCount = Object.keys(loadPracticeProgress().missedWords).length;
+
+  // Practice history only exists in localStorage, which isn't available
+  // during server rendering — load it after mount (and whenever we're back
+  // on the setup screen) so the server-rendered HTML and the first client
+  // render match, avoiding a hydration mismatch.
+  const [progressSummary, setProgressSummary] = React.useState({
+    missedWordCount: 0,
+    sessionsCompleted: 0,
+  });
+
+  React.useEffect(() => {
+    if (phase !== "setup") return;
+    const progress = loadPracticeProgress();
+    setProgressSummary({
+      missedWordCount: Object.keys(progress.missedWords).length,
+      sessionsCompleted: progress.sessionsCompleted,
+    });
+  }, [phase]);
 
   const beginQuiz = (list: PracticeWord[], reviewMode: boolean) => {
     setWords(list);
@@ -157,6 +177,19 @@ export default function PracticeQuiz() {
     } else {
       recordMissedWord(currentWord.word);
     }
+
+    const location = WORD_LOCATION[currentWord.word];
+    if (location) {
+      recordAttempt({
+        word: currentWord.word,
+        grade: location.grade,
+        difficulty: location.difficulty,
+        correct,
+        mistakeType: correct
+          ? undefined
+          : classifyMistake(guess, currentWord.word),
+      });
+    }
   };
 
   const goToNextWord = () => {
@@ -191,7 +224,6 @@ export default function PracticeQuiz() {
   const totalTimeTaken = results.reduce((sum, r) => sum + r.timeTaken, 0);
   const averageTimeTaken =
     results.length > 0 ? Math.round(totalTimeTaken / results.length) : 0;
-  const progress = loadPracticeProgress();
 
   if (phase === "setup") {
     return (
@@ -270,19 +302,19 @@ export default function PracticeQuiz() {
               Start Quiz 🎯
             </button>
 
-            {missedWordCount > 0 && (
+            {progressSummary.missedWordCount > 0 && (
               <button
                 className="btn btn-outline btn-secondary rounded-full w-full"
                 onClick={startReview}
                 disabled={!isSupported}
               >
-                📚 Review Missed Words ({missedWordCount})
+                📚 Review Missed Words ({progressSummary.missedWordCount})
               </button>
             )}
 
-            {progress.sessionsCompleted > 0 && (
+            {progressSummary.sessionsCompleted > 0 && (
               <p className="text-center text-sm text-base-content/60">
-                🐝 Sessions completed: {progress.sessionsCompleted}
+                🐝 Sessions completed: {progressSummary.sessionsCompleted}
               </p>
             )}
           </div>
@@ -356,6 +388,13 @@ export default function PracticeQuiz() {
                 Home
               </Link>
             </div>
+
+            <Link
+              href="/dashboard"
+              className="link link-hover text-sm text-center text-base-content/60 block"
+            >
+              📊 View your spelling dashboard
+            </Link>
           </div>
         </div>
       </div>

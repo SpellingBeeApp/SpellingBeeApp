@@ -160,6 +160,13 @@ export default function LandingPage() {
               🐝 Practice Solo — Quiz Mode
             </Link>
 
+            <Link
+              href="/dashboard"
+              className="link link-hover text-sm text-center text-base-content/60 animate-fade"
+            >
+              📊 View your spelling dashboard
+            </Link>
+
             <div className="tabs tabs-boxed grid grid-cols-2 my-4 animate-fade bg-base-200 rounded-full p-1">
               <a
                 className={`tab rounded-full font-semibold ${activeTab === "join" ? "tab-active" : ""}`}

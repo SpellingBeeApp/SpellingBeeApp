@@ -15,6 +15,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A person you like and enjoy being with",
         partOfSpeech: "noun",
         origin: "Old English",
+        patterns: ["vowel-team"],
         sentence: "My closest friend helped me with my homework.",
       },
       {
@@ -22,6 +23,7 @@ export const PRACTICE_GRADES: Record<
         definition: "For the reason that",
         partOfSpeech: "conjunction",
         origin: "Middle English (from Old French \"cause\", via Latin)",
+        patterns: ["schwa-vowel"],
         sentence: "We stayed inside because it was raining.",
       },
       {
@@ -29,6 +31,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Very pleasing to look at",
         partOfSpeech: "adjective",
         origin: "Middle English (from Old French \"beaute\")",
+        patterns: ["vowel-team"],
         sentence: "The garden was full of beautiful flowers.",
       },
       {
@@ -36,6 +39,7 @@ export const PRACTICE_GRADES: Record<
         definition: "As much or as many as required",
         partOfSpeech: "adverb",
         origin: "Old English",
+        patterns: ["silent-letters"],
         sentence: "Do we have enough time to finish?",
       },
       {
@@ -43,6 +47,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Human beings in general",
         partOfSpeech: "noun",
         origin: "Old French, from Latin \"populus\"",
+        patterns: ["silent-letters"],
         sentence: "Many people came to the school play.",
       },
       {
@@ -50,6 +55,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Feeling or showing pleasure",
         partOfSpeech: "adjective",
         origin: "Middle English, from Old Norse \"happ\" (luck)",
+        patterns: ["double-letters"],
         sentence: "She felt happy when she saw her puppy.",
       },
       {
@@ -57,6 +63,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A group of parents and children",
         partOfSpeech: "noun",
         origin: "Latin \"familia\"",
+        patterns: ["schwa-vowel"],
         sentence: "Our whole family went camping last summer.",
       },
       {
@@ -64,6 +71,7 @@ export const PRACTICE_GRADES: Record<
         definition: "To keep something in your memory",
         partOfSpeech: "verb",
         origin: "Old French \"remembrer\", from Latin \"rememorari\"",
+        patterns: ["schwa-vowel"],
         sentence: "Please remember to bring your lunch tomorrow.",
       },
       {
@@ -71,6 +79,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A living creature that is not a plant",
         partOfSpeech: "noun",
         origin: "Latin \"animalis\" (from \"anima\", breath/soul)",
+        patterns: ["schwa-vowel"],
         sentence: "The zoo has every kind of animal you can imagine.",
       },
       {
@@ -78,6 +87,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A clear liquid needed for life",
         partOfSpeech: "noun",
         origin: "Old English \"waeter\" (Germanic)",
+        patterns: ["schwa-vowel"],
         sentence: "Please drink some water before the game starts.",
       },
     ],
@@ -87,6 +97,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Liked more than any others",
         partOfSpeech: "adjective",
         origin: "Old French \"favori\", from Latin \"favor\"",
+        patterns: ["schwa-vowel"],
         sentence: "Pizza is my favorite food to eat on Fridays.",
       },
       {
@@ -94,6 +105,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Not the same as another",
         partOfSpeech: "adjective",
         origin: "Latin \"differre\"",
+        patterns: ["schwa-vowel"],
         sentence: "Each snowflake has a different pattern.",
       },
       {
@@ -101,6 +113,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Having all parts; finished",
         partOfSpeech: "adjective",
         origin: "Latin \"completus\"",
+        patterns: ["schwa-vowel"],
         sentence: "Please complete your homework before dinner.",
       },
       {
@@ -108,6 +121,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A statement that you will do something",
         partOfSpeech: "noun",
         origin: "Latin \"promissum\"",
+        patterns: ["schwa-vowel"],
         sentence: "She made a promise to call me tonight.",
       },
       {
@@ -115,6 +129,7 @@ export const PRACTICE_GRADES: Record<
         definition: "To make a choice",
         partOfSpeech: "verb",
         origin: "Latin \"decidere\"",
+        patterns: ["schwa-vowel"],
         sentence: "It is hard to decide which book to read first.",
       },
       {
@@ -122,6 +137,7 @@ export const PRACTICE_GRADES: Record<
         definition: "To form a picture in your mind",
         partOfSpeech: "verb",
         origin: "Latin \"imaginari\"",
+        patterns: ["schwa-vowel"],
         sentence: "Close your eyes and imagine a sunny beach.",
       },
       {
@@ -129,6 +145,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Very bad or unpleasant",
         partOfSpeech: "adjective",
         origin: "Latin \"terribilis\"",
+        patterns: ["double-letters"],
         sentence: "The storm caused terrible damage to the roof.",
       },
       {
@@ -136,6 +153,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A person who lives near you",
         partOfSpeech: "noun",
         origin: "Old English \"neahgebur\"",
+        patterns: ["vowel-team"],
         sentence: "Our neighbor waved to us from across the street.",
       },
       {
@@ -143,6 +161,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Liked by many people",
         partOfSpeech: "adjective",
         origin: "Latin \"popularis\"",
+        patterns: ["double-letters"],
         sentence: "That new song became popular very quickly.",
       },
       {
@@ -150,6 +169,7 @@ export const PRACTICE_GRADES: Record<
         definition: "The place where something is located",
         partOfSpeech: "noun",
         origin: "Latin \"positio\"",
+        patterns: ["tricky-suffix"],
         sentence: "Please move the chair back to its original position.",
       },
     ],
@@ -159,6 +179,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A chart that shows the days, weeks, and months",
         partOfSpeech: "noun",
         origin: "Latin \"calendarium\"",
+        patterns: ["schwa-vowel"],
         sentence: "We marked the trip on the calendar.",
       },
       {
@@ -166,6 +187,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A place where meals are served to customers",
         partOfSpeech: "noun",
         origin: "French, from \"restaurer\" (to restore)",
+        patterns: ["foreign-spelling"],
         sentence: "We ate dinner at a new restaurant downtown.",
       },
       {
@@ -173,6 +195,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A small flying insect that bites",
         partOfSpeech: "noun",
         origin: "Spanish, diminutive of \"mosca\" (fly)",
+        patterns: ["schwa-vowel"],
         sentence: "A mosquito buzzed around the campsite all night.",
       },
       {
@@ -180,6 +203,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A two-wheeled vehicle you pedal",
         partOfSpeech: "noun",
         origin: "French \"bicyclette\", from Greek \"bi-\" + \"kyklos\"",
+        patterns: ["schwa-vowel"],
         sentence: "He rides his bicycle to school every morning.",
       },
       {
@@ -187,6 +211,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A prehistoric reptile that is now extinct",
         partOfSpeech: "noun",
         origin: "Greek \"deinos\" + \"sauros\" (terrible lizard)",
+        patterns: ["vowel-team"],
         sentence: "The museum has a giant dinosaur skeleton.",
       },
       {
@@ -194,6 +219,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A device used to keep off rain",
         partOfSpeech: "noun",
         origin: "Italian \"ombrella\"",
+        patterns: ["double-letters"],
         sentence: "Bring an umbrella in case it rains today.",
       },
       {
@@ -201,6 +227,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A sweet brown food made from cacao",
         partOfSpeech: "noun",
         origin: "Spanish, from Nahuatl \"xocolatl\"",
+        patterns: ["schwa-vowel"],
         sentence: "She baked a batch of chocolate cookies.",
       },
       {
@@ -208,6 +235,7 @@ export const PRACTICE_GRADES: Record<
         definition: "The set of letters used in a language",
         partOfSpeech: "noun",
         origin: "Greek \"alpha\" + \"beta\"",
+        patterns: ["silent-letters"],
         sentence: "The English alphabet has twenty-six letters.",
       },
       {
@@ -215,6 +243,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A very large gray animal with a trunk",
         partOfSpeech: "noun",
         origin: "Greek \"elephas\", via Latin and Old French",
+        patterns: ["silent-letters"],
         sentence: "The elephant sprayed water with its trunk.",
       },
       {
@@ -222,6 +251,7 @@ export const PRACTICE_GRADES: Record<
         definition: "The day a person was born, celebrated yearly",
         partOfSpeech: "noun",
         origin: "Old English compound of \"birth\" + \"day\"",
+        patterns: ["schwa-vowel"],
         sentence: "We threw a surprise party for her birthday.",
       },
     ],
@@ -233,6 +263,7 @@ export const PRACTICE_GRADES: Record<
         definition: "An exciting or risky experience",
         partOfSpeech: "noun",
         origin: "Old French \"aventure\", from Latin",
+        patterns: ["schwa-vowel"],
         sentence: "Our trip to the cave was a real adventure.",
       },
       {
@@ -240,6 +271,7 @@ export const PRACTICE_GRADES: Record<
         definition: "To do something enjoyable for a special event",
         partOfSpeech: "verb",
         origin: "Latin \"celebratus\"",
+        patterns: ["schwa-vowel"],
         sentence: "We will celebrate her birthday this weekend.",
       },
       {
@@ -247,6 +279,7 @@ export const PRACTICE_GRADES: Record<
         definition: "The way something faces or moves",
         partOfSpeech: "noun",
         origin: "Latin \"directio\"",
+        patterns: ["tricky-suffix"],
         sentence: "Turn right at the sign to go in the right direction.",
       },
       {
@@ -254,6 +287,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A long trip from one place to another",
         partOfSpeech: "noun",
         origin: "Old French \"journee\" (a day's travel), from Latin \"diurnus\"",
+        patterns: ["vowel-team"],
         sentence: "Their journey across the country took five days.",
       },
       {
@@ -261,6 +295,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Information and skills gained through experience",
         partOfSpeech: "noun",
         origin: "Old English \"cnawan\" (to know) + \"-ledge\"",
+        patterns: ["silent-letters"],
         sentence: "Her knowledge of history impressed the teacher.",
       },
       {
@@ -268,6 +303,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A very high area of land with steep sides",
         partOfSpeech: "noun",
         origin: "Old French \"montaigne\", from Latin \"mons\"",
+        patterns: ["vowel-team"],
         sentence: "We hiked to the top of the mountain.",
       },
       {
@@ -275,6 +311,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Normal and not special or unusual",
         partOfSpeech: "adjective",
         origin: "Latin \"ordinarius\"",
+        patterns: ["schwa-vowel"],
         sentence: "It was just an ordinary day at school.",
       },
       {
@@ -282,6 +319,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Affecting or including all things",
         partOfSpeech: "adjective",
         origin: "Latin \"generalis\"",
+        patterns: ["schwa-vowel"],
         sentence: "The teacher gave a general overview of the topic.",
       },
       {
@@ -289,6 +327,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A day of celebration or rest from work",
         partOfSpeech: "noun",
         origin: "Old English \"haligdaeg\" (holy day)",
+        patterns: ["schwa-vowel"],
         sentence: "We visit our grandparents every holiday season.",
       },
       {
@@ -296,6 +335,7 @@ export const PRACTICE_GRADES: Record<
         definition: "To find something for the first time",
         partOfSpeech: "verb",
         origin: "Old French \"descovrir\", from Latin",
+        patterns: ["schwa-vowel"],
         sentence: "Scientists hope to discover a new planet.",
       },
     ],
@@ -305,6 +345,7 @@ export const PRACTICE_GRADES: Record<
         definition: "The details of where a person lives",
         partOfSpeech: "noun",
         origin: "Old French \"adresser\", from Latin \"directus\"",
+        patterns: ["double-letters"],
         sentence: "Please write your address on the envelope.",
       },
       {
@@ -312,6 +353,7 @@ export const PRACTICE_GRADES: Record<
         definition: "To be grateful for something",
         partOfSpeech: "verb",
         origin: "Latin \"appretiare\"",
+        patterns: ["double-letters"],
         sentence: "I really appreciate your help with this project.",
       },
       {
@@ -319,6 +361,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A person who is skilled at sports",
         partOfSpeech: "noun",
         origin: "Greek \"athletes\", via Latin",
+        patterns: ["schwa-vowel"],
         sentence: "Every athlete on the team trained hard this year.",
       },
       {
@@ -326,6 +369,7 @@ export const PRACTICE_GRADES: Record<
         definition: "The point where something starts",
         partOfSpeech: "noun",
         origin: "Old English \"beginnan\"",
+        patterns: ["double-letters"],
         sentence: "The beginning of the movie was very exciting.",
       },
       {
@@ -333,6 +377,7 @@ export const PRACTICE_GRADES: Record<
         definition: "An organization that buys and sells goods",
         partOfSpeech: "noun",
         origin: "Old English \"bisignes\" (from \"busy\")",
+        patterns: ["silent-letters"],
         sentence: "She started a small business selling candles.",
       },
       {
@@ -340,6 +385,7 @@ export const PRACTICE_GRADES: Record<
         definition: "More than usual; particularly",
         partOfSpeech: "adverb",
         origin: "Latin \"specialis\", via Old French",
+        patterns: ["tricky-suffix"],
         sentence: "I especially enjoy reading mystery novels.",
       },
       {
@@ -347,6 +393,7 @@ export const PRACTICE_GRADES: Record<
         definition: "The group that officially runs a country",
         partOfSpeech: "noun",
         origin: "Old French \"governement\", from Greek \"kybernan\"",
+        patterns: ["silent-letters"],
         sentence: "The government passed a new law today.",
       },
       {
@@ -354,6 +401,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Without any delay",
         partOfSpeech: "adverb",
         origin: "Latin \"immediatus\"",
+        patterns: ["double-letters"],
         sentence: "Please come to the office immediately.",
       },
       {
@@ -361,6 +409,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A system of words used to communicate",
         partOfSpeech: "noun",
         origin: "Old French \"langage\", from Latin \"lingua\"",
+        patterns: ["silent-letters"],
         sentence: "She is learning a new language this year.",
       },
       {
@@ -368,6 +417,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A place that keeps books for people to use",
         partOfSpeech: "noun",
         origin: "Latin \"librarium\" (from \"liber\", book)",
+        patterns: ["schwa-vowel"],
         sentence: "We borrowed three books from the library.",
       },
     ],
@@ -377,6 +427,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A person you know slightly, not a close friend",
         partOfSpeech: "noun",
         origin: "Old French \"acointance\"",
+        patterns: ["vowel-team"],
         sentence: "He is just an acquaintance from work.",
       },
       {
@@ -384,6 +435,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Causing embarrassment or difficulty",
         partOfSpeech: "adjective",
         origin: "Old Norse \"afugr\" (turned the wrong way) + \"-ward\"",
+        patterns: ["schwa-vowel"],
         sentence: "There was an awkward silence after the joke.",
       },
       {
@@ -391,6 +443,7 @@ export const PRACTICE_GRADES: Record<
         definition: "An inner sense of right and wrong",
         partOfSpeech: "noun",
         origin: "Latin \"conscientia\", via Old French",
+        patterns: ["silent-letters"],
         sentence: "Her conscience told her to return the wallet.",
       },
       {
@@ -398,6 +451,7 @@ export const PRACTICE_GRADES: Record<
         definition: "To cause someone to feel shy or ashamed",
         partOfSpeech: "verb",
         origin: "French \"embarrasser\"",
+        patterns: ["double-letters"],
         sentence: "The prank was meant to embarrass him.",
       },
       {
@@ -405,6 +459,7 @@ export const PRACTICE_GRADES: Record<
         definition: "To make something seem larger than it is",
         partOfSpeech: "verb",
         origin: "Latin \"exaggerare\"",
+        patterns: ["double-letters"],
         sentence: "Please don't exaggerate how bad the storm was.",
       },
       {
@@ -412,6 +467,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Well known from frequent contact",
         partOfSpeech: "adjective",
         origin: "Latin \"familiaris\"",
+        patterns: ["tricky-suffix"],
         sentence: "The song sounded familiar to everyone in the room.",
       },
       {
@@ -419,6 +475,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A firm promise that something will happen",
         partOfSpeech: "noun",
         origin: "French \"garantie\"",
+        patterns: ["vowel-team"],
         sentence: "The store offers a guarantee on every product.",
       },
       {
@@ -426,6 +483,7 @@ export const PRACTICE_GRADES: Record<
         definition: "To stop someone while they are speaking",
         partOfSpeech: "verb",
         origin: "Latin \"interrumpere\"",
+        patterns: ["double-letters"],
         sentence: "It is rude to interrupt a teacher during class.",
       },
       {
@@ -433,6 +491,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Enjoying causing trouble in a playful way",
         partOfSpeech: "adjective",
         origin: "Old French \"meschever\" (to come to a bad end)",
+        patterns: ["vowel-team"],
         sentence: "The mischievous puppy chewed up my shoes.",
       },
       {
@@ -440,6 +499,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A machine that cleans by suction",
         partOfSpeech: "noun",
         origin: "Latin \"vacuum\" (empty)",
+        patterns: ["double-letters"],
         sentence: "Please vacuum the living room before guests arrive.",
       },
     ],
@@ -451,6 +511,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Required to be done or achieved",
         partOfSpeech: "adjective",
         origin: "Latin \"necessarius\"",
+        patterns: ["double-letters"],
         sentence: "Sleep is necessary for good health.",
       },
       {
@@ -458,6 +519,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Not joined or touching; to divide",
         partOfSpeech: "adjective",
         origin: "Latin \"separare\"",
+        patterns: ["schwa-vowel"],
         sentence: "Please separate the recyclables from the trash.",
       },
       {
@@ -465,6 +527,7 @@ export const PRACTICE_GRADES: Record<
         definition: "An instance of something happening",
         partOfSpeech: "noun",
         origin: "Latin \"occurrere\", via French",
+        patterns: ["double-letters"],
         sentence: "Power outages are a rare occurrence in this town.",
       },
       {
@@ -472,6 +535,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A strong, regular repeated pattern of sounds",
         partOfSpeech: "noun",
         origin: "Greek \"rhythmos\"",
+        patterns: ["silent-letters"],
         sentence: "The drummer kept a steady rhythm throughout the song.",
       },
       {
@@ -479,6 +543,7 @@ export const PRACTICE_GRADES: Record<
         definition: "To provide lodging or sufficient space for",
         partOfSpeech: "verb",
         origin: "Latin \"accommodare\"",
+        patterns: ["double-letters"],
         sentence: "The hotel can accommodate up to two hundred guests.",
       },
       {
@@ -486,6 +551,7 @@ export const PRACTICE_GRADES: Record<
         definition: "The natural world around us",
         partOfSpeech: "noun",
         origin: "Old French \"environner\" (to surround)",
+        patterns: ["silent-letters"],
         sentence: "We should all work to protect the environment.",
       },
       {
@@ -493,6 +559,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Alike but not exactly the same",
         partOfSpeech: "adjective",
         origin: "Latin \"similis\", via French",
+        patterns: ["schwa-vowel"],
         sentence: "Her dress is similar to the one I bought.",
       },
       {
@@ -500,6 +567,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A measure of how hot or cold something is",
         partOfSpeech: "noun",
         origin: "Latin \"temperatura\"",
+        patterns: ["schwa-vowel"],
         sentence: "The temperature dropped below freezing last night.",
       },
       {
@@ -507,6 +575,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A machine used to transport people or goods",
         partOfSpeech: "noun",
         origin: "Latin \"vehiculum\"",
+        patterns: ["silent-letters"],
         sentence: "They loaded the boxes into the vehicle.",
       },
       {
@@ -514,6 +583,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Strange or unusual",
         partOfSpeech: "adjective",
         origin: "Old English \"wyrd\" (fate)",
+        patterns: ["vowel-team"],
         sentence: "That was a weird noise coming from the attic.",
       },
     ],
@@ -523,6 +593,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A disagreement expressed through reasons",
         partOfSpeech: "noun",
         origin: "Latin \"argumentum\"",
+        patterns: ["silent-letters"],
         sentence: "The two friends had a small argument about the movie.",
       },
       {
@@ -530,6 +601,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A group of things with shared features",
         partOfSpeech: "noun",
         origin: "Greek \"kategoria\"",
+        patterns: ["schwa-vowel"],
         sentence: "Sort the books into the correct category.",
       },
       {
@@ -537,6 +609,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Without doubt; certainly",
         partOfSpeech: "adverb",
         origin: "Latin \"definitus\"",
+        patterns: ["schwa-vowel"],
         sentence: "I will definitely be at the concert tonight.",
       },
       {
@@ -544,6 +617,7 @@ export const PRACTICE_GRADES: Record<
         definition: "The state of being real or living",
         partOfSpeech: "noun",
         origin: "Latin \"existentia\"",
+        patterns: ["tricky-suffix"],
         sentence: "Scientists debated the existence of the new species.",
       },
       {
@@ -551,6 +625,7 @@ export const PRACTICE_GRADES: Record<
         definition: "The rules for how words are used in a language",
         partOfSpeech: "noun",
         origin: "Greek \"grammatike\", via Latin and French",
+        patterns: ["double-letters"],
         sentence: "Her essay had excellent grammar and spelling.",
       },
       {
@@ -558,6 +633,7 @@ export const PRACTICE_GRADES: Record<
         definition: "To repeatedly bother or trouble someone",
         partOfSpeech: "verb",
         origin: "French \"harasser\"",
+        patterns: ["double-letters"],
         sentence: "The rules forbid students who harass their classmates.",
       },
       {
@@ -565,6 +641,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Freedom from control by others",
         partOfSpeech: "noun",
         origin: "Latin, via French (\"in-\" + \"dependere\")",
+        patterns: ["tricky-suffix"],
         sentence: "The colony fought hard for its independence.",
       },
       {
@@ -572,6 +649,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Ornaments worn for decoration, like rings",
         partOfSpeech: "noun",
         origin: "Old French \"juelrie\" (from \"jouel\", jewel)",
+        patterns: ["schwa-vowel"],
         sentence: "She keeps her jewelry in a small wooden box.",
       },
       {
@@ -579,6 +657,7 @@ export const PRACTICE_GRADES: Record<
         definition: "An official document giving permission to do something",
         partOfSpeech: "noun",
         origin: "Latin \"licentia\", via Old French",
+        patterns: ["tricky-suffix"],
         sentence: "He finally got his driver's license last week.",
       },
       {
@@ -586,6 +665,7 @@ export const PRACTICE_GRADES: Record<
         definition: "The work needed to keep something in good condition",
         partOfSpeech: "noun",
         origin: "Old French \"maintenance\"",
+        patterns: ["schwa-vowel"],
         sentence: "The building requires regular maintenance every year.",
       },
     ],
@@ -595,6 +675,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A system of government with many officials and rules",
         partOfSpeech: "noun",
         origin: "French \"bureaucratie\" (\"bureau\" + Greek \"-kratia\")",
+        patterns: ["foreign-spelling"],
         sentence: "Getting the permit took weeks because of the bureaucracy.",
       },
       {
@@ -602,6 +683,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A way of hiding by blending into surroundings",
         partOfSpeech: "noun",
         origin: "French \"camoufler\"",
+        patterns: ["foreign-spelling"],
         sentence: "The frog's camouflage made it hard to see in the leaves.",
       },
       {
@@ -609,6 +691,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A set of written questions used to gather information",
         partOfSpeech: "noun",
         origin: "French \"questionnaire\"",
+        patterns: ["double-letters", "foreign-spelling"],
         sentence: "Please fill out this questionnaire before your appointment.",
       },
       {
@@ -616,6 +699,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A dark outline seen against a light background",
         partOfSpeech: "noun",
         origin: "French, named after Etienne de Silhouette",
+        patterns: ["foreign-spelling"],
         sentence: "We could see her silhouette against the sunset.",
       },
       {
@@ -623,6 +707,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Close watching of a person or place",
         partOfSpeech: "noun",
         origin: "French \"surveiller\" (to watch over)",
+        patterns: ["foreign-spelling"],
         sentence: "The store uses cameras for surveillance at night.",
       },
       {
@@ -630,6 +715,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Punishment given in return for a wrong",
         partOfSpeech: "noun",
         origin: "Old French, from Latin \"vindicare\"",
+        patterns: ["tricky-suffix"],
         sentence: "He swore he would seek vengeance for the insult.",
       },
       {
@@ -637,6 +723,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A special right given to a person or group",
         partOfSpeech: "noun",
         origin: "Latin \"privilegium\"",
+        patterns: ["schwa-vowel"],
         sentence: "Voting is both a privilege and a responsibility.",
       },
       {
@@ -644,6 +731,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Able to recover quickly from difficulties",
         partOfSpeech: "adjective",
         origin: "Latin \"resilire\" (to leap back)",
+        patterns: ["tricky-suffix"],
         sentence: "Children are often more resilient than adults expect.",
       },
       {
@@ -651,6 +739,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A rank of officer in the army or police",
         partOfSpeech: "noun",
         origin: "Old French \"sergent\", from Latin \"serviens\"",
+        patterns: ["vowel-team"],
         sentence: "The sergeant gave orders to the new recruits.",
       },
       {
@@ -658,6 +747,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Not obvious; delicate",
         partOfSpeech: "adjective",
         origin: "Latin \"subtilis\", via Old French",
+        patterns: ["silent-letters"],
         sentence: "There was a subtle change in her tone of voice.",
       },
     ],
@@ -669,6 +759,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Having a strong desire to succeed",
         partOfSpeech: "adjective",
         origin: "Latin \"ambitiosus\"",
+        patterns: ["tricky-suffix"],
         sentence: "She is an ambitious student who wants to be a doctor.",
       },
       {
@@ -676,6 +767,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Kind and generous",
         partOfSpeech: "adjective",
         origin: "Latin \"bene\" + \"volens\" (wishing well)",
+        patterns: ["schwa-vowel"],
         sentence: "The benevolent king gave food to the poor.",
       },
       {
@@ -683,6 +775,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Brave in the face of danger",
         partOfSpeech: "adjective",
         origin: "Old French \"corage\", from Latin \"cor\" (heart)",
+        patterns: ["tricky-suffix"],
         sentence: "The courageous firefighter ran into the burning building.",
       },
       {
@@ -690,6 +783,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Showing careful and steady effort",
         partOfSpeech: "adjective",
         origin: "Latin \"diligens\"",
+        patterns: ["tricky-suffix"],
         sentence: "He is a diligent worker who never misses a deadline.",
       },
       {
@@ -697,6 +791,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Fluent and persuasive in speaking",
         partOfSpeech: "adjective",
         origin: "Latin \"eloquens\"",
+        patterns: ["tricky-suffix"],
         sentence: "Her eloquent speech moved the entire audience.",
       },
       {
@@ -704,6 +799,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Having good luck",
         partOfSpeech: "adjective",
         origin: "Latin \"fortunatus\"",
+        patterns: ["schwa-vowel"],
         sentence: "We were fortunate to find a parking spot right away.",
       },
       {
@@ -711,6 +807,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Willing to give more than expected",
         partOfSpeech: "adjective",
         origin: "Latin \"generosus\"",
+        patterns: ["tricky-suffix"],
         sentence: "The generous donor gave money to the school.",
       },
       {
@@ -718,6 +815,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Slow to act because of uncertainty",
         partOfSpeech: "adjective",
         origin: "Latin \"haesitare\"",
+        patterns: ["tricky-suffix"],
         sentence: "She was hesitant to try the spicy food.",
       },
       {
@@ -725,6 +823,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Extremely large",
         partOfSpeech: "adjective",
         origin: "Latin \"immensus\" (unmeasurable)",
+        patterns: ["double-letters"],
         sentence: "The castle sat on an immense hill overlooking the town.",
       },
       {
@@ -732,6 +831,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Feeling great happiness and triumph",
         partOfSpeech: "adjective",
         origin: "Latin \"jubilare\" (to shout for joy)",
+        patterns: ["tricky-suffix"],
         sentence: "The team was jubilant after winning the championship.",
       },
     ],
@@ -741,6 +841,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A system that ranks people or things by level",
         partOfSpeech: "noun",
         origin: "Greek \"hierarkhia\", via Latin and French",
+        patterns: ["vowel-team"],
         sentence: "Everyone in the company understands the hierarchy of managers.",
       },
       {
@@ -748,6 +849,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A planned route or schedule for a trip",
         partOfSpeech: "noun",
         origin: "Latin \"itinerarius\"",
+        patterns: ["schwa-vowel"],
         sentence: "Our itinerary includes three cities in five days.",
       },
       {
@@ -755,6 +857,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A person or thing causing annoyance",
         partOfSpeech: "noun",
         origin: "Old French \"nuisance\" (from \"nuire\", to harm)",
+        patterns: ["vowel-team"],
         sentence: "The barking dog next door became a real nuisance.",
       },
       {
@@ -762,6 +865,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Lines that never meet, always the same distance apart",
         partOfSpeech: "adjective",
         origin: "Greek \"parallelos\"",
+        patterns: ["double-letters"],
         sentence: "The two roads run parallel to each other.",
       },
       {
@@ -769,6 +873,7 @@ export const PRACTICE_GRADES: Record<
         definition: "The art of effective or persuasive speaking",
         partOfSpeech: "noun",
         origin: "Greek \"rhetorike\"",
+        patterns: ["silent-letters"],
         sentence: "The politician was known for his powerful rhetoric.",
       },
       {
@@ -776,6 +881,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Balanced proportions on either side of a line",
         partOfSpeech: "noun",
         origin: "Greek \"symmetria\"",
+        patterns: ["double-letters"],
         sentence: "The butterfly's wings show perfect symmetry.",
       },
       {
@@ -783,6 +889,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A person who starts and runs a business",
         partOfSpeech: "noun",
         origin: "French \"entreprendre\" (to undertake)",
+        patterns: ["foreign-spelling"],
         sentence: "The young entrepreneur launched her own app.",
       },
       {
@@ -790,6 +897,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Dull because it is repetitive",
         partOfSpeech: "adjective",
         origin: "Greek \"monotonos\"",
+        patterns: ["tricky-suffix"],
         sentence: "The long lecture became monotonous after an hour.",
       },
       {
@@ -797,6 +905,7 @@ export const PRACTICE_GRADES: Record<
         definition: "The outer boundary of an area",
         partOfSpeech: "noun",
         origin: "Greek \"perimetros\"",
+        patterns: ["schwa-vowel"],
         sentence: "We measured the perimeter of the garden.",
       },
       {
@@ -804,6 +913,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Enough for a particular purpose",
         partOfSpeech: "adjective",
         origin: "Latin \"sufficiens\"",
+        patterns: ["double-letters", "tricky-suffix"],
         sentence: "We packed sufficient food for the whole trip.",
       },
     ],
@@ -813,6 +923,7 @@ export const PRACTICE_GRADES: Record<
         definition: "To make someone feel very excited",
         partOfSpeech: "verb",
         origin: "Latin \"exhilarare\"",
+        patterns: ["silent-letters"],
         sentence: "The roller coaster ride will exhilarate every rider.",
       },
       {
@@ -820,6 +931,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Fond of company; sociable",
         partOfSpeech: "adjective",
         origin: "Latin \"gregarius\" (from \"grex\", flock)",
+        patterns: ["tricky-suffix"],
         sentence: "My gregarious cousin makes friends everywhere she goes.",
       },
       {
@@ -827,6 +939,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Concerned with human welfare",
         partOfSpeech: "adjective",
         origin: "Latin \"humanitas\", formed in English",
+        patterns: ["tricky-suffix"],
         sentence: "The group sent humanitarian aid to the flooded region.",
       },
       {
@@ -834,6 +947,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Unwilling or unable to believe something",
         partOfSpeech: "adjective",
         origin: "Latin \"incredulus\"",
+        patterns: ["tricky-suffix"],
         sentence: "He gave an incredulous look when he heard the news.",
       },
       {
@@ -841,6 +955,7 @@ export const PRACTICE_GRADES: Record<
         definition: "To put something at risk of harm",
         partOfSpeech: "verb",
         origin: "Anglo-Norman \"jeu parti\" (divided game)",
+        patterns: ["vowel-team"],
         sentence: "One late assignment could jeopardize her final grade.",
       },
       {
@@ -848,6 +963,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Giving off light; bright",
         partOfSpeech: "adjective",
         origin: "Latin \"luminosus\"",
+        patterns: ["tricky-suffix"],
         sentence: "The luminous moon lit up the entire yard.",
       },
       {
@@ -855,6 +971,7 @@ export const PRACTICE_GRADES: Record<
         definition: "To discuss something to reach an agreement",
         partOfSpeech: "verb",
         origin: "Latin \"negotiari\"",
+        patterns: ["tricky-suffix"],
         sentence: "The two companies will negotiate a new contract.",
       },
       {
@@ -862,6 +979,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A remarkable or unusual fact or event",
         partOfSpeech: "noun",
         origin: "Greek \"phainomenon\"",
+        patterns: ["silent-letters"],
         sentence: "The northern lights are a natural phenomenon.",
       },
       {
@@ -869,6 +987,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Tending to remind one of something",
         partOfSpeech: "adjective",
         origin: "Latin \"reminisci\" (to remember)",
+        patterns: ["tricky-suffix"],
         sentence: "The old song was reminiscent of my childhood.",
       },
       {
@@ -876,6 +995,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Done without planning",
         partOfSpeech: "adjective",
         origin: "Latin \"spontaneus\"",
+        patterns: ["tricky-suffix"],
         sentence: "We took a spontaneous trip to the beach.",
       },
     ],
@@ -887,6 +1007,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A young person going through the teenage years",
         partOfSpeech: "noun",
         origin: "Latin \"adolescere\" (to grow up)",
+        patterns: ["tricky-suffix"],
         sentence: "Every adolescent goes through many physical changes.",
       },
       {
@@ -894,6 +1015,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A sudden event causing great damage",
         partOfSpeech: "noun",
         origin: "Greek \"katastrophe\"",
+        patterns: ["silent-letters"],
         sentence: "The flood was a catastrophe for the small town.",
       },
       {
@@ -901,6 +1023,7 @@ export const PRACTICE_GRADES: Record<
         definition: "To become worse over time",
         partOfSpeech: "verb",
         origin: "Latin \"deteriorare\"",
+        patterns: ["schwa-vowel"],
         sentence: "Old bridges can deteriorate without proper repairs.",
       },
       {
@@ -908,6 +1031,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Full of energy and excitement",
         partOfSpeech: "adjective",
         origin: "Latin \"exuberare\"",
+        patterns: ["tricky-suffix"],
         sentence: "The exuberant crowd cheered for their team.",
       },
       {
@@ -915,6 +1039,7 @@ export const PRACTICE_GRADES: Record<
         definition: "To rise and fall irregularly",
         partOfSpeech: "verb",
         origin: "Latin \"fluctuare\"",
+        patterns: ["schwa-vowel"],
         sentence: "Gas prices fluctuate throughout the year.",
       },
       {
@@ -922,6 +1047,7 @@ export const PRACTICE_GRADES: Record<
         definition: "An idea proposed as a starting point for testing",
         partOfSpeech: "noun",
         origin: "Greek \"hypothesis\"",
+        patterns: ["silent-letters"],
         sentence: "Our hypothesis was proven correct by the experiment.",
       },
       {
@@ -929,6 +1055,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Certain to happen; unavoidable",
         partOfSpeech: "adjective",
         origin: "Latin \"inevitabilis\"",
+        patterns: ["tricky-suffix"],
         sentence: "Change is an inevitable part of growing up.",
       },
       {
@@ -936,6 +1063,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Special words used by a particular group",
         partOfSpeech: "noun",
         origin: "Old French \"jargon\" (chatter)",
+        patterns: ["schwa-vowel"],
         sentence: "Doctors often use jargon that patients don't understand.",
       },
       {
@@ -943,6 +1071,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Conforming to the law or accepted standards",
         partOfSpeech: "adjective",
         origin: "Latin \"legitimus\"",
+        patterns: ["schwa-vowel"],
         sentence: "She has a legitimate reason for missing class.",
       },
       {
@@ -950,6 +1079,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Showing great attention to detail",
         partOfSpeech: "adjective",
         origin: "Latin \"meticulosus\" (fearful)",
+        patterns: ["tricky-suffix"],
         sentence: "The meticulous editor checked every single sentence.",
       },
     ],
@@ -959,6 +1089,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A sentimental longing for the past",
         partOfSpeech: "noun",
         origin: "Greek \"nostos\" + \"algos\" (homecoming + pain)",
+        patterns: ["vowel-team"],
         sentence: "The old photographs filled her with nostalgia.",
       },
       {
@@ -966,6 +1097,7 @@ export const PRACTICE_GRADES: Record<
         definition: "No longer used; out of date",
         partOfSpeech: "adjective",
         origin: "Latin \"obsoletus\"",
+        patterns: ["schwa-vowel"],
         sentence: "That old computer model is now obsolete.",
       },
       {
@@ -973,6 +1105,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A statement that seems contradictory but may be true",
         partOfSpeech: "noun",
         origin: "Greek \"paradoxon\"",
+        patterns: ["schwa-vowel"],
         sentence: "It is a paradox that saving money can sometimes cost more.",
       },
       {
@@ -980,6 +1113,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A state of uncertainty about what to do",
         partOfSpeech: "noun",
         origin: "Uncertain, possibly Latin \"quando\"",
+        patterns: ["schwa-vowel"],
         sentence: "She was in a quandary about which college to choose.",
       },
       {
@@ -987,6 +1121,7 @@ export const PRACTICE_GRADES: Record<
         definition: "An agreed meeting at a certain time and place",
         partOfSpeech: "noun",
         origin: "French \"rendez-vous\" (present yourselves)",
+        patterns: ["foreign-spelling"],
         sentence: "The spies arranged a secret rendezvous downtown.",
       },
       {
@@ -994,6 +1129,7 @@ export const PRACTICE_GRADES: Record<
         definition: "To examine something closely and carefully",
         partOfSpeech: "verb",
         origin: "Latin \"scrutari\" (to search)",
+        patterns: ["schwa-vowel"],
         sentence: "Judges scrutinize every detail of each entry.",
       },
       {
@@ -1001,6 +1137,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Loud, excited, and possibly disorderly",
         partOfSpeech: "adjective",
         origin: "Latin \"tumultus\"",
+        patterns: ["tricky-suffix"],
         sentence: "The tumultuous crowd rushed toward the stage.",
       },
       {
@@ -1008,6 +1145,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Fully agreed by everyone",
         partOfSpeech: "adjective",
         origin: "Latin \"unanimus\" (of one mind)",
+        patterns: ["tricky-suffix"],
         sentence: "The committee reached a unanimous decision.",
       },
       {
@@ -1015,6 +1153,7 @@ export const PRACTICE_GRADES: Record<
         definition: "To clear someone of blame after being accused",
         partOfSpeech: "verb",
         origin: "Latin \"vindicare\"",
+        patterns: ["schwa-vowel"],
         sentence: "New evidence will vindicate the innocent man.",
       },
       {
@@ -1022,6 +1161,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Playfully quaint or fanciful",
         partOfSpeech: "adjective",
         origin: "English, from \"whim\" (uncertain origin)",
+        patterns: ["silent-letters"],
         sentence: "The artist painted a whimsical scene of flying cats.",
       },
     ],
@@ -1031,6 +1171,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A ruler in ancient Egypt",
         partOfSpeech: "noun",
         origin: "Egyptian, via Greek \"pharao\" and Hebrew",
+        patterns: ["vowel-team"],
         sentence: "The pharaoh ordered the construction of a great pyramid.",
       },
       {
@@ -1038,6 +1179,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A device such as a pattern of letters that aids memory",
         partOfSpeech: "noun",
         origin: "Greek \"mneme\" (memory)",
+        patterns: ["silent-letters"],
         sentence: "ROY G. BIV is a mnemonic for the colors of the rainbow.",
       },
       {
@@ -1045,6 +1187,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Wishing to do what is right, especially at work",
         partOfSpeech: "adjective",
         origin: "Latin \"conscientia\", via French",
+        patterns: ["tricky-suffix"],
         sentence: "She is a conscientious student who always checks her work.",
       },
       {
@@ -1052,6 +1195,7 @@ export const PRACTICE_GRADES: Record<
         definition: "The treatment of light and shade in drawing or painting",
         partOfSpeech: "noun",
         origin: "Italian \"chiaro\" + \"oscuro\" (light + dark)",
+        patterns: ["foreign-spelling"],
         sentence: "The artist used chiaroscuro to create dramatic contrast in the painting.",
       },
       {
@@ -1059,6 +1203,7 @@ export const PRACTICE_GRADES: Record<
         definition: "An expert judge in matters of taste",
         partOfSpeech: "noun",
         origin: "French \"connaisseur\" (from \"connaitre\", to know)",
+        patterns: ["foreign-spelling"],
         sentence: "He is a true connoisseur of fine chocolate.",
       },
       {
@@ -1066,6 +1211,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A set of equipment used for a specific purpose",
         partOfSpeech: "noun",
         origin: "Latin \"apparare\" (to prepare)",
+        patterns: ["double-letters"],
         sentence: "The lab apparatus needed careful cleaning after the experiment.",
       },
       {
@@ -1073,6 +1219,7 @@ export const PRACTICE_GRADES: Record<
         definition: "To work jointly with others on a project",
         partOfSpeech: "verb",
         origin: "Latin \"collaborare\"",
+        patterns: ["double-letters"],
         sentence: "The two schools will collaborate on the science fair.",
       },
       {
@@ -1080,6 +1227,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Extremely small",
         partOfSpeech: "adjective",
         origin: "Latin \"diminutivus\"",
+        patterns: ["schwa-vowel"],
         sentence: "The diminutive puppy could fit in one hand.",
       },
       {
@@ -1087,6 +1235,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Feeling or expressing overwhelming happiness",
         partOfSpeech: "adjective",
         origin: "Greek \"ekstatikos\"",
+        patterns: ["schwa-vowel"],
         sentence: "She was ecstatic when she won first place.",
       },
       {
@@ -1094,6 +1243,7 @@ export const PRACTICE_GRADES: Record<
         definition: "An official in a government department",
         partOfSpeech: "noun",
         origin: "French \"bureaucrate\"",
+        patterns: ["foreign-spelling"],
         sentence: "The bureaucrat approved the paperwork after months of delay.",
       },
     ],
@@ -1105,6 +1255,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Existing in large quantities",
         partOfSpeech: "adjective",
         origin: "Latin \"abundare\" (to overflow)",
+        patterns: ["tricky-suffix"],
         sentence: "The garden had an abundant harvest this year.",
       },
       {
@@ -1112,6 +1263,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Hostile and aggressive",
         partOfSpeech: "adjective",
         origin: "Latin \"bellum\" + \"gerere\" (to wage war)",
+        patterns: ["double-letters", "tricky-suffix"],
         sentence: "The belligerent customer shouted at the cashier.",
       },
       {
@@ -1119,6 +1271,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Truthful and straightforward",
         partOfSpeech: "adjective",
         origin: "Latin \"candidus\" (white, pure)",
+        patterns: ["schwa-vowel"],
         sentence: "The coach gave a candid assessment of the team.",
       },
       {
@@ -1126,6 +1279,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Lacking a necessary quality or amount",
         partOfSpeech: "adjective",
         origin: "Latin \"deficere\"",
+        patterns: ["tricky-suffix"],
         sentence: "The soil was deficient in nitrogen.",
       },
       {
@@ -1133,6 +1287,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Involving many careful details",
         partOfSpeech: "adjective",
         origin: "Latin \"elaborare\"",
+        patterns: ["schwa-vowel"],
         sentence: "They planned an elaborate party for the anniversary.",
       },
       {
@@ -1140,6 +1295,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Inspiring fear or respect through being powerful",
         partOfSpeech: "adjective",
         origin: "Latin \"formidabilis\"",
+        patterns: ["tricky-suffix"],
         sentence: "The chess champion is a formidable opponent.",
       },
       {
@@ -1147,6 +1303,7 @@ export const PRACTICE_GRADES: Record<
         definition: "The quality of being thankful",
         partOfSpeech: "noun",
         origin: "Latin \"gratitudo\"",
+        patterns: ["schwa-vowel"],
         sentence: "She wrote a letter to express her gratitude.",
       },
       {
@@ -1154,6 +1311,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A thing that gets in the way",
         partOfSpeech: "noun",
         origin: "Old English \"hindrian\" (to hinder)",
+        patterns: ["tricky-suffix"],
         sentence: "The heavy rain was a hindrance to our travel plans.",
       },
       {
@@ -1161,6 +1319,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Unable to read or write",
         partOfSpeech: "adjective",
         origin: "Latin \"illiteratus\"",
+        patterns: ["double-letters"],
         sentence: "The program helps adults who are illiterate learn to read.",
       },
       {
@@ -1168,6 +1327,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Cheerful and friendly",
         partOfSpeech: "adjective",
         origin: "Italian \"joviale\", from Latin \"Jovialis\" (of Jupiter)",
+        patterns: ["vowel-team"],
         sentence: "The jovial host greeted every guest with a smile.",
       },
     ],
@@ -1177,6 +1337,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Relating to or resulting from motion",
         partOfSpeech: "adjective",
         origin: "Greek \"kinetikos\" (from \"kinein\", to move)",
+        patterns: ["schwa-vowel"],
         sentence: "The roller coaster demonstrates kinetic energy.",
       },
       {
@@ -1184,6 +1345,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Producing a great deal of profit",
         partOfSpeech: "adjective",
         origin: "Latin \"lucrativus\"",
+        patterns: ["schwa-vowel"],
         sentence: "She started a lucrative business selling handmade candles.",
       },
       {
@@ -1191,6 +1353,7 @@ export const PRACTICE_GRADES: Record<
         definition: "The great size or importance of something",
         partOfSpeech: "noun",
         origin: "Latin \"magnitudo\"",
+        patterns: ["schwa-vowel"],
         sentence: "Scientists measured the magnitude of the earthquake.",
       },
       {
@@ -1198,6 +1361,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Calmly indifferent; casual",
         partOfSpeech: "adjective",
         origin: "French \"nonchalant\" (from \"chaloir\", to be concerned)",
+        patterns: ["foreign-spelling"],
         sentence: "He stayed nonchalant even during the stressful exam.",
       },
       {
@@ -1205,6 +1369,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Not aware of what is happening",
         partOfSpeech: "adjective",
         origin: "Latin \"obliviosus\"",
+        patterns: ["tricky-suffix"],
         sentence: "She was oblivious to the surprise party being planned.",
       },
       {
@@ -1212,6 +1377,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Seeming reasonable or probable",
         partOfSpeech: "adjective",
         origin: "Latin \"plausibilis\" (deserving applause)",
+        patterns: ["vowel-team", "tricky-suffix"],
         sentence: "His explanation for being late seemed plausible.",
       },
       {
@@ -1219,6 +1385,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Attractively unusual or old-fashioned",
         partOfSpeech: "adjective",
         origin: "Old French \"cointe\", from Latin \"cognitus\"",
+        patterns: ["vowel-team"],
         sentence: "We stayed in a quaint cottage by the lake.",
       },
       {
@@ -1226,6 +1393,7 @@ export const PRACTICE_GRADES: Record<
         definition: "To produce a deep, echoing sound; to relate to",
         partOfSpeech: "verb",
         origin: "Latin \"resonare\"",
+        patterns: ["schwa-vowel"],
         sentence: "Her speech seemed to resonate with the whole audience.",
       },
       {
@@ -1233,6 +1401,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Not easily convinced; having doubts",
         partOfSpeech: "adjective",
         origin: "Greek \"skeptikos\", via Latin",
+        patterns: ["schwa-vowel"],
         sentence: "The scientist remained skeptical of the new theory.",
       },
       {
@@ -1240,6 +1409,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Able to be touched or clearly seen as real",
         partOfSpeech: "adjective",
         origin: "Latin \"tangibilis\" (from \"tangere\", to touch)",
+        patterns: ["tricky-suffix"],
         sentence: "The project finally showed tangible results.",
       },
     ],
@@ -1249,6 +1419,7 @@ export const PRACTICE_GRADES: Record<
         definition: "The art of cutting paper into decorative designs",
         partOfSpeech: "noun",
         origin: "German (\"scissors\" + \"cut\")",
+        patterns: ["foreign-spelling"],
         sentence: "She learned the art of scherenschnitte from her grandmother.",
       },
       {
@@ -1256,6 +1427,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Open to more than one interpretation",
         partOfSpeech: "adjective",
         origin: "Latin \"ambiguus\"",
+        patterns: ["tricky-suffix"],
         sentence: "The instructions were ambiguous and confused the class.",
       },
       {
@@ -1263,6 +1435,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Kindness and generosity",
         partOfSpeech: "noun",
         origin: "Latin \"benevolentia\"",
+        patterns: ["tricky-suffix"],
         sentence: "The charity was built on a foundation of benevolence.",
       },
       {
@@ -1270,6 +1443,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Aware or informed of something",
         partOfSpeech: "adjective",
         origin: "Latin \"cognoscere\" (to know)",
+        patterns: ["tricky-suffix"],
         sentence: "Drivers must stay cognizant of pedestrians at all times.",
       },
       {
@@ -1277,6 +1451,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A difference between things that should match",
         partOfSpeech: "noun",
         origin: "Latin \"discrepantia\"",
+        patterns: ["tricky-suffix"],
         sentence: "There was a discrepancy between the two reports.",
       },
       {
@@ -1284,6 +1459,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Based on observation or experience rather than theory",
         partOfSpeech: "adjective",
         origin: "Greek \"empeirikos\", via Latin",
+        patterns: ["schwa-vowel"],
         sentence: "The study relied on empirical evidence from real patients.",
       },
       {
@@ -1291,6 +1467,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Treating serious things with inappropriate humor",
         partOfSpeech: "adjective",
         origin: "French \"facetieux\", from Latin \"facetus\"",
+        patterns: ["vowel-team"],
         sentence: "His facetious remark annoyed the serious committee.",
       },
       {
@@ -1298,6 +1475,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Easily deceived or tricked",
         partOfSpeech: "adjective",
         origin: "English, from \"gull\" (to deceive)",
+        patterns: ["double-letters", "tricky-suffix"],
         sentence: "The gullible tourist believed the obvious scam.",
       },
       {
@@ -1305,6 +1483,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Lacking order or organization; random",
         partOfSpeech: "adjective",
         origin: "Old Norse \"happ\" + French \"hasard\"",
+        patterns: ["schwa-vowel"],
         sentence: "The books were stacked in a haphazard pile.",
       },
       {
@@ -1312,6 +1491,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Feeling anger at something unfair",
         partOfSpeech: "adjective",
         origin: "Latin \"indignari\"",
+        patterns: ["tricky-suffix"],
         sentence: "She was indignant about the unfair grading.",
       },
     ],
@@ -1323,6 +1503,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Comparable in certain respects",
         partOfSpeech: "adjective",
         origin: "Greek \"analogos\", via Latin",
+        patterns: ["tricky-suffix"],
         sentence: "The heart is analogous to a pump in the body.",
       },
       {
@@ -1330,6 +1511,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Forming a unified whole",
         partOfSpeech: "adjective",
         origin: "Latin \"cohaerere\" (to stick together)",
+        patterns: ["schwa-vowel"],
         sentence: "The team worked together as a cohesive unit.",
       },
       {
@@ -1337,6 +1519,7 @@ export const PRACTICE_GRADES: Record<
         definition: "To speak of someone or something with disrespect",
         partOfSpeech: "verb",
         origin: "Old French \"desparagier\" (to marry below rank)",
+        patterns: ["schwa-vowel"],
         sentence: "It is unkind to disparage another person's work.",
       },
       {
@@ -1344,6 +1527,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Deriving ideas from a broad range of sources",
         partOfSpeech: "adjective",
         origin: "Greek \"eklektikos\" (selective)",
+        patterns: ["schwa-vowel"],
         sentence: "Her music collection is wonderfully eclectic.",
       },
       {
@@ -1351,6 +1535,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Possible to do easily or conveniently",
         partOfSpeech: "adjective",
         origin: "Old French \"faisible\", from Latin \"facere\"",
+        patterns: ["vowel-team", "tricky-suffix"],
         sentence: "The engineers decided the new design was feasible.",
       },
       {
@@ -1358,6 +1543,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Uncalled for; unnecessary",
         partOfSpeech: "adjective",
         origin: "Latin \"gratuitus\"",
+        patterns: ["vowel-team", "tricky-suffix"],
         sentence: "The movie included gratuitous violence that added nothing.",
       },
       {
@@ -1365,6 +1551,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Overused and lacking originality",
         partOfSpeech: "adjective",
         origin: "English, from \"hackney\" (a horse for hire)",
+        patterns: ["vowel-team"],
         sentence: "The plot relied on a hackneyed twist ending.",
       },
       {
@@ -1372,6 +1559,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Treating all sides equally; fair",
         partOfSpeech: "adjective",
         origin: "Latin \"in-\" + \"partialis\"",
+        patterns: ["tricky-suffix"],
         sentence: "The judge remained impartial throughout the trial.",
       },
       {
@@ -1379,6 +1567,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Having or showing good judgment",
         partOfSpeech: "adjective",
         origin: "Latin \"judicium\", via French",
+        patterns: ["tricky-suffix"],
         sentence: "She made a judicious decision to save her money.",
       },
       {
@@ -1386,6 +1575,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Using very few words",
         partOfSpeech: "adjective",
         origin: "Greek \"Lakonikos\" (referring to Sparta)",
+        patterns: ["schwa-vowel"],
         sentence: "His laconic reply left everyone wanting more detail.",
       },
     ],
@@ -1395,6 +1585,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Easily influenced or shaped",
         partOfSpeech: "adjective",
         origin: "Latin \"malleare\" (to hammer)",
+        patterns: ["double-letters", "tricky-suffix"],
         sentence: "Young minds are often more malleable than adults'.",
       },
       {
@@ -1402,6 +1593,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Unclear, vague, or ill-defined",
         partOfSpeech: "adjective",
         origin: "Latin \"nebulosus\" (from \"nebula\", mist)",
+        patterns: ["tricky-suffix"],
         sentence: "His plan for the future was still nebulous.",
       },
       {
@@ -1409,6 +1601,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Stubbornly refusing to change one's opinion",
         partOfSpeech: "adjective",
         origin: "Latin \"obstinare\"",
+        patterns: ["schwa-vowel"],
         sentence: "The obstinate mule would not move an inch.",
       },
       {
@@ -1416,6 +1609,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Dealing with things sensibly and practically",
         partOfSpeech: "adjective",
         origin: "Greek \"pragmatikos\", via Latin",
+        patterns: ["schwa-vowel"],
         sentence: "She took a pragmatic approach to solving the budget problem.",
       },
       {
@@ -1423,6 +1617,7 @@ export const PRACTICE_GRADES: Record<
         definition: "The most perfect example of a quality",
         partOfSpeech: "noun",
         origin: "Medieval Latin \"quinta essentia\" (fifth essence)",
+        patterns: ["double-letters"],
         sentence: "The old cottage was the quintessence of charm.",
       },
       {
@@ -1430,6 +1625,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Not revealing thoughts or feelings readily",
         partOfSpeech: "adjective",
         origin: "Latin \"reticere\" (to keep silent)",
+        patterns: ["tricky-suffix"],
         sentence: "He remained reticent about his plans for the summer.",
       },
       {
@@ -1437,6 +1633,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Sedate, respectable, and unadventurous",
         partOfSpeech: "adjective",
         origin: "English, from \"stayed\"",
+        patterns: ["vowel-team"],
         sentence: "The staid professor rarely raised his voice.",
       },
       {
@@ -1444,6 +1641,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Very weak or slight",
         partOfSpeech: "adjective",
         origin: "Latin \"tenuis\" (thin)",
+        patterns: ["tricky-suffix"],
         sentence: "The evidence for his theory was tenuous at best.",
       },
       {
@@ -1451,6 +1649,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Not pretentious or arrogant; modest",
         partOfSpeech: "adjective",
         origin: "English, from Latin \"assumere\"",
+        patterns: ["double-letters"],
         sentence: "The unassuming champion never bragged about her wins.",
       },
       {
@@ -1458,6 +1657,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Experienced through the feelings of another",
         partOfSpeech: "adjective",
         origin: "Latin \"vicarius\" (substitute)",
+        patterns: ["tricky-suffix"],
         sentence: "She felt vicarious joy watching her sister graduate.",
       },
     ],
@@ -1467,6 +1667,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A departure from what is normal or expected",
         partOfSpeech: "noun",
         origin: "Latin \"aberrare\" (to wander away)",
+        patterns: ["double-letters", "tricky-suffix"],
         sentence: "The strange weather was an aberration for this season.",
       },
       {
@@ -1474,6 +1675,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Concise and exact use of words",
         partOfSpeech: "noun",
         origin: "Latin \"brevitas\"",
+        patterns: ["schwa-vowel"],
         sentence: "The judge praised the lawyer's brevity in closing arguments.",
       },
       {
@@ -1481,6 +1683,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Given to sudden changes of mood or behavior",
         partOfSpeech: "adjective",
         origin: "Italian \"capriccio\"",
+        patterns: ["tricky-suffix"],
         sentence: "The capricious weather changed from sun to snow in an hour.",
       },
       {
@@ -1488,6 +1691,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Respectful submission to another's wishes",
         partOfSpeech: "noun",
         origin: "French \"deference\", from Latin \"deferre\"",
+        patterns: ["tricky-suffix"],
         sentence: "The students showed deference to their elderly teacher.",
       },
       {
@@ -1495,6 +1699,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Cheerful and full of energy",
         partOfSpeech: "adjective",
         origin: "Latin \"ebullire\" (to boil over)",
+        patterns: ["double-letters", "tricky-suffix"],
         sentence: "The ebullient coach celebrated every small victory.",
       },
       {
@@ -1502,6 +1707,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Happening by a lucky chance",
         partOfSpeech: "adjective",
         origin: "Latin \"fortuitus\"",
+        patterns: ["vowel-team"],
         sentence: "Meeting my old friend at the airport was entirely fortuitous.",
       },
       {
@@ -1509,6 +1715,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Excessively talkative",
         partOfSpeech: "adjective",
         origin: "Latin \"garrulus\" (from \"garrire\", to chatter)",
+        patterns: ["double-letters", "tricky-suffix"],
         sentence: "My garrulous uncle can talk for hours without pausing.",
       },
       {
@@ -1516,6 +1723,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A lengthy and aggressive speech",
         partOfSpeech: "noun",
         origin: "Old Italian \"aringa\", via French",
+        patterns: ["vowel-team"],
         sentence: "The coach delivered a harangue after the team's loss.",
       },
       {
@@ -1523,6 +1731,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Deserving or causing public disgrace",
         partOfSpeech: "adjective",
         origin: "Latin \"ignominia\" (disgrace)",
+        patterns: ["tricky-suffix"],
         sentence: "The team suffered an ignominious defeat in the final round.",
       },
       {
@@ -1530,6 +1739,7 @@ export const PRACTICE_GRADES: Record<
         definition: "To place things side by side for comparison",
         partOfSpeech: "verb",
         origin: "French \"juxtaposer\" (Latin \"juxta\" + \"poser\")",
+        patterns: ["schwa-vowel"],
         sentence: "The artist chose to juxtapose bright and dark colors.",
       },
     ],
@@ -1541,6 +1751,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Having mixed feelings about something",
         partOfSpeech: "adjective",
         origin: "German \"Ambivalenz\", from Latin \"ambi-\" + \"valere\"",
+        patterns: ["tricky-suffix"],
         sentence: "She felt ambivalent about moving to a new city.",
       },
       {
@@ -1548,6 +1759,7 @@ export const PRACTICE_GRADES: Record<
         definition: "High-sounding but with little meaning",
         partOfSpeech: "adjective",
         origin: "English, from \"bombast\" (cotton padding)",
+        patterns: ["schwa-vowel"],
         sentence: "The politician's bombastic speech impressed no one.",
       },
       {
@@ -1555,6 +1767,7 @@ export const PRACTICE_GRADES: Record<
         definition: "To find a way around an obstacle",
         partOfSpeech: "verb",
         origin: "Latin \"circumvenire\"",
+        patterns: ["schwa-vowel"],
         sentence: "Hackers often try to circumvent security systems.",
       },
       {
@@ -1562,6 +1775,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Intended to teach, especially with moral lessons",
         partOfSpeech: "adjective",
         origin: "Greek \"didaktikos\"",
+        patterns: ["schwa-vowel"],
         sentence: "The fable had a clearly didactic purpose.",
       },
       {
@@ -1569,6 +1783,7 @@ export const PRACTICE_GRADES: Record<
         definition: "To cause someone to feel drained of energy",
         partOfSpeech: "verb",
         origin: "Latin \"enervare\" (to weaken)",
+        patterns: ["schwa-vowel"],
         sentence: "The intense heat can enervate even the fittest athletes.",
       },
       {
@@ -1576,6 +1791,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Conspicuously or obviously offensive",
         partOfSpeech: "adjective",
         origin: "Latin \"flagrare\" (to blaze)",
+        patterns: ["tricky-suffix"],
         sentence: "The referee called a flagrant foul on the play.",
       },
       {
@@ -1583,6 +1799,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Impressively large or complicated; overly ambitious",
         partOfSpeech: "adjective",
         origin: "French, from Italian \"grandioso\"",
+        patterns: ["foreign-spelling"],
         sentence: "He described his grandiose plan for a new business empire.",
       },
       {
@@ -1590,6 +1807,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A person who pursues pleasure as a main goal",
         partOfSpeech: "noun",
         origin: "Greek \"hedone\" (pleasure)",
+        patterns: ["schwa-vowel"],
         sentence: "The hedonist spent all his money on lavish parties.",
       },
       {
@@ -1597,6 +1815,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Not in harmony or keeping with the surroundings",
         partOfSpeech: "adjective",
         origin: "Latin \"incongruus\"",
+        patterns: ["vowel-team", "tricky-suffix"],
         sentence: "The bright sneakers looked incongruous with his formal suit.",
       },
       {
@@ -1604,6 +1823,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Fond of joking; humorous",
         partOfSpeech: "adjective",
         origin: "Latin \"jocularis\" (from \"jocus\", joke)",
+        patterns: ["schwa-vowel"],
         sentence: "The jocular teacher kept the class laughing all period.",
       },
     ],
@@ -1613,6 +1833,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A constantly changing pattern or sequence of elements",
         partOfSpeech: "noun",
         origin: "Greek \"kalos\" + \"eidos\" + \"skopein\" (coined 1817)",
+        patterns: ["vowel-team"],
         sentence: "The city at night looked like a kaleidoscope of lights.",
       },
       {
@@ -1620,6 +1841,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Intricate and confusing, like a maze",
         partOfSpeech: "adjective",
         origin: "Greek \"labyrinthos\"",
+        patterns: ["schwa-vowel"],
         sentence: "The old castle had labyrinthine hallways that confused visitors.",
       },
       {
@@ -1627,6 +1849,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Generous or forgiving, especially toward a rival",
         partOfSpeech: "adjective",
         origin: "Latin \"magnus\" + \"animus\" (great soul)",
+        patterns: ["tricky-suffix"],
         sentence: "The champion was magnanimous in victory, praising her opponent.",
       },
       {
@@ -1634,6 +1857,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Wicked or criminal",
         partOfSpeech: "adjective",
         origin: "Latin \"nefarius\" (from \"nefas\", wrong)",
+        patterns: ["tricky-suffix"],
         sentence: "The detective uncovered the villain's nefarious plot.",
       },
       {
@@ -1641,6 +1865,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Obedient or attentive to an excessive degree",
         partOfSpeech: "adjective",
         origin: "Latin \"obsequiosus\"",
+        patterns: ["tricky-suffix"],
         sentence: "The obsequious waiter kept interrupting our conversation.",
       },
       {
@@ -1648,6 +1873,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A solution or remedy for all difficulties",
         partOfSpeech: "noun",
         origin: "Greek \"panakeia\" (all-healing)",
+        patterns: ["vowel-team"],
         sentence: "There is no single panacea for every economic problem.",
       },
       {
@@ -1655,6 +1881,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Extremely idealistic and unrealistic",
         partOfSpeech: "adjective",
         origin: "Spanish, from the character Don Quixote",
+        patterns: ["schwa-vowel"],
         sentence: "His quixotic dream of ending world hunger alone inspired us.",
       },
       {
@@ -1662,6 +1889,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Having an obstinately uncooperative attitude",
         partOfSpeech: "adjective",
         origin: "Latin \"recalcitrare\" (to kick back)",
+        patterns: ["tricky-suffix"],
         sentence: "The recalcitrant witness refused to answer any questions.",
       },
       {
@@ -1669,6 +1897,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A person who acts obsequiously toward someone important",
         partOfSpeech: "noun",
         origin: "Greek \"sykophantes\"",
+        patterns: ["schwa-vowel"],
         sentence: "The king surrounded himself with every sycophant who agreed with him.",
       },
       {
@@ -1676,6 +1905,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Reserved or uncommunicative in speech",
         partOfSpeech: "adjective",
         origin: "Latin \"taciturnus\"",
+        patterns: ["schwa-vowel"],
         sentence: "The taciturn farmer rarely spoke more than a few words.",
       },
     ],
@@ -1685,6 +1915,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Present or found everywhere",
         partOfSpeech: "adjective",
         origin: "Latin \"ubique\" (everywhere)",
+        patterns: ["vowel-team", "tricky-suffix"],
         sentence: "Smartphones have become ubiquitous in modern society.",
       },
       {
@@ -1692,6 +1923,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Expressing opinions loudly and forcefully",
         partOfSpeech: "adjective",
         origin: "Latin \"vox\" + \"ferre\" (voice + to carry)",
+        patterns: ["tricky-suffix"],
         sentence: "The vociferous fans chanted throughout the entire game.",
       },
       {
@@ -1699,6 +1931,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Deliberate and without motive or provocation",
         partOfSpeech: "adjective",
         origin: "Middle English \"wan-\" + \"towen\"",
+        patterns: ["schwa-vowel"],
         sentence: "The court condemned the wanton destruction of the park.",
       },
       {
@@ -1706,6 +1939,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Dislike of people from other countries",
         partOfSpeech: "noun",
         origin: "Greek \"xenos\" + \"phobos\" (stranger + fear)",
+        patterns: ["silent-letters"],
         sentence: "The film explored how xenophobia can divide a community.",
       },
       {
@@ -1713,6 +1947,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Fanatical and uncompromising devotion to a cause",
         partOfSpeech: "noun",
         origin: "Greek \"zelotes\", via Latin",
+        patterns: ["vowel-team"],
         sentence: "Historians studied the rise of religious zealotry in the region.",
       },
       {
@@ -1720,6 +1955,7 @@ export const PRACTICE_GRADES: Record<
         definition: "To accept something reluctantly but without protest",
         partOfSpeech: "verb",
         origin: "Latin \"acquiescere\"",
+        patterns: ["vowel-team"],
         sentence: "After hours of debate, he chose to acquiesce to their plan.",
       },
       {
@@ -1727,6 +1963,7 @@ export const PRACTICE_GRADES: Record<
         definition: "The middle class, especially business-owners",
         partOfSpeech: "noun",
         origin: "French \"bourgeoisie\" (from \"bourg\", town)",
+        patterns: ["foreign-spelling"],
         sentence: "The novel examines the values of the French bourgeoisie.",
       },
       {
@@ -1734,6 +1971,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A harsh, discordant mixture of sounds",
         partOfSpeech: "noun",
         origin: "Greek \"kakophonia\"",
+        patterns: ["silent-letters"],
         sentence: "The orchestra warming up created a strange cacophony.",
       },
       {
@@ -1741,6 +1979,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Causing harm or damage",
         partOfSpeech: "adjective",
         origin: "Greek \"deleterios\", via Latin",
+        patterns: ["tricky-suffix"],
         sentence: "Too much sugar can have a deleterious effect on health.",
       },
       {
@@ -1748,6 +1987,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Intended for or understood by only a small group",
         partOfSpeech: "adjective",
         origin: "Greek \"esoterikos\"",
+        patterns: ["schwa-vowel"],
         sentence: "The professor's lecture was full of esoteric references.",
       },
     ],
@@ -1759,6 +1999,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Very attentive to detail; hard to please",
         partOfSpeech: "adjective",
         origin: "Latin \"fastidium\" (disgust)",
+        patterns: ["tricky-suffix"],
         sentence: "The fastidious editor rejected any essay with a single typo.",
       },
       {
@@ -1766,6 +2007,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Pompous or extravagant in language",
         partOfSpeech: "adjective",
         origin: "Latin \"grandis\" + \"loqui\" (great + to speak)",
+        patterns: ["vowel-team", "tricky-suffix"],
         sentence: "The speaker's grandiloquent style bored the tired audience.",
       },
       {
@@ -1773,6 +2015,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Dominance of one group over others",
         partOfSpeech: "noun",
         origin: "Greek \"hegemonia\"",
+        patterns: ["schwa-vowel"],
         sentence: "Historians studied the empire's hegemony over trade routes.",
       },
       {
@@ -1780,6 +2023,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Not able to be corrected or reformed",
         partOfSpeech: "adjective",
         origin: "Latin \"incorrigibilis\"",
+        patterns: ["double-letters", "tricky-suffix"],
         sentence: "The incorrigible prankster was sent to the principal again.",
       },
       {
@@ -1787,6 +2031,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A huge, powerful, unstoppable force",
         partOfSpeech: "noun",
         origin: "Hindi/Sanskrit \"Jagannath\" (a form of Vishnu)",
+        patterns: ["double-letters", "vowel-team"],
         sentence: "The championship team became an unstoppable juggernaut this season.",
       },
       {
@@ -1794,6 +2039,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Tending to talk a great deal",
         partOfSpeech: "adjective",
         origin: "Latin \"loquax\" (from \"loqui\", to speak)",
+        patterns: ["tricky-suffix"],
         sentence: "The loquacious guide told stories the whole tour.",
       },
       {
@@ -1801,6 +2047,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Sweet or musical in sound",
         partOfSpeech: "adjective",
         origin: "Latin \"mel\" + \"fluere\" (honey + to flow)",
+        patterns: ["double-letters", "tricky-suffix"],
         sentence: "Her mellifluous voice made the poem sound like a song.",
       },
       {
@@ -1808,6 +2055,7 @@ export const PRACTICE_GRADES: Record<
         definition: "The belief that life is without meaning or value",
         partOfSpeech: "noun",
         origin: "Latin \"nihil\" (nothing), coined in German/Russian",
+        patterns: ["vowel-team"],
         sentence: "The novel's main character struggles with a sense of nihilism.",
       },
       {
@@ -1815,6 +2063,7 @@ export const PRACTICE_GRADES: Record<
         definition: "To deliberately make something unclear or confusing",
         partOfSpeech: "verb",
         origin: "Latin \"obfuscare\" (to darken)",
+        patterns: ["schwa-vowel"],
         sentence: "The report seemed designed to obfuscate the real numbers.",
       },
       {
@@ -1822,6 +2071,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Extremely unwilling to spend money",
         partOfSpeech: "adjective",
         origin: "Latin \"parsimonia\"",
+        patterns: ["tricky-suffix"],
         sentence: "The parsimonious landlord refused to fix the broken heater.",
       },
     ],
@@ -1831,6 +2081,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Having keen insight or judgment",
         partOfSpeech: "adjective",
         origin: "Latin \"perspicax\" (from \"perspicere\", to see through)",
+        patterns: ["tricky-suffix"],
         sentence: "The perspicacious detective solved the case within hours.",
       },
       {
@@ -1838,6 +2089,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Showing a lack of courage",
         partOfSpeech: "adjective",
         origin: "Latin \"pusillus\" + \"animus\" (very small spirit)",
+        patterns: ["double-letters", "tricky-suffix"],
         sentence: "His pusillanimous excuse fooled no one on the team.",
       },
       {
@@ -1845,6 +2097,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Complaining in a whining manner",
         partOfSpeech: "adjective",
         origin: "Latin \"querulus\" (from \"queri\", to complain)",
+        patterns: ["tricky-suffix"],
         sentence: "The querulous passenger complained about every small delay.",
       },
       {
@@ -1852,6 +2105,7 @@ export const PRACTICE_GRADES: Record<
         definition: "To cancel or revoke an official decision",
         partOfSpeech: "verb",
         origin: "Latin \"rescindere\"",
+        patterns: ["schwa-vowel"],
         sentence: "The board voted to rescind the unpopular policy.",
       },
       {
@@ -1859,6 +2113,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Health-giving; favorable to well-being",
         partOfSpeech: "adjective",
         origin: "Latin \"salubris\" (from \"salus\", health)",
+        patterns: ["tricky-suffix"],
         sentence: "The mountain air was salubrious after the long illness.",
       },
       {
@@ -1866,6 +2121,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Having or showing keen mental discernment",
         partOfSpeech: "adjective",
         origin: "Latin \"sagax\"",
+        patterns: ["tricky-suffix"],
         sentence: "The sagacious advisor warned the king of the coming danger.",
       },
       {
@@ -1873,6 +2129,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Kept secret because it would not be approved of",
         partOfSpeech: "adjective",
         origin: "Latin \"surripere\" (to snatch secretly)",
+        patterns: ["double-letters", "tricky-suffix"],
         sentence: "She took a surreptitious glance at her phone during class.",
       },
       {
@@ -1880,6 +2137,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Not readily letting go; persistent",
         partOfSpeech: "adjective",
         origin: "Latin \"tenax\" (from \"tenere\", to hold)",
+        patterns: ["tricky-suffix"],
         sentence: "Her tenacious effort finally paid off with an acceptance letter.",
       },
       {
@@ -1887,6 +2145,7 @@ export const PRACTICE_GRADES: Record<
         definition: "To take a position of power illegally or by force",
         partOfSpeech: "verb",
         origin: "Latin \"usurpare\"",
+        patterns: ["schwa-vowel"],
         sentence: "The general tried to usurp the throne during the chaos.",
       },
       {
@@ -1894,6 +2153,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Filled with bitter criticism or malice",
         partOfSpeech: "adjective",
         origin: "Medieval Latin \"vitriolum\", from \"vitrum\" (glass)",
+        patterns: ["vowel-team"],
         sentence: "The critic wrote a vitriolic review of the new film.",
       },
     ],
@@ -1903,6 +2163,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Showing great care and perseverance",
         partOfSpeech: "adjective",
         origin: "Latin \"assiduus\"",
+        patterns: ["double-letters", "tricky-suffix"],
         sentence: "The assiduous student reviewed her notes every single night.",
       },
       {
@@ -1910,6 +2171,7 @@ export const PRACTICE_GRADES: Record<
         definition: "An extensive and destructive fire",
         partOfSpeech: "noun",
         origin: "Latin \"conflagrare\" (to burn up)",
+        patterns: ["tricky-suffix"],
         sentence: "Firefighters battled the conflagration for over twelve hours.",
       },
       {
@@ -1917,6 +2179,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Lasting for a very short time",
         partOfSpeech: "adjective",
         origin: "Greek \"ephemeros\" (lasting a day)",
+        patterns: ["silent-letters"],
         sentence: "The beauty of the cherry blossoms is ephemeral.",
       },
       {
@@ -1924,6 +2187,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A sudden and striking realization",
         partOfSpeech: "noun",
         origin: "Greek \"epiphaneia\" (manifestation)",
+        patterns: ["silent-letters"],
         sentence: "She had an epiphany about her career while hiking.",
       },
       {
@@ -1931,6 +2195,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Courage in facing pain or adversity",
         partOfSpeech: "noun",
         origin: "Latin \"fortitudo\"",
+        patterns: ["schwa-vowel"],
         sentence: "He faced the surgery with remarkable fortitude.",
       },
       {
@@ -1938,6 +2203,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Excessive pride or self-confidence",
         partOfSpeech: "noun",
         origin: "Greek \"hybris\"",
+        patterns: ["schwa-vowel"],
         sentence: "The king's hubris led to his eventual downfall.",
       },
       {
@@ -1945,6 +2211,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Impossible to stop or prevent",
         partOfSpeech: "adjective",
         origin: "Latin \"inexorabilis\"",
+        patterns: ["tricky-suffix"],
         sentence: "The inexorable march of time waits for no one.",
       },
       {
@@ -1952,6 +2219,7 @@ export const PRACTICE_GRADES: Record<
         definition: "The placement of two things close together for contrast",
         partOfSpeech: "noun",
         origin: "Latin \"juxta\" + \"positio\"",
+        patterns: ["tricky-suffix"],
         sentence: "The painting relies on the juxtaposition of light and dark.",
       },
       {
@@ -1959,6 +2227,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Destiny or fate",
         partOfSpeech: "noun",
         origin: "Turkish/Arabic \"qismah\" (portion, fate)",
+        patterns: ["schwa-vowel"],
         sentence: "Meeting on that train felt like pure kismet to them both.",
       },
       {
@@ -1966,6 +2235,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Looking or sounding sad and dismal",
         partOfSpeech: "adjective",
         origin: "Latin \"lugubris\" (from \"lugere\", to mourn)",
+        patterns: ["tricky-suffix"],
         sentence: "The lugubrious violin music filled the empty hall.",
       },
     ],
@@ -1977,6 +2247,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Noisy and difficult to control",
         partOfSpeech: "adjective",
         origin: "Latin \"obstrepere\" (to clamor against)",
+        patterns: ["tricky-suffix"],
         sentence: "The obstreperous crowd refused to quiet down for the announcement.",
       },
       {
@@ -1984,6 +2255,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A public speech of praise",
         partOfSpeech: "noun",
         origin: "Greek \"panegyrikos\"",
+        patterns: ["schwa-vowel"],
         sentence: "The mayor delivered a panegyric honoring the retiring firefighter.",
       },
       {
@@ -1991,6 +2263,7 @@ export const PRACTICE_GRADES: Record<
         definition: "In a state of calm inactivity",
         partOfSpeech: "adjective",
         origin: "Latin \"quiescere\" (to rest)",
+        patterns: ["vowel-team", "tricky-suffix"],
         sentence: "The volcano had remained quiescent for over a century.",
       },
       {
@@ -1998,6 +2271,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Little known; difficult to understand",
         partOfSpeech: "adjective",
         origin: "Latin \"reconditus\" (hidden)",
+        patterns: ["schwa-vowel"],
         sentence: "The lecture was full of recondite references to ancient philosophy.",
       },
       {
@@ -2005,6 +2279,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Characterized by the use of long words",
         partOfSpeech: "adjective",
         origin: "Latin \"sesqui-\" + \"pes\" (one and a half + foot)",
+        patterns: ["vowel-team", "tricky-suffix"],
         sentence: "The professor's sesquipedalian style confused most freshmen.",
       },
       {
@@ -2012,6 +2287,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Vigorous and incisive in expression",
         partOfSpeech: "adjective",
         origin: "Old French \"trenchant\" (from \"trenchier\", to cut)",
+        patterns: ["tricky-suffix"],
         sentence: "Her trenchant critique exposed every flaw in the proposal.",
       },
       {
@@ -2019,6 +2295,7 @@ export const PRACTICE_GRADES: Record<
         definition: "The fact of appearing everywhere",
         partOfSpeech: "noun",
         origin: "Latin \"ubique\" (everywhere)",
+        patterns: ["vowel-team"],
         sentence: "The ubiquity of smartphones has changed how people communicate.",
       },
       {
@@ -2026,6 +2303,7 @@ export const PRACTICE_GRADES: Record<
         definition: "The appearance of being true or real",
         partOfSpeech: "noun",
         origin: "Latin \"verisimilis\" (truth-like)",
+        patterns: ["schwa-vowel"],
         sentence: "The film's costumes added great verisimilitude to the setting.",
       },
       {
@@ -2033,6 +2311,7 @@ export const PRACTICE_GRADES: Record<
         definition: "To separate valuable parts from worthless ones",
         partOfSpeech: "verb",
         origin: "Old English \"windwian\" (related to \"wind\")",
+        patterns: ["double-letters"],
         sentence: "The committee had to winnow the applicants down to five.",
       },
       {
@@ -2040,6 +2319,7 @@ export const PRACTICE_GRADES: Record<
         definition: "The defining spirit or mood of a particular period",
         partOfSpeech: "noun",
         origin: "German \"Zeit\" + \"Geist\" (time + spirit)",
+        patterns: ["foreign-spelling"],
         sentence: "The film captured the zeitgeist of the decade perfectly.",
       },
     ],
@@ -2049,6 +2329,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Of doubtful authenticity, although widely circulated",
         partOfSpeech: "adjective",
         origin: "Greek \"apokryphos\" (hidden)",
+        patterns: ["silent-letters"],
         sentence: "The story about the founder is likely apocryphal.",
       },
       {
@@ -2056,6 +2337,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Demonstrating aggression and willingness to fight",
         partOfSpeech: "adjective",
         origin: "Latin \"bellicosus\" (from \"bellum\", war)",
+        patterns: ["double-letters"],
         sentence: "The bellicose nation threatened its neighbors with war.",
       },
       {
@@ -2063,6 +2345,7 @@ export const PRACTICE_GRADES: Record<
         definition: "The use of trickery to achieve a goal",
         partOfSpeech: "noun",
         origin: "French \"chicanerie\"",
+        patterns: ["schwa-vowel"],
         sentence: "The deal fell apart once the chicanery was exposed.",
       },
       {
@@ -2070,6 +2353,7 @@ export const PRACTICE_GRADES: Record<
         definition: "To express disapproval of something",
         partOfSpeech: "verb",
         origin: "Latin \"deprecari\"",
+        patterns: ["schwa-vowel"],
         sentence: "Critics deprecate the film's shallow plot.",
       },
       {
@@ -2077,6 +2361,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Vivacious and enthusiastic",
         partOfSpeech: "adjective",
         origin: "Latin \"effervescere\" (to boil up)",
+        patterns: ["double-letters", "tricky-suffix"],
         sentence: "Her effervescent personality lit up every room she entered.",
       },
       {
@@ -2084,6 +2369,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Silly and pointless",
         partOfSpeech: "adjective",
         origin: "Latin \"fatuus\" (foolish)",
+        patterns: ["tricky-suffix"],
         sentence: "He made a fatuous comment that no one took seriously.",
       },
       {
@@ -2091,6 +2377,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Lacking social grace; awkward",
         partOfSpeech: "adjective",
         origin: "French \"gauche\" (left, awkward)",
+        patterns: ["foreign-spelling"],
         sentence: "It was gauche of him to bring up the price at dinner.",
       },
       {
@@ -2098,6 +2385,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A person or thing that signals the approach of something",
         partOfSpeech: "noun",
         origin: "Old French \"herbergere\" (host, provider of lodging)",
+        patterns: ["schwa-vowel"],
         sentence: "The robin is often seen as a harbinger of spring.",
       },
       {
@@ -2105,6 +2393,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Not honorable in character or purpose",
         partOfSpeech: "adjective",
         origin: "Latin \"ignobilis\"",
+        patterns: ["tricky-suffix"],
         sentence: "History remembers the general's ignoble betrayal.",
       },
       {
@@ -2112,6 +2401,7 @@ export const PRACTICE_GRADES: Record<
         definition: "To throw or drop something from a moving vehicle",
         partOfSpeech: "verb",
         origin: "Old French \"getaison\", from Latin \"jactare\" (to throw)",
+        patterns: ["double-letters"],
         sentence: "The captain ordered the crew to jettison the extra cargo.",
       },
     ],
@@ -2121,6 +2411,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Excessive and often incoherent talkativeness",
         partOfSpeech: "noun",
         origin: "Greek \"logos\" + \"rhein\" (word + to flow)",
+        patterns: ["double-letters", "vowel-team"],
         sentence: "His logorrhea made it hard to get a word in during meetings.",
       },
       {
@@ -2128,6 +2419,7 @@ export const PRACTICE_GRADES: Record<
         definition: "The mistaken use of a word in place of a similar one",
         partOfSpeech: "noun",
         origin: "English, from the character Mrs. Malaprop",
+        patterns: ["schwa-vowel"],
         sentence: "The comedian built his act around clever malapropism jokes.",
       },
       {
@@ -2135,6 +2427,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Having no match; unrivaled",
         partOfSpeech: "adjective",
         origin: "French \"non\" + \"pareil\" (not equal)",
+        patterns: ["vowel-team"],
         sentence: "The chef's dessert was truly nonpareil among the competition.",
       },
       {
@@ -2142,6 +2435,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Deferential respect shown through a gesture",
         partOfSpeech: "noun",
         origin: "Old French \"obeissance\" (from \"obeir\", to obey)",
+        patterns: ["vowel-team"],
         sentence: "The courtiers bowed in obeisance before the queen.",
       },
       {
@@ -2149,6 +2443,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A manuscript on which older writing has been erased",
         partOfSpeech: "noun",
         origin: "Greek \"palimpsestos\" (scraped again)",
+        patterns: ["schwa-vowel"],
         sentence: "The historian studied the ancient palimpsest under special light.",
       },
       {
@@ -2156,6 +2451,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Representing the most perfect example of something",
         partOfSpeech: "adjective",
         origin: "Medieval Latin \"quinta essentia\"",
+        patterns: ["double-letters", "tricky-suffix"],
         sentence: "The small cafe felt like the quintessential Paris experience.",
       },
       {
@@ -2163,6 +2459,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Distinct from ordinary things; elevated",
         partOfSpeech: "adjective",
         origin: "Latin \"rarefacere\" (to make rare)",
+        patterns: ["vowel-team"],
         sentence: "She moved in the rarefied circles of world-class musicians.",
       },
       {
@@ -2170,6 +2467,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Optimistic or positive, especially in a difficult situation",
         partOfSpeech: "adjective",
         origin: "Latin \"sanguineus\" (of blood)",
+        patterns: ["vowel-team"],
         sentence: "He remained sanguine despite losing the first round.",
       },
       {
@@ -2177,6 +2475,7 @@ export const PRACTICE_GRADES: Record<
         definition: "Needless repetition of the same idea in different words",
         partOfSpeech: "noun",
         origin: "Greek \"tautologia\"",
+        patterns: ["vowel-team"],
         sentence: "The phrase 'free gift' is often criticized as a tautology.",
       },
       {
@@ -2184,6 +2483,7 @@ export const PRACTICE_GRADES: Record<
         definition: "A change of circumstances, often unwelcome",
         partOfSpeech: "noun",
         origin: "Latin \"vicissitudo\"",
+        patterns: ["double-letters"],
         sentence: "The old sailor had weathered every vicissitude of the sea.",
       },
     ],
@@ -2198,3 +2498,23 @@ export const ALL_PRACTICE_WORDS: Record<string, PracticeWord> =
       lookup[practiceWord.word] = practiceWord;
       return lookup;
     }, {});
+
+/**
+ * Looks up which grade/difficulty a word belongs to, so an attempt can be
+ * logged correctly even in Review Mode, where the quiz mixes words from
+ * different grades and difficulties.
+ */
+export const WORD_LOCATION: Record<
+  string,
+  { grade: number; difficulty: Difficulty }
+> = Object.entries(PRACTICE_GRADES).reduce<
+  Record<string, { grade: number; difficulty: Difficulty }>
+>((lookup, [gradeKey, byDifficulty]) => {
+  const grade = Number(gradeKey);
+  Object.entries(byDifficulty).forEach(([difficulty, words]) => {
+    words.forEach((practiceWord) => {
+      lookup[practiceWord.word] = { grade, difficulty: difficulty as Difficulty };
+    });
+  });
+  return lookup;
+}, {});
