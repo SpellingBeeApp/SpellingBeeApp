@@ -82,7 +82,7 @@ export default function PracticeQuiz() {
   const [showOrigin, setShowOrigin] = React.useState(false);
   const [speechSpeed, setSpeechSpeed] = React.useState<SpeechSpeed>("normal");
 
-  const { isSupported, isSpeaking, speak, stop } = useWordPronunciation({
+  const { isSupported, supportChecked, isSpeaking, speak, stop } = useWordPronunciation({
     rate: SPEECH_RATES[speechSpeed],
   });
 
@@ -279,7 +279,7 @@ export default function PracticeQuiz() {
               Hear each word, spell it from memory, and track your progress.
             </p>
 
-            {!isSupported && (
+            {supportChecked && !isSupported && (
               <div className="alert alert-warning rounded-xl">
                 <span>
                   Audio pronunciation is not supported in this browser.
