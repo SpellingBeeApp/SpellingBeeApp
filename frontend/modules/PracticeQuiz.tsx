@@ -11,9 +11,11 @@ import {
   GRADE_LEVELS,
   PRACTICE_GRADES,
   WORD_LOCATION,
+  WORDS_BY_PATTERN,
 } from "@/data/practiceWords";
 import { isSpellingCorrect } from "@/helpers/isSpellingCorrect";
 import { classifyMistake } from "@/helpers/classifyMistake";
+import { shuffleArray } from "@/helpers/shuffleArray";
 import {
   loadPracticeProgress,
   recordAttempt,
@@ -24,7 +26,8 @@ import {
 import useWordPronunciation from "@/hooks/useWordPronunciation";
 import Confetti from "./PlayerRoom/Confetti";
 import { maskWordInText, textContainsWord } from "@/helpers/maskWordInText";
-import { Difficulty, PracticeWord, QuizResult } from "@/types/PracticeWord";
+import { Difficulty, PracticeWord, QuizResult, SpellingPattern } from "@/types/PracticeWord";
+import { SPELLING_PATTERN_INFO } from "@/common/constants/spellingPatterns";
 
 const DIFFICULTY_LABELS: Record<Difficulty, string> = {
   easy: "Easy",
@@ -32,13 +35,20 @@ const DIFFICULTY_LABELS: Record<Difficulty, string> = {
   hard: "Hard",
 };
 
+const SPELLING_PATTERNS = Object.keys(
+  SPELLING_PATTERN_INFO,
+) as SpellingPattern[];
+
 type QuizPhase = "setup" | "quiz" | "summary";
 type SpeechSpeed = "normal" | "slow";
+type PracticeMode = "grade" | "category";
 
 const SPEECH_RATES: Record<SpeechSpeed, number> = {
   normal: 0.85,
   slow: 0.5,
 };
+
+const SESSION_SIZE = 10;
 
 const formatDuration = (totalSeconds: number): string => {
   const minutes = Math.floor(totalSeconds / 60);
@@ -48,9 +58,13 @@ const formatDuration = (totalSeconds: number): string => {
 
 export default function PracticeQuiz() {
   const [phase, setPhase] = React.useState<QuizPhase>("setup");
+  const [practiceMode, setPracticeMode] = React.useState<PracticeMode>("grade");
   const [selectedGrade, setSelectedGrade] = React.useState<number>(5);
   const [selectedDifficulty, setSelectedDifficulty] =
     React.useState<Difficulty>("easy");
+  const [selectedPattern, setSelectedPattern] = React.useState<
+    SpellingPattern | "random-mix"
+  >("random-mix");
   const [words, setWords] = React.useState<PracticeWord[]>([]);
   const [currentIndex, setCurrentIndex] = React.useState(0);
   const [guess, setGuess] = React.useState("");
@@ -105,7 +119,17 @@ export default function PracticeQuiz() {
   };
 
   const startQuiz = () => {
-    beginQuiz([...PRACTICE_GRADES[selectedGrade][selectedDifficulty]], false);
+    if (practiceMode === "category") {
+      const pool =
+        selectedPattern === "random-mix"
+          ? Object.values(ALL_PRACTICE_WORDS)
+          : (WORDS_BY_PATTERN[selectedPattern] ?? []);
+      beginQuiz(shuffleArray(pool).slice(0, SESSION_SIZE), false);
+      return;
+    }
+
+    const gradeWords = PRACTICE_GRADES[selectedGrade][selectedDifficulty];
+    beginQuiz(shuffleArray(gradeWords), false);
   };
 
   const startReview = () => {
@@ -257,42 +281,91 @@ export default function PracticeQuiz() {
               </div>
             )}
 
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text font-medium">Grade level</span>
-              </label>
-              <select
-                className="select select-bordered rounded-xl w-full"
-                value={selectedGrade}
-                onChange={(e) => setSelectedGrade(Number(e.target.value))}
+            <div className="tabs tabs-boxed grid grid-cols-2 bg-base-200 rounded-full p-1">
+              <a
+                className={`tab rounded-full font-semibold ${practiceMode === "grade" ? "tab-active" : ""}`}
+                onClick={() => setPracticeMode("grade")}
               >
-                {GRADE_LEVELS.map((grade) => (
-                  <option key={grade} value={grade}>
-                    Grade {grade}
-                  </option>
-                ))}
-              </select>
+                By Grade
+              </a>
+              <a
+                className={`tab rounded-full font-semibold ${practiceMode === "category" ? "tab-active" : ""}`}
+                onClick={() => setPracticeMode("category")}
+              >
+                🎯 Weak Spot
+              </a>
             </div>
 
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text font-medium">Difficulty</span>
-              </label>
-              <select
-                className="select select-bordered rounded-xl w-full"
-                value={selectedDifficulty}
-                onChange={(e) =>
-                  setSelectedDifficulty(e.target.value as Difficulty)
-                }
-              >
-                {DIFFICULTY_LEVELS.map((difficulty) => (
-                  <option key={difficulty} value={difficulty}>
-                    {DIFFICULTY_LABELS[difficulty]} (
-                    {PRACTICE_GRADES[selectedGrade][difficulty].length} words)
+            {practiceMode === "grade" ? (
+              <>
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text font-medium">Grade level</span>
+                  </label>
+                  <select
+                    className="select select-bordered rounded-xl w-full"
+                    value={selectedGrade}
+                    onChange={(e) => setSelectedGrade(Number(e.target.value))}
+                  >
+                    {GRADE_LEVELS.map((grade) => (
+                      <option key={grade} value={grade}>
+                        Grade {grade}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text font-medium">Difficulty</span>
+                  </label>
+                  <select
+                    className="select select-bordered rounded-xl w-full"
+                    value={selectedDifficulty}
+                    onChange={(e) =>
+                      setSelectedDifficulty(e.target.value as Difficulty)
+                    }
+                  >
+                    {DIFFICULTY_LEVELS.map((difficulty) => (
+                      <option key={difficulty} value={difficulty}>
+                        {DIFFICULTY_LABELS[difficulty]} (
+                        {PRACTICE_GRADES[selectedGrade][difficulty].length} words)
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </>
+            ) : (
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text font-medium">Category</span>
+                </label>
+                <select
+                  className="select select-bordered rounded-xl w-full"
+                  value={selectedPattern}
+                  onChange={(e) =>
+                    setSelectedPattern(
+                      e.target.value as SpellingPattern | "random-mix",
+                    )
+                  }
+                >
+                  <option value="random-mix">
+                    🎲 Random Mix ({Object.keys(ALL_PRACTICE_WORDS).length} words)
                   </option>
-                ))}
-              </select>
-            </div>
+                  {SPELLING_PATTERNS.map((pattern) => (
+                    <option key={pattern} value={pattern}>
+                      {SPELLING_PATTERN_INFO[pattern].label} (
+                      {WORDS_BY_PATTERN[pattern]?.length ?? 0} words)
+                    </option>
+                  ))}
+                </select>
+                <span className="text-xs text-base-content/50 mt-1 ml-1 block">
+                  {selectedPattern === "random-mix"
+                    ? "A random mix of words from every category."
+                    : SPELLING_PATTERN_INFO[selectedPattern].tip}
+                </span>
+              </div>
+            )}
 
             <button
               className="btn btn-primary btn-lg rounded-full w-full mt-2"

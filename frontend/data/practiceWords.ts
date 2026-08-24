@@ -1,4 +1,4 @@
-import { Difficulty, PracticeWord } from "@/types/PracticeWord";
+import { Difficulty, PracticeWord, SpellingPattern } from "@/types/PracticeWord";
 
 export const GRADE_LEVELS = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
@@ -2518,3 +2518,20 @@ export const WORD_LOCATION: Record<
   });
   return lookup;
 }, {});
+
+/**
+ * Groups every word by each spelling-pattern tag it carries, so "Practice a
+ * Weak Spot" mode can pull a pool of words for a chosen category regardless
+ * of grade or difficulty. A word with multiple tags appears in each group.
+ */
+export const WORDS_BY_PATTERN: Record<SpellingPattern, PracticeWord[]> =
+  Object.values(ALL_PRACTICE_WORDS).reduce<Record<string, PracticeWord[]>>(
+    (groups, practiceWord) => {
+      (practiceWord.patterns ?? []).forEach((pattern) => {
+        groups[pattern] = groups[pattern] ?? [];
+        groups[pattern].push(practiceWord);
+      });
+      return groups;
+    },
+    {},
+  ) as Record<SpellingPattern, PracticeWord[]>;
