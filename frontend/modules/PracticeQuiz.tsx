@@ -10,10 +10,15 @@ import {
   DIFFICULTY_LEVELS,
   GRADE_LEVELS,
   PRACTICE_GRADES,
+  WORD_LOCATION,
+  WORDS_BY_PATTERN,
 } from "@/data/practiceWords";
 import { isSpellingCorrect } from "@/helpers/isSpellingCorrect";
+import { classifyMistake } from "@/helpers/classifyMistake";
+import { shuffleArray } from "@/helpers/shuffleArray";
 import {
   loadPracticeProgress,
+  recordAttempt,
   recordCompletedSession,
   recordCorrectAttempt,
   recordMissedWord,
@@ -21,7 +26,8 @@ import {
 import useWordPronunciation from "@/hooks/useWordPronunciation";
 import Confetti from "./PlayerRoom/Confetti";
 import { maskWordInText, textContainsWord } from "@/helpers/maskWordInText";
-import { Difficulty, PracticeWord, QuizResult } from "@/types/PracticeWord";
+import { Difficulty, PracticeWord, QuizResult, SpellingPattern } from "@/types/PracticeWord";
+import { SPELLING_PATTERN_INFO } from "@/common/constants/spellingPatterns";
 
 const DIFFICULTY_LABELS: Record<Difficulty, string> = {
   easy: "Easy",
@@ -29,13 +35,20 @@ const DIFFICULTY_LABELS: Record<Difficulty, string> = {
   hard: "Hard",
 };
 
+const SPELLING_PATTERNS = Object.keys(
+  SPELLING_PATTERN_INFO,
+) as SpellingPattern[];
+
 type QuizPhase = "setup" | "quiz" | "summary";
 type SpeechSpeed = "normal" | "slow";
+type PracticeMode = "grade" | "category";
 
 const SPEECH_RATES: Record<SpeechSpeed, number> = {
   normal: 0.85,
   slow: 0.5,
 };
+
+const SESSION_SIZE_OPTIONS = [5, 10, 15, 20];
 
 const formatDuration = (totalSeconds: number): string => {
   const minutes = Math.floor(totalSeconds / 60);
@@ -45,9 +58,14 @@ const formatDuration = (totalSeconds: number): string => {
 
 export default function PracticeQuiz() {
   const [phase, setPhase] = React.useState<QuizPhase>("setup");
+  const [practiceMode, setPracticeMode] = React.useState<PracticeMode>("grade");
   const [selectedGrade, setSelectedGrade] = React.useState<number>(5);
   const [selectedDifficulty, setSelectedDifficulty] =
     React.useState<Difficulty>("easy");
+  const [selectedPattern, setSelectedPattern] = React.useState<
+    SpellingPattern | "random-mix"
+  >("random-mix");
+  const [selectedSessionSize, setSelectedSessionSize] = React.useState(10);
   const [words, setWords] = React.useState<PracticeWord[]>([]);
   const [currentIndex, setCurrentIndex] = React.useState(0);
   const [guess, setGuess] = React.useState("");
@@ -64,13 +82,41 @@ export default function PracticeQuiz() {
   const [showOrigin, setShowOrigin] = React.useState(false);
   const [speechSpeed, setSpeechSpeed] = React.useState<SpeechSpeed>("normal");
 
-  const { isSupported, isSpeaking, speak, stop } = useWordPronunciation({
+  const { isSupported, supportChecked, isSpeaking, speak, stop } = useWordPronunciation({
     rate: SPEECH_RATES[speechSpeed],
   });
 
   const currentWord = words[currentIndex];
   const isLastWord = currentIndex === words.length - 1;
-  const missedWordCount = Object.keys(loadPracticeProgress().missedWords).length;
+
+  // Practice history only exists in localStorage, which isn't available
+  // during server rendering — load it after mount (and whenever we're back
+  // on the setup screen) so the server-rendered HTML and the first client
+  // render match, avoiding a hydration mismatch.
+  const [progressSummary, setProgressSummary] = React.useState({
+    missedWordCount: 0,
+    sessionsCompleted: 0,
+  });
+
+  React.useEffect(() => {
+    if (phase !== "setup") return;
+    const progress = loadPracticeProgress();
+    setProgressSummary({
+      missedWordCount: Object.keys(progress.missedWords).length,
+      sessionsCompleted: progress.sessionsCompleted,
+    });
+  }, [phase]);
+
+  // Deep link from the Dashboard's "Practice This Now" button (e.g. /practice?pattern=silent-letters)
+  // preselects Weak Spot mode for that category. Applied after mount, like progressSummary above,
+  // so the server-rendered HTML and first client render still match.
+  React.useEffect(() => {
+    const pattern = new URLSearchParams(window.location.search).get("pattern");
+    if (pattern && SPELLING_PATTERNS.includes(pattern as SpellingPattern)) {
+      setPracticeMode("category");
+      setSelectedPattern(pattern as SpellingPattern);
+    }
+  }, []);
 
   const beginQuiz = (list: PracticeWord[], reviewMode: boolean) => {
     setWords(list);
@@ -84,8 +130,23 @@ export default function PracticeQuiz() {
     setPhase("quiz");
   };
 
+  const currentPool =
+    practiceMode === "category"
+      ? selectedPattern === "random-mix"
+        ? Object.values(ALL_PRACTICE_WORDS)
+        : (WORDS_BY_PATTERN[selectedPattern] ?? [])
+      : PRACTICE_GRADES[selectedGrade][selectedDifficulty];
+
+  const sessionSizeOptions = SESSION_SIZE_OPTIONS.filter(
+    (size) => size <= currentPool.length,
+  );
+  if (sessionSizeOptions.length === 0) {
+    sessionSizeOptions.push(currentPool.length);
+  }
+
   const startQuiz = () => {
-    beginQuiz([...PRACTICE_GRADES[selectedGrade][selectedDifficulty]], false);
+    const count = Math.min(selectedSessionSize, currentPool.length);
+    beginQuiz(shuffleArray(currentPool).slice(0, count), false);
   };
 
   const startReview = () => {
@@ -157,6 +218,19 @@ export default function PracticeQuiz() {
     } else {
       recordMissedWord(currentWord.word);
     }
+
+    const location = WORD_LOCATION[currentWord.word];
+    if (location) {
+      recordAttempt({
+        word: currentWord.word,
+        grade: location.grade,
+        difficulty: location.difficulty,
+        correct,
+        mistakeType: correct
+          ? undefined
+          : classifyMistake(guess, currentWord.word),
+      });
+    }
   };
 
   const goToNextWord = () => {
@@ -191,7 +265,6 @@ export default function PracticeQuiz() {
   const totalTimeTaken = results.reduce((sum, r) => sum + r.timeTaken, 0);
   const averageTimeTaken =
     results.length > 0 ? Math.round(totalTimeTaken / results.length) : 0;
-  const progress = loadPracticeProgress();
 
   if (phase === "setup") {
     return (
@@ -216,8 +289,11 @@ export default function PracticeQuiz() {
             <p className="text-center text-base-content/70">
               Hear each word, spell it from memory, and track your progress.
             </p>
+            <p className="text-center text-xs sm:text-sm text-base-content/50 -mt-1">
+              🏆 Real words from past National &amp; Regional Spelling Bee competitions
+            </p>
 
-            {!isSupported && (
+            {supportChecked && !isSupported && (
               <div className="alert alert-warning rounded-xl">
                 <span>
                   Audio pronunciation is not supported in this browser.
@@ -225,38 +301,107 @@ export default function PracticeQuiz() {
               </div>
             )}
 
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text font-medium">Grade level</span>
-              </label>
-              <select
-                className="select select-bordered rounded-xl w-full"
-                value={selectedGrade}
-                onChange={(e) => setSelectedGrade(Number(e.target.value))}
+            <div className="tabs tabs-boxed grid grid-cols-2 bg-base-200 rounded-full p-1">
+              <a
+                className={`tab rounded-full font-semibold ${practiceMode === "grade" ? "tab-active" : ""}`}
+                onClick={() => setPracticeMode("grade")}
               >
-                {GRADE_LEVELS.map((grade) => (
-                  <option key={grade} value={grade}>
-                    Grade {grade}
-                  </option>
-                ))}
-              </select>
+                By Level
+              </a>
+              <a
+                className={`tab rounded-full font-semibold ${practiceMode === "category" ? "tab-active" : ""}`}
+                onClick={() => setPracticeMode("category")}
+              >
+                🎯 Weak Spot
+              </a>
             </div>
+
+            {practiceMode === "grade" ? (
+              <>
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text font-medium">Level</span>
+                  </label>
+                  <select
+                    className="select select-bordered rounded-xl w-full"
+                    value={selectedGrade}
+                    onChange={(e) => setSelectedGrade(Number(e.target.value))}
+                  >
+                    {GRADE_LEVELS.map((grade) => (
+                      <option key={grade} value={grade}>
+                        Level {grade}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text font-medium">Difficulty</span>
+                  </label>
+                  <select
+                    className="select select-bordered rounded-xl w-full"
+                    value={selectedDifficulty}
+                    onChange={(e) =>
+                      setSelectedDifficulty(e.target.value as Difficulty)
+                    }
+                  >
+                    {DIFFICULTY_LEVELS.map((difficulty) => (
+                      <option key={difficulty} value={difficulty}>
+                        {DIFFICULTY_LABELS[difficulty]}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </>
+            ) : (
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text font-medium">Category</span>
+                </label>
+                <select
+                  className="select select-bordered rounded-xl w-full"
+                  value={selectedPattern}
+                  onChange={(e) =>
+                    setSelectedPattern(
+                      e.target.value as SpellingPattern | "random-mix",
+                    )
+                  }
+                >
+                  <option value="random-mix">
+                    🎲 Random Mix ({Object.keys(ALL_PRACTICE_WORDS).length} words)
+                  </option>
+                  {SPELLING_PATTERNS.map((pattern) => (
+                    <option key={pattern} value={pattern}>
+                      {SPELLING_PATTERN_INFO[pattern].label} (
+                      {WORDS_BY_PATTERN[pattern]?.length ?? 0} words)
+                    </option>
+                  ))}
+                </select>
+                <span className="text-xs text-base-content/50 mt-1 ml-1 block">
+                  {selectedPattern === "random-mix"
+                    ? "A random mix of words from every category."
+                    : SPELLING_PATTERN_INFO[selectedPattern].tip}
+                </span>
+              </div>
+            )}
 
             <div className="form-control">
               <label className="label">
-                <span className="label-text font-medium">Difficulty</span>
+                <span className="label-text font-medium">Number of words</span>
               </label>
               <select
                 className="select select-bordered rounded-xl w-full"
-                value={selectedDifficulty}
-                onChange={(e) =>
-                  setSelectedDifficulty(e.target.value as Difficulty)
+                value={
+                  sessionSizeOptions.includes(selectedSessionSize)
+                    ? selectedSessionSize
+                    : sessionSizeOptions[sessionSizeOptions.length - 1]
                 }
+                onChange={(e) => setSelectedSessionSize(Number(e.target.value))}
               >
-                {DIFFICULTY_LEVELS.map((difficulty) => (
-                  <option key={difficulty} value={difficulty}>
-                    {DIFFICULTY_LABELS[difficulty]} (
-                    {PRACTICE_GRADES[selectedGrade][difficulty].length} words)
+                {sessionSizeOptions.map((size) => (
+                  <option key={size} value={size}>
+                    {size} words
                   </option>
                 ))}
               </select>
@@ -270,19 +415,19 @@ export default function PracticeQuiz() {
               Start Quiz 🎯
             </button>
 
-            {missedWordCount > 0 && (
+            {progressSummary.missedWordCount > 0 && (
               <button
                 className="btn btn-outline btn-secondary rounded-full w-full"
                 onClick={startReview}
                 disabled={!isSupported}
               >
-                📚 Review Missed Words ({missedWordCount})
+                📚 Review Missed Words ({progressSummary.missedWordCount})
               </button>
             )}
 
-            {progress.sessionsCompleted > 0 && (
+            {progressSummary.sessionsCompleted > 0 && (
               <p className="text-center text-sm text-base-content/60">
-                🐝 Sessions completed: {progress.sessionsCompleted}
+                🐝 Sessions completed: {progressSummary.sessionsCompleted}
               </p>
             )}
           </div>
@@ -356,6 +501,13 @@ export default function PracticeQuiz() {
                 Home
               </Link>
             </div>
+
+            <Link
+              href="/dashboard"
+              className="link link-hover text-sm text-center text-base-content/60 block"
+            >
+              📊 View your spelling dashboard
+            </Link>
           </div>
         </div>
       </div>

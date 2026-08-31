@@ -21,16 +21,19 @@ export default function useWordPronunciation(
 ) {
   const { rate = 0.85, pitch = 1 } = options;
   const [isSupported, setIsSupported] = React.useState(false);
+  const [supportChecked, setSupportChecked] = React.useState(false);
   const [isSpeaking, setIsSpeaking] = React.useState(false);
   const [voicesReady, setVoicesReady] = React.useState(false);
   const voiceRef = React.useRef<SpeechSynthesisVoice | undefined>(undefined);
 
   React.useEffect(() => {
     if (typeof window === "undefined" || !("speechSynthesis" in window)) {
+      setSupportChecked(true);
       return;
     }
 
     setIsSupported(true);
+    setSupportChecked(true);
 
     const loadVoices = () => {
       voiceRef.current = pickEnglishVoice();
@@ -78,6 +81,7 @@ export default function useWordPronunciation(
 
   return {
     isSupported,
+    supportChecked,
     isSpeaking,
     voicesReady,
     speak,
