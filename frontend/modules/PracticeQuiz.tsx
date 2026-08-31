@@ -107,6 +107,17 @@ export default function PracticeQuiz() {
     });
   }, [phase]);
 
+  // Deep link from the Dashboard's "Practice This Now" button (e.g. /practice?pattern=silent-letters)
+  // preselects Weak Spot mode for that category. Applied after mount, like progressSummary above,
+  // so the server-rendered HTML and first client render still match.
+  React.useEffect(() => {
+    const pattern = new URLSearchParams(window.location.search).get("pattern");
+    if (pattern && SPELLING_PATTERNS.includes(pattern as SpellingPattern)) {
+      setPracticeMode("category");
+      setSelectedPattern(pattern as SpellingPattern);
+    }
+  }, []);
+
   const beginQuiz = (list: PracticeWord[], reviewMode: boolean) => {
     setWords(list);
     setCurrentIndex(0);
@@ -277,6 +288,9 @@ export default function PracticeQuiz() {
             </h1>
             <p className="text-center text-base-content/70">
               Hear each word, spell it from memory, and track your progress.
+            </p>
+            <p className="text-center text-xs sm:text-sm text-base-content/50 -mt-1">
+              🏆 Real words from past National &amp; Regional Spelling Bee competitions
             </p>
 
             {supportChecked && !isSupported && (

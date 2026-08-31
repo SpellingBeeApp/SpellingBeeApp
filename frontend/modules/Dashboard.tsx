@@ -9,6 +9,7 @@ import { computeDashboardStats, DashboardStats } from "@/helpers/dashboardStats"
 import { getAccuracyStatus } from "@/helpers/accuracyStatus";
 import { SPELLING_PATTERN_INFO } from "@/common/constants/spellingPatterns";
 import { MISTAKE_TYPE_INFO } from "@/common/constants/mistakeTypes";
+import { BADGES } from "@/common/constants/badges";
 
 export default function Dashboard() {
   // Practice history only exists in localStorage, which isn't available
@@ -106,7 +107,35 @@ export default function Dashboard() {
                   {stats.wordsMastered}
                 </div>
               </div>
+              <div className="stat">
+                <div className="stat-title text-center">Day Streak</div>
+                <div className="stat-value text-center text-primary">
+                  {stats.currentStreak > 0 ? `🔥 ${stats.currentStreak}` : 0}
+                </div>
+              </div>
             </div>
+
+            {stats.patternStats.length > 0 && (
+              <div className="card card-modern rounded-3xl bg-primary text-primary-content shadow-xl">
+                <div className="card-body p-5 sm:p-6 space-y-3">
+                  <h2 className="card-title">🎯 Your Focus Area</h2>
+                  <p className="text-sm opacity-90">
+                    {SPELLING_PATTERN_INFO[stats.patternStats[0].pattern].label} is
+                    where you have the most to gain — {stats.patternStats[0].accuracy}%
+                    accuracy so far.
+                  </p>
+                  <p className="text-sm opacity-80">
+                    {SPELLING_PATTERN_INFO[stats.patternStats[0].pattern].tip}
+                  </p>
+                  <Link
+                    href={`/practice?pattern=${stats.patternStats[0].pattern}`}
+                    className="btn btn-secondary rounded-full w-full sm:w-fit"
+                  >
+                    Practice This Now →
+                  </Link>
+                </div>
+              </div>
+            )}
 
             <div className="card card-modern rounded-3xl bg-base-100 shadow-xl">
               <div className="card-body p-5 sm:p-6 space-y-4">
@@ -210,6 +239,33 @@ export default function Dashboard() {
                     ))}
                   </div>
                 )}
+              </div>
+            </div>
+
+            <div className="card card-modern rounded-3xl bg-base-100 shadow-xl">
+              <div className="card-body p-5 sm:p-6 space-y-4">
+                <h2 className="card-title">Achievements</h2>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  {BADGES.map((badge) => {
+                    const earned = badge.isEarned(stats);
+                    return (
+                      <div
+                        key={badge.id}
+                        className={`flex flex-col items-center text-center gap-1 p-3 rounded-2xl border ${
+                          earned
+                            ? "bg-secondary/10 border-secondary/30"
+                            : "bg-base-200 border-transparent opacity-50"
+                        }`}
+                      >
+                        <span className="text-2xl">{badge.icon}</span>
+                        <span className="text-xs font-semibold">{badge.label}</span>
+                        <span className="text-[11px] text-base-content/60">
+                          {badge.description}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             </div>
           </>

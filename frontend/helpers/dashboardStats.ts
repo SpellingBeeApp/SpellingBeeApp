@@ -29,6 +29,34 @@ export type DashboardStats = {
   patternStats: PatternStat[];
   mistakeTypeStats: MistakeTypeStat[];
   mostMissedWords: MissedWordStat[];
+  currentStreak: number;
+};
+
+const toLocalDayKey = (timestamp: number): string => {
+  const date = new Date(timestamp);
+  return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+};
+
+/**
+ * Consecutive calendar days (local time) with at least one practice attempt,
+ * counting back from today. A day is only "missed" once it has fully passed —
+ * practicing yesterday but not yet today still counts as an active streak.
+ */
+const computeCurrentStreak = (history: PracticeProgress["history"]): number => {
+  if (history.length === 0) return 0;
+
+  const practicedDays = new Set(history.map((attempt) => toLocalDayKey(attempt.timestamp)));
+  const cursor = new Date();
+  if (!practicedDays.has(toLocalDayKey(cursor.getTime()))) {
+    cursor.setDate(cursor.getDate() - 1);
+  }
+
+  let streak = 0;
+  while (practicedDays.has(toLocalDayKey(cursor.getTime()))) {
+    streak += 1;
+    cursor.setDate(cursor.getDate() - 1);
+  }
+  return streak;
 };
 
 export const computeDashboardStats = (
@@ -93,5 +121,6 @@ export const computeDashboardStats = (
     patternStats,
     mistakeTypeStats,
     mostMissedWords,
+    currentStreak: computeCurrentStreak(history),
   };
 };
