@@ -26,7 +26,7 @@ import { isGuessRight } from "./helpers/isGuessRight";
 import { calculateScoreboard } from "./helpers/calculateScoreboard";
 
 const app = express();
-const port = 5000;
+const port = Number(process.env.PORT) || 5000;
 const server = app.listen(port);
 const io = new Server(server, {
   cors: {
