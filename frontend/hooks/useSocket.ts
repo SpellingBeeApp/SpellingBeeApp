@@ -16,9 +16,14 @@ function useSocket(
     // (true for the single-VPS setup this app used to run on), which no
     // longer holds now that the frontend (Vercel) and backend (Render)
     // are on separate domains.
+    // Polling must come first: listing "websocket" first makes the client
+    // attempt a direct WebSocket upgrade with no prior handshake, which
+    // Render's proxy (and most reverse proxies) drops. Starting with
+    // polling establishes the engine.io session first, then upgrades to
+    // a real WebSocket once that connection exists.
     const socketIo = io(url, {
       path: "/socket.io",
-      transports: ["websocket", "polling"],
+      transports: ["polling", "websocket"],
       ...options,
     });
 
