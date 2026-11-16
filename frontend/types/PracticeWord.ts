@@ -24,10 +24,15 @@ export type QuizResult = {
   timeTaken: number;
 };
 
-export type MissedWordEntry = {
+export type WordBoxEntry = {
+  /** 1-5 Leitner box. Higher box = longer gap before this word is due again. */
+  box: number;
+  /** Epoch ms; the word is due for review once Date.now() >= dueAt. */
+  dueAt: number;
+  /** Total times this word has ever been answered incorrectly. */
   count: number;
+  /** Epoch ms of the most recent attempt (right or wrong). */
   lastSeen: number;
-  correctStreak: number;
 };
 
 export type MistakeType =
@@ -47,8 +52,10 @@ export type AttemptRecord = {
 };
 
 export type PracticeProgress = {
-  missedWords: Record<string, MissedWordEntry>;
+  wordBoxes: Record<string, WordBoxEntry>;
   sessionsCompleted: number;
   history: AttemptRecord[];
   wordsMastered: number;
+  /** Curriculum unit id -> epoch ms when every word in it first reached box 2+. */
+  completedUnitIds: Record<string, number>;
 };

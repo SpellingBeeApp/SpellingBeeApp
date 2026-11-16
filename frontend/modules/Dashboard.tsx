@@ -4,12 +4,17 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { BarChart3, Sparkles } from "lucide-react";
-import { loadPracticeProgress, MASTERY_STREAK } from "@/helpers/practiceProgress";
+import { loadPracticeProgress, MAX_BOX } from "@/helpers/practiceProgress";
 import { computeDashboardStats, DashboardStats } from "@/helpers/dashboardStats";
 import { getAccuracyStatus } from "@/helpers/accuracyStatus";
 import { SPELLING_PATTERN_INFO } from "@/common/constants/spellingPatterns";
 import { MISTAKE_TYPE_INFO } from "@/common/constants/mistakeTypes";
 import { BADGES } from "@/common/constants/badges";
+
+const formatDueLabel = (dueAt: number): string => {
+  const daysUntilDue = Math.ceil((dueAt - Date.now()) / (24 * 60 * 60 * 1000));
+  return daysUntilDue <= 0 ? "due now" : `due in ${daysUntilDue}d`;
+};
 
 export default function Dashboard() {
   // Practice history only exists in localStorage, which isn't available
@@ -214,7 +219,7 @@ export default function Dashboard() {
                   </p>
                 ) : (
                   <div className="space-y-2">
-                    {stats.mostMissedWords.map(({ word, count, correctStreak }) => (
+                    {stats.mostMissedWords.map(({ word, count, box, dueAt }) => (
                       <div
                         key={word}
                         className="flex justify-between items-center p-3 bg-base-200 rounded-xl gap-2"
@@ -222,14 +227,14 @@ export default function Dashboard() {
                         <span className="font-medium">{word}</span>
                         <div className="flex items-center gap-3">
                           <span className="text-xs text-base-content/60 whitespace-nowrap">
-                            missed {count}x
+                            missed {count}x · {formatDueLabel(dueAt)}
                           </span>
                           <div className="flex gap-1">
-                            {Array.from({ length: MASTERY_STREAK }).map((_, i) => (
+                            {Array.from({ length: MAX_BOX }).map((_, i) => (
                               <span
                                 key={i}
                                 className={`w-2 h-2 rounded-full ${
-                                  i < correctStreak ? "bg-success" : "bg-base-300"
+                                  i < box ? "bg-success" : "bg-base-300"
                                 }`}
                               />
                             ))}

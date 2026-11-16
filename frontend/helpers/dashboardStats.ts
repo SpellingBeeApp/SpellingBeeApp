@@ -1,4 +1,5 @@
 import { ALL_PRACTICE_WORDS } from "@/data/practiceWords";
+import { MAX_BOX } from "@/helpers/practiceProgress";
 import { MistakeType, PracticeProgress, SpellingPattern } from "@/types/PracticeWord";
 
 const MIN_ATTEMPTS_FOR_PATTERN = 3;
@@ -18,7 +19,8 @@ export type MistakeTypeStat = {
 export type MissedWordStat = {
   word: string;
   count: number;
-  correctStreak: number;
+  box: number;
+  dueAt: number;
 };
 
 export type DashboardStats = {
@@ -62,7 +64,7 @@ const computeCurrentStreak = (history: PracticeProgress["history"]): number => {
 export const computeDashboardStats = (
   progress: PracticeProgress,
 ): DashboardStats => {
-  const { history, missedWords, sessionsCompleted, wordsMastered } = progress;
+  const { history, wordBoxes, sessionsCompleted, wordsMastered } = progress;
 
   const totalAttempts = history.length;
   const totalCorrect = history.filter((attempt) => attempt.correct).length;
@@ -104,11 +106,13 @@ export const computeDashboardStats = (
     }))
     .sort((a, b) => b.count - a.count);
 
-  const mostMissedWords: MissedWordStat[] = Object.entries(missedWords)
+  const mostMissedWords: MissedWordStat[] = Object.entries(wordBoxes)
+    .filter(([, entry]) => entry.count > 0 && entry.box < MAX_BOX)
     .map(([word, entry]) => ({
       word,
       count: entry.count,
-      correctStreak: entry.correctStreak,
+      box: entry.box,
+      dueAt: entry.dueAt,
     }))
     .sort((a, b) => b.count - a.count)
     .slice(0, 8);

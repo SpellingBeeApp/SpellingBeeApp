@@ -17,15 +17,24 @@ import { isSpellingCorrect } from "@/helpers/isSpellingCorrect";
 import { classifyMistake } from "@/helpers/classifyMistake";
 import { shuffleArray } from "@/helpers/shuffleArray";
 import {
+  getDueWords,
   loadPracticeProgress,
+  markUnitComplete,
   recordAttempt,
   recordCompletedSession,
   recordCorrectAttempt,
   recordMissedWord,
 } from "@/helpers/practiceProgress";
+import {
+  canClearUnit,
+  CurriculumUnit,
+  getNextUnit,
+} from "@/helpers/curriculum";
 import useWordPronunciation from "@/hooks/useWordPronunciation";
 import Confetti from "./PlayerRoom/Confetti";
+import CurriculumPicker from "./CurriculumPicker";
 import { maskWordInText, textContainsWord } from "@/helpers/maskWordInText";
+import { diffSpelling } from "@/helpers/diffSpelling";
 import { Difficulty, PracticeWord, QuizResult, SpellingPattern } from "@/types/PracticeWord";
 import { SPELLING_PATTERN_INFO } from "@/common/constants/spellingPatterns";
 
@@ -41,7 +50,13 @@ const SPELLING_PATTERNS = Object.keys(
 
 type QuizPhase = "setup" | "quiz" | "summary";
 type SpeechSpeed = "normal" | "slow";
-type PracticeMode = "grade" | "category";
+type PracticeMode = "grade" | "category" | "curriculum";
+
+type UnitSessionResult = {
+  unit: CurriculumUnit;
+  justCompleted: boolean;
+  nextUnit: CurriculumUnit | null;
+};
 
 const SPEECH_RATES: Record<SpeechSpeed, number> = {
   normal: 0.85,
@@ -81,6 +96,8 @@ export default function PracticeQuiz() {
   const [isReviewMode, setIsReviewMode] = React.useState(false);
   const [showOrigin, setShowOrigin] = React.useState(false);
   const [speechSpeed, setSpeechSpeed] = React.useState<SpeechSpeed>("normal");
+  const [activeUnit, setActiveUnit] = React.useState<CurriculumUnit | null>(null);
+  const [unitResult, setUnitResult] = React.useState<UnitSessionResult | null>(null);
 
   const { isSupported, supportChecked, isSpeaking, speak, stop } = useWordPronunciation({
     rate: SPEECH_RATES[speechSpeed],
@@ -94,7 +111,7 @@ export default function PracticeQuiz() {
   // on the setup screen) so the server-rendered HTML and the first client
   // render match, avoiding a hydration mismatch.
   const [progressSummary, setProgressSummary] = React.useState({
-    missedWordCount: 0,
+    dueWordCount: 0,
     sessionsCompleted: 0,
   });
 
@@ -102,7 +119,7 @@ export default function PracticeQuiz() {
     if (phase !== "setup") return;
     const progress = loadPracticeProgress();
     setProgressSummary({
-      missedWordCount: Object.keys(progress.missedWords).length,
+      dueWordCount: getDueWords(progress).length,
       sessionsCompleted: progress.sessionsCompleted,
     });
   }, [phase]);
@@ -146,16 +163,29 @@ export default function PracticeQuiz() {
 
   const startQuiz = () => {
     const count = Math.min(selectedSessionSize, currentPool.length);
+    setActiveUnit(null);
     beginQuiz(shuffleArray(currentPool).slice(0, count), false);
   };
 
   const startReview = () => {
-    const missedWords = Object.keys(loadPracticeProgress().missedWords)
+    const dueWords = getDueWords(loadPracticeProgress())
       .map((word) => ALL_PRACTICE_WORDS[word])
       .filter((word): word is PracticeWord => Boolean(word));
 
-    if (missedWords.length === 0) return;
-    beginQuiz(missedWords, true);
+    if (dueWords.length === 0) return;
+    setActiveUnit(null);
+    beginQuiz(dueWords, true);
+  };
+
+  const startUnitQuiz = (unit: CurriculumUnit) => {
+    const unitWords = unit.words
+      .map((word) => ALL_PRACTICE_WORDS[word])
+      .filter((word): word is PracticeWord => Boolean(word));
+
+    if (unitWords.length === 0) return;
+    setUnitResult(null);
+    setActiveUnit(unit);
+    beginQuiz(unitWords, false);
   };
 
   React.useEffect(() => {
@@ -236,6 +266,21 @@ export default function PracticeQuiz() {
   const goToNextWord = () => {
     if (isLastWord) {
       recordCompletedSession();
+
+      if (activeUnit) {
+        const progress = loadPracticeProgress();
+        const alreadyComplete = activeUnit.id in progress.completedUnitIds;
+        const justCompleted = !alreadyComplete && canClearUnit(progress, activeUnit);
+
+        if (justCompleted) markUnitComplete(activeUnit.id);
+
+        setUnitResult({
+          unit: activeUnit,
+          justCompleted,
+          nextUnit: justCompleted ? getNextUnit(activeUnit) : null,
+        });
+      }
+
       setPhase("summary");
       return;
     }
@@ -257,6 +302,8 @@ export default function PracticeQuiz() {
     setLastFeedback(null);
     setHasSubmitted(false);
     setIsReviewMode(false);
+    setActiveUnit(null);
+    setUnitResult(null);
   };
 
   const correctCount = results.filter((r) => r.correct).length;
@@ -301,22 +348,30 @@ export default function PracticeQuiz() {
               </div>
             )}
 
-            <div className="tabs tabs-boxed grid grid-cols-2 bg-base-200 rounded-full p-1">
+            <div className="tabs tabs-boxed grid grid-cols-3 bg-base-200 rounded-full p-1">
               <a
-                className={`tab rounded-full font-semibold ${practiceMode === "grade" ? "tab-active" : ""}`}
+                className={`tab rounded-full font-semibold text-xs sm:text-sm px-1 sm:px-4 whitespace-nowrap ${practiceMode === "curriculum" ? "tab-active" : ""}`}
+                onClick={() => setPracticeMode("curriculum")}
+              >
+                📘 Curriculum
+              </a>
+              <a
+                className={`tab rounded-full font-semibold text-xs sm:text-sm px-1 sm:px-4 whitespace-nowrap ${practiceMode === "grade" ? "tab-active" : ""}`}
                 onClick={() => setPracticeMode("grade")}
               >
                 By Level
               </a>
               <a
-                className={`tab rounded-full font-semibold ${practiceMode === "category" ? "tab-active" : ""}`}
+                className={`tab rounded-full font-semibold text-xs sm:text-sm px-1 sm:px-4 whitespace-nowrap ${practiceMode === "category" ? "tab-active" : ""}`}
                 onClick={() => setPracticeMode("category")}
               >
                 🎯 Weak Spot
               </a>
             </div>
 
-            {practiceMode === "grade" ? (
+            {practiceMode === "curriculum" ? (
+              <CurriculumPicker onSelectUnit={startUnitQuiz} />
+            ) : practiceMode === "grade" ? (
               <>
                 <div className="form-control">
                   <label className="label">
@@ -386,42 +441,46 @@ export default function PracticeQuiz() {
               </div>
             )}
 
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text font-medium">Number of words</span>
-              </label>
-              <select
-                className="select select-bordered rounded-xl w-full"
-                value={
-                  sessionSizeOptions.includes(selectedSessionSize)
-                    ? selectedSessionSize
-                    : sessionSizeOptions[sessionSizeOptions.length - 1]
-                }
-                onChange={(e) => setSelectedSessionSize(Number(e.target.value))}
-              >
-                {sessionSizeOptions.map((size) => (
-                  <option key={size} value={size}>
-                    {size} words
-                  </option>
-                ))}
-              </select>
-            </div>
+            {practiceMode !== "curriculum" && (
+              <>
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text font-medium">Number of words</span>
+                  </label>
+                  <select
+                    className="select select-bordered rounded-xl w-full"
+                    value={
+                      sessionSizeOptions.includes(selectedSessionSize)
+                        ? selectedSessionSize
+                        : sessionSizeOptions[sessionSizeOptions.length - 1]
+                    }
+                    onChange={(e) => setSelectedSessionSize(Number(e.target.value))}
+                  >
+                    {sessionSizeOptions.map((size) => (
+                      <option key={size} value={size}>
+                        {size} words
+                      </option>
+                    ))}
+                  </select>
+                </div>
 
-            <button
-              className="btn btn-primary btn-lg rounded-full w-full mt-2"
-              onClick={startQuiz}
-              disabled={!isSupported}
-            >
-              Start Quiz 🎯
-            </button>
+                <button
+                  className="btn btn-primary btn-lg rounded-full w-full mt-2"
+                  onClick={startQuiz}
+                  disabled={!isSupported}
+                >
+                  Start Quiz 🎯
+                </button>
+              </>
+            )}
 
-            {progressSummary.missedWordCount > 0 && (
+            {progressSummary.dueWordCount > 0 && (
               <button
                 className="btn btn-outline btn-secondary rounded-full w-full"
                 onClick={startReview}
                 disabled={!isSupported}
               >
-                📚 Review Missed Words ({progressSummary.missedWordCount})
+                📚 Words Due for Review ({progressSummary.dueWordCount})
               </button>
             )}
 
@@ -470,6 +529,20 @@ export default function PracticeQuiz() {
               </div>
             </div>
 
+            {unitResult && (
+              <div
+                className={`alert rounded-xl ${unitResult.justCompleted ? "alert-success" : "alert-info"}`}
+              >
+                <span>
+                  {unitResult.justCompleted
+                    ? unitResult.nextUnit
+                      ? `📘 Unit ${unitResult.unit.unitNumber} complete! The next unit is unlocked.`
+                      : `📘 Unit ${unitResult.unit.unitNumber} complete! You've reached the end of the curriculum 🎉`
+                    : "📘 Spell every word in this unit correctly at least once to clear it and unlock the next one."}
+                </span>
+              </div>
+            )}
+
             {missed.length > 0 && (
               <div className="space-y-2">
                 <h2 className="font-semibold">Words to review</h2>
@@ -490,13 +563,22 @@ export default function PracticeQuiz() {
             )}
 
             <div className="flex gap-2">
-              <button
-                className="btn btn-primary rounded-full flex-1"
-                onClick={restartQuiz}
-              >
-                <RotateCcw className="h-4 w-4" />
-                Try Again
-              </button>
+              {unitResult?.justCompleted && unitResult.nextUnit ? (
+                <button
+                  className="btn btn-primary rounded-full flex-1"
+                  onClick={() => startUnitQuiz(unitResult.nextUnit!)}
+                >
+                  Next Unit →
+                </button>
+              ) : (
+                <button
+                  className="btn btn-primary rounded-full flex-1"
+                  onClick={restartQuiz}
+                >
+                  <RotateCcw className="h-4 w-4" />
+                  Try Again
+                </button>
+              )}
               <Link href="/" className="btn btn-outline rounded-full flex-1">
                 Home
               </Link>
@@ -555,7 +637,13 @@ export default function PracticeQuiz() {
 
           {isReviewMode && (
             <div className="badge badge-accent rounded-full gap-1 -mt-2">
-              📚 Reviewing missed words
+              📚 Reviewing words due today
+            </div>
+          )}
+
+          {activeUnit && (
+            <div className="badge badge-primary rounded-full gap-1 -mt-2">
+              📘 Level {activeUnit.grade} · Unit {activeUnit.unitNumber}
             </div>
           )}
 
@@ -699,11 +787,28 @@ export default function PracticeQuiz() {
                     {lastFeedback.correct ? (
                       <span>Correct! Well done.</span>
                     ) : (
-                      <span>
-                        Not quite. You wrote{" "}
-                        <strong>{lastFeedback.guess}</strong>, the correct
-                        spelling is <strong>{lastFeedback.answer}</strong>.
-                      </span>
+                      <div className="space-y-1">
+                        <span>
+                          Not quite. You wrote{" "}
+                          <strong>{lastFeedback.guess}</strong>.
+                        </span>
+                        <p className="font-mono text-base tracking-wide">
+                          {diffSpelling(lastFeedback.answer, lastFeedback.guess).map(
+                            (letter, i) => (
+                              <span
+                                key={i}
+                                className={
+                                  letter.isWrong
+                                    ? "underline underline-offset-2 text-error font-bold"
+                                    : undefined
+                                }
+                              >
+                                {letter.char}
+                              </span>
+                            ),
+                          )}
+                        </p>
+                      </div>
                     )}
                   </div>
                 </div>
