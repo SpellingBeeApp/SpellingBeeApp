@@ -11,13 +11,16 @@ function useSocket(
   const [socket, setSocket] = useState<Socket>();
 
   useEffect(() => {
-    const socketIo =
-      process.env.NODE_ENV === "development"
-        ? io(url, options)
-        : io({
-            path: "/socket.io",
-            transports: ["websocket", "polling"],
-          });
+    // Always connect to the actual backend `url` — the old prod branch
+    // assumed the frontend and backend were served from the same origin
+    // (true for the single-VPS setup this app used to run on), which no
+    // longer holds now that the frontend (Vercel) and backend (Render)
+    // are on separate domains.
+    const socketIo = io(url, {
+      path: "/socket.io",
+      transports: ["websocket", "polling"],
+      ...options,
+    });
 
     setSocket(socketIo);
 
