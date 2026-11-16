@@ -4,7 +4,6 @@
   "webDir": "public",
   "bundledWebRuntime": false,
   "server": {
-    "url": "http://secretbee.zipcode.rocks",
-    "cleartext": true
+    "url": "https://spelling-bee-app-lovat.vercel.app"
   }
 }
